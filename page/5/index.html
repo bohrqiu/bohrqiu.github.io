@@ -605,7 +605,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-trans-filed-null/">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/hessian-java-serialization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="qiubo">
@@ -624,7 +624,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/cxf-trans-filed-null/" itemprop="url">cxf如何传字段为null</a></h1>
+                <a class="post-title-link" href="/hessian-java-serialization/" itemprop="url">hessian反序列化field值丢失bug</a></h1>
         
 
         <div class="post-meta">
@@ -697,18 +697,11 @@
 
       
         
-          <p>传输对象如下：</p>
-<pre><code>public class EmailSenderOrder {
-private String clientName=&quot;test&quot;;
-//clientName默认值为test
-}
-</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p>
-<pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); 
-emailSenderOrder.setClientName(null); 
-</code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br></p>
+          <h3 id="bug说明"><a href="#bug说明" class="headerlink" title="bug说明"></a>bug说明</h3><hr>
+<p>子类和父类中有同名的字段时，hessian反序列化会丢失字段值。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/cxf-trans-filed-null/#more" rel="contents">
+            <a class="btn" href="/hessian-java-serialization/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -906,7 +899,7 @@ emailSenderOrder.setClientName(null);
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/hessian-java-serialization/">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-trans-filed-null/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="qiubo">
@@ -925,7 +918,7 @@ emailSenderOrder.setClientName(null);
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/hessian-java-serialization/" itemprop="url">hessian反序列化field值丢失bug</a></h1>
+                <a class="post-title-link" href="/cxf-trans-filed-null/" itemprop="url">cxf如何传字段为null</a></h1>
         
 
         <div class="post-meta">
@@ -998,11 +991,18 @@ emailSenderOrder.setClientName(null);
 
       
         
-          <h3 id="bug说明"><a href="#bug说明" class="headerlink" title="bug说明"></a>bug说明</h3><hr>
-<p>子类和父类中有同名的字段时，hessian反序列化会丢失字段值。<br></p>
+          <p>传输对象如下：</p>
+<pre><code>public class EmailSenderOrder {
+private String clientName=&quot;test&quot;;
+//clientName默认值为test
+}
+</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p>
+<pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); 
+emailSenderOrder.setClientName(null); 
+</code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/hessian-java-serialization/#more" rel="contents">
+            <a class="btn" href="/cxf-trans-filed-null/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
