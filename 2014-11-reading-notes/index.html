@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="READING NOTES," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux Troubleshooting, Part I: High Loadhttp://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load 10月25(This is my big day)日凌晨线上某系统出现load很高的问题,我当时排查问题的思路和这篇文章类似.简单总结下: load,">
+<meta name="keywords" content="READING NOTES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2014年11月Reading Notes">
+<meta property="og:url" content="http://bohr.me/2014-11-reading-notes/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="Linux Troubleshooting, Part I: High Loadhttp://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load 10月25(This is my big day)日凌晨线上某系统出现load很高的问题,我当时排查问题的思路和这篇文章类似.简单总结下: load,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bohr.me/2014-11-reading-notes/access_delay_bandwidth.gif">
+<meta property="og:updated_time" content="2018-04-01T09:34:43.533Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2014年11月Reading Notes">
+<meta name="twitter:description" content="Linux Troubleshooting, Part I: High Loadhttp://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load 10月25(This is my big day)日凌晨线上某系统出现load很高的问题,我当时排查问题的思路和这篇文章类似.简单总结下: load,">
+<meta name="twitter:image" content="http://bohr.me/2014-11-reading-notes/access_delay_bandwidth.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/2014-11-reading-notes/"/>
+
+
+
+
+
+  <title>2014年11月Reading Notes | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-11-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2014年11月Reading Notes</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-04T21:52:17+08:00">
+                2014-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Linux-Troubleshooting-Part-I-High-Load"><a href="#Linux-Troubleshooting-Part-I-High-Load" class="headerlink" title="Linux Troubleshooting, Part I: High Load"></a>Linux Troubleshooting, Part I: High Load</h2><p><a href="http://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load" target="_blank" rel="noopener">http://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load</a></p>
+<p>10月25(This is my big day)日凌晨线上某系统出现<code>load</code>很高的问题,我当时排查问题的思路和这篇文章类似.简单总结下:</p>
+<p><code>load</code>,系统负载,可以理解为现在等待cpu处理的任务数.如何衡量<code>high</code>呢?这个和cpu核心数有关系,8核cpu,load为8,这个也不能称之为high.</p>
+<p>造成high load的原因一般有:</p>
+<ul>
+<li><p>CPU-bound load</p>
+<p>  某些任务太耗cpu了,导致high load.这个通过看top就能看出来.如果<code>top</code>命令中的<code>xx%wa</code>很高,说明这些任务都在等待去了.</p>
+</li>
+<li><p>load caused by out of memory issues</p>
+<p>  由于内存不足,linux在使用swap了,导致high load.这个通过<code>free</code>很容易看出来.</p>
+</li>
+<li><p>I/O-bound load</p>
+<p>  iostat/iotop(需安装)都很容易发现原因所在.</p>
+</li>
+</ul>
+<p>我偏向于使用<code>vmstat</code>,用了它,什么都可以看到了.很悲剧的是,这台线上服务器一切正常.服务器重启后,负载一直很低.服务器重启后,一切都正常了.</p>
+<h2 id="The-Best-Plugins-for-Sublime-Text"><a href="#The-Best-Plugins-for-Sublime-Text" class="headerlink" title="The Best Plugins for Sublime Text"></a>The Best Plugins for Sublime Text</h2><p><a href="http://ipestov.com/the-best-plugins-for-sublime-text/" target="_blank" rel="noopener">http://ipestov.com/the-best-plugins-for-sublime-text/</a></p>
+<p>可以把sublime武装成ide的插件.</p>
+<h2 id="ibatis和mybatis共存"><a href="#ibatis和mybatis共存" class="headerlink" title="ibatis和mybatis共存"></a>ibatis和mybatis共存</h2><p>如果先加载ibatis的jar,会遇到<code>java.lang.reflect.MalformedParameterizedTypeException</code>异常.需要让ibatis后加载.可以修改<code>ibatis</code>依赖的<code>artifactId</code>,比如改为<code>zibatis</code></p>
+<h2 id="MySQL-加锁处理分析"><a href="#MySQL-加锁处理分析" class="headerlink" title="MySQL 加锁处理分析"></a>MySQL 加锁处理分析</h2><p><a href="http://hedengcheng.com/?p=771" target="_blank" rel="noopener">http://hedengcheng.com/?p=771</a></p>
+<p>这篇文章从mysql数据库原理角度来分析锁,很透彻,很深刻.</p>
+<p>比如对于一条简单的sql语句:</p>
+<pre><code>delete from test where id = ?；
+</code></pre><p>如果id是主键/非空的唯一索引,不会出现gap锁.如果是非索引列,直接锁表(这个太恶心了,因为server和存储引擎分离导致的);如果是非唯一的索引,事务隔离级别是read commit,锁定选取的数据.如果是repeatable read,为了防止幻读,gap lock出现了)</p>
+<p>##面向程序员的数据库访问性能优化法则<br><a href="http://blog.csdn.net/yzsind/article/details/6059209" target="_blank" rel="noopener">http://blog.csdn.net/yzsind/article/details/6059209</a></p>
+<p>这篇文章很系统的介绍了程序员应该掌握的数据库优化知识.<br>首先根据硬件相关知识介绍各种硬件的访问延时/带宽指标:<br><img src="/2014-11-reading-notes/access_delay_bandwidth.gif" alt=""></p>
+<p>通过对上面的指标分析,自然得出优化的层次:</p>
+<ol>
+<li><p>减少数据访问（减少磁盘访问）</p>
+<ul>
+<li>正确创建/使用索引</li>
+<li>只通过索引访问数据(索引节点中存有数据,通过索引就能拿到数据最高效)</li>
+<li>根据查询计划优化索引</li>
+<li>一个表上的索引不能太多,会增加修改操作IO.</li>
+</ul>
+</li>
+<li><p>返回更少数据（减少网络传输或磁盘访问）</p>
+<ul>
+<li>分页(通过rowid分页的方式减少IO,前提是where/order子句都要在索引上)</li>
+<li>只返回需要的字段(别使用select *,带来各种问题,对于我们来说,最头痛的是sql版本兼容性问题.)</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>减少交互次数（减少网络传输）</p>
+<ul>
+<li>batch DML(批量操作走jdbc批量接口)</li>
+<li>In List(多操作合并,依稀记得mysql驱动里也有这样的做法)</li>
+<li>设置Fetch Size(默认fetch size可能不是最优的,需要根据实际情况调整,比如分页查询,一次查询100条,在不OOM的前提下增大此值,减少网络io)</li>
+<li>使用存储过程(这个得看场景)</li>
+<li>使用ResultSet游标处理记录(这一点往往被忽略掉,使用mybatis的RowHandler来解决问题)</li>
+</ul>
+</li>
+<li><p>减少服务器CPU开销（减少CPU及内存开销）</p>
+<ul>
+<li>使用绑定变量(mysql仅仅支持硬解析,<a href="http://www.cnblogs.com/justfortaste/p/3920140.html" target="_blank" rel="noopener">参考</a>)</li>
+<li>合理使用排序</li>
+</ul>
+</li>
+<li><p>利用更多资源（增加资源）</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/READING-NOTES/" rel="tag"><i class="fa fa-tag"></i> READING NOTES</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014-10-reading-notes/" rel="next" title="2014年10月Reading Notes">
+                <i class="fa fa-chevron-left"></i> 2014年10月Reading Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014-12-reading-notes/" rel="prev" title="2014年12月Reading Notes">
+                2014年12月Reading Notes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Troubleshooting-Part-I-High-Load"><span class="nav-number">1.</span> <span class="nav-text">Linux Troubleshooting, Part I: High Load</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Best-Plugins-for-Sublime-Text"><span class="nav-number">2.</span> <span class="nav-text">The Best Plugins for Sublime Text</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ibatis和mybatis共存"><span class="nav-number">3.</span> <span class="nav-text">ibatis和mybatis共存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-加锁处理分析"><span class="nav-number">4.</span> <span class="nav-text">MySQL 加锁处理分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

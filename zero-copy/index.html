@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="zero copy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文讲了如何用zero copy技术来提高I/O性能. 静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力. java提供了transferTo方法来使用zero copy技术.他">
+<meta name="keywords" content="zero copy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用零拷贝提高数据传输效率">
+<meta property="og:url" content="http://bohr.me/zero-copy/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="本文讲了如何用zero copy技术来提高I/O性能. 静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力. java提供了transferTo方法来使用zero copy技术.他">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bohr.me/zero-copy/figure1.gif">
+<meta property="og:image" content="http://bohr.me/zero-copy/figure2.gif">
+<meta property="og:image" content="http://bohr.me/zero-copy/figure3.gif">
+<meta property="og:image" content="http://bohr.me/zero-copy/figure4.gif">
+<meta property="og:image" content="http://bohr.me/zero-copy/figure5.gif">
+<meta property="og:updated_time" content="2018-04-01T09:27:45.184Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用零拷贝提高数据传输效率">
+<meta name="twitter:description" content="本文讲了如何用zero copy技术来提高I/O性能. 静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力. java提供了transferTo方法来使用zero copy技术.他">
+<meta name="twitter:image" content="http://bohr.me/zero-copy/figure1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/zero-copy/"/>
+
+
+
+
+
+  <title>使用零拷贝提高数据传输效率 | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/zero-copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用零拷贝提高数据传输效率</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-16T21:52:17+08:00">
+                2014-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文讲了如何用<code>zero copy</code>技术来提高I/O性能.</p>
+<p>静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力.</p>
+<p>java提供了<code>transferTo</code>方法来使用<code>zero copy</code>技术.他可以让数据直接从一个<code>channel</code>到另外一个<code>channel</code>.避免上面说到的一些问题.</p>
+<h3 id="1-传统的解决办法"><a href="#1-传统的解决办法" class="headerlink" title="1.传统的解决办法"></a>1.传统的解决办法</h3><p>过程类似于下面的代码:</p>
+<pre><code>File.read(fileDesc, buf, len);
+Socket.send(socket, buf, len);
+</code></pre><h4 id="1-1数据拷贝"><a href="#1-1数据拷贝" class="headerlink" title="1.1数据拷贝"></a>1.1数据拷贝</h4><p><img src="/zero-copy/figure1.gif" alt=""></p>
+<p>这种方式会有四次内存拷贝</p>
+<h4 id="1-2-上下文切换"><a href="#1-2-上下文切换" class="headerlink" title="1.2 上下文切换"></a>1.2 上下文切换</h4><p><img src="/zero-copy/figure2.gif" alt=""></p>
+<p>这种方式会有四次上下文切换.</p>
+<h4 id="1-3-过程说明"><a href="#1-3-过程说明" class="headerlink" title="1.3 过程说明"></a>1.3 过程说明</h4><ol>
+<li><code>read</code>方法导致一次从<code>user mode</code>到<code>kernel mode</code>的上下文切换.系统调用<code>sys_read</code>从文件读取数据,通过DMA,把磁盘上的数据读到<code>kernel address space buffer</code>.</li>
+<li>数据从<code>kernel address space buffer</code>拷贝到<code>user buffer</code>.<code>read</code>返回,导致从<code>kernel mode</code>到<code>user mode</code>的上下文切换.现在数据被读到了<code>user address space buffer</code>.</li>
+<li><code>send</code>方法导致一次<code>user mode</code>到<code>kernel mode</code>的上下文切换.第三次拷贝把拷贝到<code>kernel address space buffer</code>.此buffer关联着<code>destination socket</code></li>
+<li>系统<code>send</code>调用返回时导致第四次上下文切换,DMA把<code>kernel address space buffer</code>中的数据发送到协议引擎导致第四次数据拷贝.</li>
+</ol>
+<h4 id="1-4-intermediate-kernel-buffer"><a href="#1-4-intermediate-kernel-buffer" class="headerlink" title="1.4 intermediate kernel buffer"></a>1.4 intermediate kernel buffer</h4><p>使用<code>intermediate kernel buffer</code>主要为了提高性能,读的时候扮演缓存的角色,写的时候可以让应用程序实现异步(应用程序写到kernel buffer就返回).不幸的是,当我们处理的数据大于内核缓冲大小时,这样的拷贝是完全没有任何意义的.</p>
+<h3 id="2-零拷贝的方式"><a href="#2-零拷贝的方式" class="headerlink" title="2.零拷贝的方式"></a>2.零拷贝的方式</h3><p>使用如下的代码来完成零拷贝</p>
+<p>java方法:</p>
+<pre><code>public void transferTo(long position, long count, WritableByteChannel target);
+</code></pre><p>系统调用:</p>
+<pre><code>#include &lt;sys/socket.h&gt;
+ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
+</code></pre><h4 id="2-1-数据拷贝"><a href="#2-1-数据拷贝" class="headerlink" title="2.1 数据拷贝"></a>2.1 数据拷贝</h4><p><img src="/zero-copy/figure3.gif" alt=""></p>
+<p>涉及到3次数据拷贝.</p>
+<h4 id="2-2-上下文切换"><a href="#2-2-上下文切换" class="headerlink" title="2.2 上下文切换"></a>2.2 上下文切换</h4><p><img src="/zero-copy/figure4.gif" alt=""></p>
+<p>涉及到2次上下文切换</p>
+<h4 id="2-3-过程说明"><a href="#2-3-过程说明" class="headerlink" title="2.3 过程说明"></a>2.3 过程说明</h4><ol>
+<li><code>transferTo</code>方法让DMA把磁盘文件读到<code>kernel read buffer</code>.然后内核把<code>kernel read buffer</code>中的数据拷贝到<code>socket buffer</code>.</li>
+<li><code>DMA</code>把<code>socket buffer</code>中的数据拷贝到协议引擎.</li>
+</ol>
+<h3 id="3-更好的方式"><a href="#3-更好的方式" class="headerlink" title="3 更好的方式"></a>3 更好的方式</h3><p>通过上面使用这种方式,上下文切换从4次变为了2次.数据拷贝减少了一次.如果网卡支持<code>gather operations</code>,linux 2.4内核就开始提供更好的解决方案.</p>
+<p><img src="/zero-copy/figure5.gif" alt=""></p>
+<ol>
+<li><code>transferTo</code>方法让<code>DMA engine</code>把磁盘文件内容拷贝到内核缓冲区.</li>
+<li>数据不需要拷贝到<code>socket buffer</code>.<code>socket buffer</code>里只需写入数据的地址和长度.<code>DMA engine</code>从内核缓冲区把数据读到协议引擎.</li>
+</ol>
+<p>通过内核带来的特性,数据拷贝变为了2次(这两次拷贝都是DMA在做).cpu copy变为了0.</p>
+<h3 id="4-写在最后"><a href="#4-写在最后" class="headerlink" title="4 写在最后"></a>4 写在最后</h3><p>文章地址<code>http://www.ibm.com/developerworks/library/j-zerocopy/</code>,里面有性能测试结果.后面附带有性能测试程序.不过这个测试程序不太恰当,应该都用nio的api来测试<code>tansferTo</code>和非<code>tansferTo</code>.</p>
+<p>静态文件服务器一般都有静态资源缓存(apache可以配置,其他的服务器不了解).如果使用内存缓存,减少了读的过程.内存拷贝变为cpu copy <code>application buffer</code> -&gt; <code>socket buffer</code>,DMA copy <code>socket buffer</code> -&gt;<code>NIC buffer</code>,磁盘io大大降低了.</p>
+<p><code>NIO</code>不是很熟悉,不知道通过<code>ByteBuffer.allocateDirect()</code>+<code>transferTo</code>+<code>gather operations</code>能不能让copy变为一次.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zero-copy/" rel="tag"><i class="fa fa-tag"></i> zero copy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/database-version/" rel="next" title="如何跟踪数据库结构变动">
+                <i class="fa fa-chevron-left"></i> 如何跟踪数据库结构变动
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/dubbo-imbalance/" rel="prev" title="dubbo线程任务"不均衡"问题分析">
+                dubbo线程任务"不均衡"问题分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-传统的解决办法"><span class="nav-number">1.</span> <span class="nav-text">1.传统的解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1数据拷贝"><span class="nav-number">1.1.</span> <span class="nav-text">1.1数据拷贝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-上下文切换"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 上下文切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-过程说明"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 过程说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-intermediate-kernel-buffer"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 intermediate kernel buffer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-零拷贝的方式"><span class="nav-number">2.</span> <span class="nav-text">2.零拷贝的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-数据拷贝"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据拷贝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-上下文切换"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 上下文切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-过程说明"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 过程说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-更好的方式"><span class="nav-number">3.</span> <span class="nav-text">3 更好的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-写在最后"><span class="nav-number">4.</span> <span class="nav-text">4 写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

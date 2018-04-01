@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="READING NOTES," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="每个架构师都应该研究下康威定律最近在做DEVOPS,看技术的出发点有所变化，正好看到这篇文章，总结下自己。 1. 系统架构的目标是解决利益相关者的关注点。  架构其实是发现利益相关者（stakeholder），然后解决他们的关注点（concerns） 业务方，产品经理，客户/用户，开发经理，工程师，项目经理，测试人员，运维人员，产品运营人员等等都有可能是利益相关者，架构师要充分和利益相关者沟通，深">
+<meta name="keywords" content="READING NOTES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2016年02月Reading Notes">
+<meta property="og:url" content="http://bohr.me/2016-02-reading-notes/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="每个架构师都应该研究下康威定律最近在做DEVOPS,看技术的出发点有所变化，正好看到这篇文章，总结下自己。 1. 系统架构的目标是解决利益相关者的关注点。  架构其实是发现利益相关者（stakeholder），然后解决他们的关注点（concerns） 业务方，产品经理，客户/用户，开发经理，工程师，项目经理，测试人员，运维人员，产品运营人员等等都有可能是利益相关者，架构师要充分和利益相关者沟通，深">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bohr.me/2016-02-reading-notes/devops.jpg">
+<meta property="og:image" content="http://cdn3.infoqstatic.com/statics_s2_20160217-0123u3/resource/articles/database-timestamp-02/zh/resources/0820002.jpg">
+<meta property="og:updated_time" content="2018-04-01T09:34:02.216Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2016年02月Reading Notes">
+<meta name="twitter:description" content="每个架构师都应该研究下康威定律最近在做DEVOPS,看技术的出发点有所变化，正好看到这篇文章，总结下自己。 1. 系统架构的目标是解决利益相关者的关注点。  架构其实是发现利益相关者（stakeholder），然后解决他们的关注点（concerns） 业务方，产品经理，客户/用户，开发经理，工程师，项目经理，测试人员，运维人员，产品运营人员等等都有可能是利益相关者，架构师要充分和利益相关者沟通，深">
+<meta name="twitter:image" content="http://bohr.me/2016-02-reading-notes/devops.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/2016-02-reading-notes/"/>
+
+
+
+
+
+  <title>2016年02月Reading Notes | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2016-02-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2016年02月Reading Notes</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-01T21:52:17+08:00">
+                2016-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="每个架构师都应该研究下康威定律"><a href="#每个架构师都应该研究下康威定律" class="headerlink" title="每个架构师都应该研究下康威定律"></a><a name="about-arch"><a href="http://mp.weixin.qq.com/s?__biz=MzA5Nzc4OTA1Mw==&amp;mid=408286995&amp;idx=1&amp;sn=1634698023c48b754d42af69cee2ab32" target="_blank" rel="noopener">每个架构师都应该研究下康威定律</a></a></h2><p>最近在做<code>DEVOPS</code>,看技术的出发点有所变化，正好看到这篇文章，总结下自己。</p>
+<h3 id="1-系统架构的目标是解决利益相关者的关注点。"><a href="#1-系统架构的目标是解决利益相关者的关注点。" class="headerlink" title="1. 系统架构的目标是解决利益相关者的关注点。"></a>1. 系统架构的目标是解决利益相关者的关注点。</h3><blockquote>
+<blockquote>
+<p>架构其实是发现利益相关者（stakeholder），然后解决他们的关注点（concerns）</p>
+<p>业务方，产品经理，客户/用户，开发经理，工程师，项目经理，测试人员，运维人员，产品运营人员等等都有可能是利益相关者，架构师要充分和利益相关者沟通，深入理解他们的关注点和痛点，并出架构解决这些关注点。</p>
+</blockquote>
+</blockquote>
+<p>架构师在这里也定位为一个好的需求分析师，但是架构师往往会从自己的角度(利益相关或者立场相关)来设计。我之前一直做开发工作，在技术选型或者研究时，对于可运维性考虑得比较少，在痛过几次后，发现监控的价值，来补充相关<code>metrics</code>的能力。</p>
+<h3 id="2-关注非功能性需求"><a href="#2-关注非功能性需求" class="headerlink" title="2. 关注非功能性需求"></a>2. 关注非功能性需求</h3><ul>
+<li>easy to separate</li>
+<li>easy to understand</li>
+<li>easy to extend</li>
+<li>easy to change</li>
+<li>easy to replace</li>
+<li>easy to deploy</li>
+<li>easy to scale</li>
+<li>easy to recover</li>
+<li>easy to connect</li>
+<li>easy to afford</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>Architecture represents the significant design decisions that shape a system, where significant is measured by cost of change.</p>
+<p>架构的目标是用于管理复杂性、易变性和不确定性，以确保在长期的系统演化过程中，一部分架构的变化不会对架构的其它部分产生不必要的负面影响。</p>
+</blockquote>
+</blockquote>
+<p>这里补充一点，需要考虑<code>easy to find the problem</code>。除了合理的规划日志，我们要做到<code>failfast</code>。当关键资源依赖条件不满足，我们最好是把问题用最显示的方式暴露出来，而不是让它在那里一直报错。</p>
+<h3 id="3-架构的迭代和演化性"><a href="#3-架构的迭代和演化性" class="headerlink" title="3. 架构的迭代和演化性"></a>3. 架构的迭代和演化性</h3><blockquote>
+<blockquote>
+<p>做技术架构的都有点完美主义倾向，一开始往往喜欢求大求全，忽视架构的演化和迭代性，这种倾向易造产品和用户之间不能形成有效快速的反馈，产品不满足最终用户需求.</p>
+<p>在系统真正地投入生产使用之前，再好的架构都只是假设，产品越晚被使用者使用，失败的成本和风险就越高，而小步行进，通过MVP快速实验，获取客户反馈，迭代演化产品，能有效地减少失败的成本和风险。</p>
+</blockquote>
+</blockquote>
+<p>好的架构是衍变出来的，而非设计出来的。</p>
+<h3 id="4-构建闭环反馈架构"><a href="#4-构建闭环反馈架构" class="headerlink" title="4. 构建闭环反馈架构"></a>4. 构建闭环反馈架构</h3><blockquote>
+<blockquote>
+<p>第一条道路，系统思维，开发驱动的组织机体，其能力不是制作软件，而是持续的交付客户价值，架构师需要有全局视角和系统思维（System Thinking），深入理解整个价值交付链，从业务需求、研发、测试、集成，到部署运维，这条价值链的效率并不依赖于单个或者几个环节，局部优化的结果往往是全局受损，架构师要站在系统高度去优化整个价值交付链，让企业和客户之间形成快速和高效的价值传递。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>第二条道路，强化反馈环，任何过程改进的目标都是加强和缩短反馈环。</p>
+<p>收集-&gt;测量-&gt;调整-&gt;闭环重复，在有测量数据和反馈的基础上，系统、应用、流程和客户体验才有可能获得持续的提升和改善，否则没有数据的所谓改进只能靠拍脑袋或者说猜测。</p>
+</blockquote>
+</blockquote>
+<p>这里提到监控的重要性，<strong>没有测量，就没有改进和提升</strong>，<a href="http://www.infoq.com/cn/articles/metrics-driven-development" target="_blank" rel="noopener">MDD</a>这偏文章有点意思，通过分层和可用的性能指标让开发人员了解项目业务方面的内容，反过来，业务人员也能理解项目技术方面的内容，看到开发人员所面临的问题和我们的负载局限。</p>
+<blockquote>
+<blockquote>
+<p>第三条道路，鼓励勇于承担责任，冒险试错和持续提升的文化。</p>
+</blockquote>
+</blockquote>
+<p>最后，贴上一张关于<code>DevOps</code>的图。</p>
+<p><img src="/2016-02-reading-notes/devops.jpg" alt=""></p>
+<h2 id="时间序列数据库的秘密"><a href="#时间序列数据库的秘密" class="headerlink" title="时间序列数据库的秘密"></a>时间序列数据库的秘密</h2><p><a href="http://www.infoq.com/cn/articles/database-timestamp-01" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/database-timestamp-01</a></p>
+<p><a href="http://www.infoq.com/cn/articles/database-timestamp-01" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/database-timestamp-01</a></p>
+<p><a href="http://www.infoq.com/cn/articles/database-timestamp-01" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/database-timestamp-01</a></p>
+<p>此文讲明白了时序数据库，最近也在纠结这个事(原来一直看好opentsdb，但是没有深入调研opentsdb的细节，对es也不是太了解)，这里总结下全文。</p>
+<p>时间序列数据库除了提供查询能力外，我们也希望能够提供在查询阶段做聚合能力。</p>
+<p>聚合有有三个步骤:</p>
+<ul>
+<li>用索引检索出行号(搜索引擎最擅长)</li>
+<li>从主存储按行号加载列(列式存储最合适)</li>
+<li>计算(分布式计算列数据)</li>
+</ul>
+<p><code>ES</code>在这三个步骤上都做得很好。</p>
+<ol>
+<li><p>如何快速检索？</p>
+<p> <img src="http://cdn3.infoqstatic.com/statics_s2_20160217-0123u3/resource/articles/database-timestamp-02/zh/resources/0820002.jpg" alt=""><br> lucene倒排索引由<code>Term index</code>-&gt;<code>Term Dictionary</code>-&gt;<code>Posting List</code>构成。<code>TI</code>是对<code>TD</code>做的索引，实现对Term的快速查找。Mysql使用b-tree排序存储<code>TD</code>在磁盘上;<code>Lucene</code>增加了<code>TI</code>保存在内存中，查询效率更高。</p>
+</li>
+<li><p>如何联合索引查询？</p>
+<p> 对于<code>age=18 AND gender=女</code>的查询过滤。mysql的做法是(如果两个列都建立了索引，当然gender列做索引在mysql上没有什么卵用)先在索引上找<code>age=18</code>的所有id，然后遍历id匹配。</p>
+<p> Elasticsearch支持：</p>
+<ul>
+<li><p>使用skip list数据结构。同时遍历gender和age的posting list，互相skip；</p>
+<p>  利用skip list(Level0存储原始有序数据，level1存储部分数据，查找时从level1跳过部分数据)，跳过了遍历的成本,并且用<code>Frame of Reference</code>(计算差值，分块后，每个块内部选择合适的bit来存储)压缩存储。</p>
+</li>
+<li><p>使用bitset数据结构，对gender和age两个filter分别求出bitset，对两个bitset做AN操作。</p>
+<p>  大多数场景下，bitset非常稀疏，bitset压缩空间很大。lucene采用<code>Roaring Bitmap</code>,算法也有点意思：<br>  计算N/65536和N%65536的值，把N/65536相同的分为一个组，分组后根据每个组的情况用short数字或者bitset。</p>
+</li>
+</ul>
+</li>
+<li><p>如何减少文档数？</p>
+<p> 一般采用数据库会合并，把多行数据合并成一行，比如把原来精确到秒的数据合并为分。<code>ES</code>中使用内嵌文档(Nested Document)实现公共字段的去从(比如应用名、ip、环境标识、metricsname)</p>
+</li>
+<li><p>如何加载更快？</p>
+<p> 如何利用索引和主存储，是一种两难的选择。</p>
+<ul>
+<li><p>选择不使用索引，只使用主存储：除非查询的字段就是主存储的排序字段，否则就需要顺序扫描整个主存储。</p>
+<p>   这要求数据存储按照查询条件来选择主键(mysql中的聚簇索引)，如果查询条件很多，会扫描整个文件。</p>
+</li>
+<li><p>选择使用索引，然后用找到的row id去主存储加载数据：这样会导致很多碎片化的随机读操作。</p>
+<p>  从硬盘上随机读写性能低</p>
+</li>
+</ul>
+<p>Lucene底层读取文件基于mmap，充分利用操作系统的特性来映射文件到内存(列式存储的优点是每列一个文件，可以充分利用mmap，加载需要的列)，所以还是内存越大越好。</p>
+</li>
+<li><p>分布式聚合如何做得快？</p>
+<p> 通过数据分片，把数据分散到多台机器。在计算时，各个节点index计算聚合结果，然后汇总后在聚合。这样也减少了网络带宽，充分利用了各个节点的计算能力。</p>
+</li>
+<li><p>为什么时间序列需要更复杂的聚合？</p>
+<p> 通常会有降频(比如原来时间精确到秒，现在需要以分为单位)和降维(比如原来有地域纬度，统计时求所有地区)需求。<code>ES</code>支持Pipeline Aggregation可以实现数据在聚合之后再做聚合，能满足多次聚合的需求。</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/READING-NOTES/" rel="tag"><i class="fa fa-tag"></i> READING NOTES</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/docker/" rel="next" title="docker">
+                <i class="fa fa-chevron-left"></i> docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016-04-reading-notes/" rel="prev" title="2016年04月Reading Notes">
+                2016年04月Reading Notes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#每个架构师都应该研究下康威定律"><span class="nav-number">1.</span> <span class="nav-text">每个架构师都应该研究下康威定律</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-系统架构的目标是解决利益相关者的关注点。"><span class="nav-number">1.1.</span> <span class="nav-text">1. 系统架构的目标是解决利益相关者的关注点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-关注非功能性需求"><span class="nav-number">1.2.</span> <span class="nav-text">2. 关注非功能性需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-架构的迭代和演化性"><span class="nav-number">1.3.</span> <span class="nav-text">3. 架构的迭代和演化性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-构建闭环反馈架构"><span class="nav-number">1.4.</span> <span class="nav-text">4. 构建闭环反馈架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间序列数据库的秘密"><span class="nav-number">2.</span> <span class="nav-text">时间序列数据库的秘密</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

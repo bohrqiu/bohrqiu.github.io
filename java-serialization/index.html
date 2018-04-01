@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java序列化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是序列化serialization is the process of converting a data structure or object state into a format that can be stored (for example, in a file or memory buffer, or transmitted across a network connection">
+<meta name="keywords" content="java序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java序列化">
+<meta property="og:url" content="http://bohr.me/java-serialization/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="什么是序列化serialization is the process of converting a data structure or object state into a format that can be stored (for example, in a file or memory buffer, or transmitted across a network connection">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T06:04:17.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java序列化">
+<meta name="twitter:description" content="什么是序列化serialization is the process of converting a data structure or object state into a format that can be stored (for example, in a file or memory buffer, or transmitted across a network connection">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/java-serialization/"/>
+
+
+
+
+
+  <title>java序列化 | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/java-serialization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java序列化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2012-04-02T21:52:17+08:00">
+                2012-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是序列化"><a href="#什么是序列化" class="headerlink" title="什么是序列化"></a>什么是序列化</h2><p>serialization is the process of converting a data structure or object state into a format that can be stored (for example, in a file or memory buffer, or transmitted across a network connection link) and “resurrected” later in the same or another computer environment.<br><a id="more"></a></p>
+<h2 id="JAVA内置序列化介绍"><a href="#JAVA内置序列化介绍" class="headerlink" title="JAVA内置序列化介绍"></a>JAVA内置序列化介绍</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>由于Java提供了良好的默认支持，实现基本的对象序列化是件比较简单的事。待序列化的Java类只需要实现Serializable接口即可。Serializable仅是一个标记接口，并不包含任何需要实现的具体方法。实现该接口只是为了声明该Java类的对象是可以被序列化的。实际的序列化和反序列化工作是通过ObjectOuputStream和ObjectInputStream来完成的。ObjectOutputStream的writeObject方法可以把一个Java对象写入到流中，ObjectInputStream的readObject方法可以从流中读取一个Java对象。</p>
+<p>在写入和读取的时候，虽然用的参数或返回值是单个对象，但实际上操纵的是一个对象图，包括该对象所引用的其它对象，以及这些对象所引用的另外的对象。Java会自动帮你遍历对象图并逐个序列化。除了对象之外，Java中的基本类型和数组也是可以通过 ObjectOutputStream和ObjectInputStream来序列化的。</p>
+<p>序列化:</p>
+<pre><code>try {
+    User user = new User(&quot;Bohr&quot;, &quot;QIU&quot;);
+    ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(&quot;user.bin&quot;));
+    output.writeObject(user);
+    output.close();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+</code></pre><p>反序列化:</p>
+<pre><code>try {
+    ObjectInputStream input = new ObjectInputStream(new FileInputStream(&quot;user.bin&quot;));
+    User user = (User) input.readObject();
+    System.out.println(user);    
+} catch (Exception e) {    
+    e.printStackTrace();    
+}
+</code></pre><p> User类实现了Serializable接口。</p>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><h4 id="哪些东东会被序列化"><a href="#哪些东东会被序列化" class="headerlink" title="哪些东东会被序列化"></a>哪些东东会被序列化</h4><p>序列化只保存状态，不保存行为。在默认的序列化实现中，Java对象中的非静态和非瞬时域都会被序列化。</p>
+<h4 id="如何控制序列化字段"><a href="#如何控制序列化字段" class="headerlink" title="如何控制序列化字段"></a>如何控制序列化字段</h4><p>1、把域声明为瞬时的，即使用transient关键词。</p>
+<p>2、添加一个serialPersistentFields域来声明序列化时要包含的域。</p>
+<pre><code>private static final ObjectStreamField[] serialPersistentFields = { 
+    new ObjectStreamField(&quot;firstName&quot;, String.class) 
+};  
+</code></pre><p>上面的代码给出了 serialPersistentFields的声明示例，即只有firstName这个域是要被序列化的。</p>
+<h4 id="为什么反序列化时不成功"><a href="#为什么反序列化时不成功" class="headerlink" title="为什么反序列化时不成功"></a>为什么反序列化时不成功</h4><p>虚拟机是否允许反序列化，不仅取决于类路径和功能代码是否一致，一个非常重要的一点是两个类的序列化 ID 是否一致（就是 private static final long serialVersionUID = 1L）。</p>
+<p>如果类没有serialVersionUID静态字段，jvm在反序列化时会根据field情况生成serialVersionUID，类字段增减时，就会出现版本不一致的问题，最好添加一个默认的版本，当然也可以通过这种方式来控制类的不同版本。</p>
+<h4 id="实现了Serializable接口为什么还是序列化不成功？"><a href="#实现了Serializable接口为什么还是序列化不成功？" class="headerlink" title="实现了Serializable接口为什么还是序列化不成功？"></a>实现了Serializable接口为什么还是序列化不成功？</h4><p>如果类中的域包含不可序列化的对象，序列化就会失败，抛出NotSerializableException。</p>
+<h4 id="父类实现了Serializable接口，子类不想序列化怎么办？"><a href="#父类实现了Serializable接口，子类不想序列化怎么办？" class="headerlink" title="父类实现了Serializable接口，子类不想序列化怎么办？"></a>父类实现了Serializable接口，子类不想序列化怎么办？</h4><p>子类可以重载writeObject () 或者 readObject ()方法，在方法体中throw NotSerializableException </p>
+<h4 id="什么是compatible-changes-and-incompatible-changes"><a href="#什么是compatible-changes-and-incompatible-changes" class="headerlink" title="什么是compatible changes and incompatible changes"></a>什么是compatible changes and incompatible changes</h4><p>增减字段或者方法属于compatible changes，只要serialVersionUID相同，还可以成功的反序列化。但是如果修改类层次，或者不实现Serializable接口，就属于incompatible changes。参考java 序列化规范</p>
+<h4 id="反序列化后的对象和new-的对象有什么区别"><a href="#反序列化后的对象和new-的对象有什么区别" class="headerlink" title="反序列化后的对象和new 的对象有什么区别"></a>反序列化后的对象和new 的对象有什么区别</h4><p>在通过ObjectInputStream的readObject方法读取到一个对象之后，这个对象是一个新的实例，但是其构造方法是没有被调用的，其中的域的初始化代码也没有被执行。对于那些没有被序列化的域，在新创建出来的对象中的值都是默认的。也就是说，这个对象从某种角度上来说是不完备的。这有可能会造成一些隐含的错误。调用者并不知道对象是通过一般的new操作符来创建的，还是通过反序列化所得到的。解决的办法就是在类的readObject方法里面，再执行所需的对象初始化逻辑。对于一般的Java类来说，构造方法中包含了初始化的逻辑。可以把这些逻辑提取到一个方法中，在readObject方法中调用此方法。</p>
+<h4 id="序列化安全性"><a href="#序列化安全性" class="headerlink" title="序列化安全性"></a>序列化安全性</h4><p>Java对象序列化之后的内容格式是公开的。所以可以很容易的从中提取出各种信息。从实现的角度来说，可以从不同的层次来加强序列化的安全性。</p>
+<p>对序列化之后的流进行加密。这可以通过CipherOutputStream来实现。<br>实现自己的writeObject和readObject方法，在调用defaultWriteObject之前，先对要序列化的域的值进行加密处理。<br>使用一个SignedObject或SealedObject来封装当前对象，用SignedObject或SealedObject进行序列化。<br>在从流中进行反序列化的时候，可以通过ObjectInputStream的registerValidation方法添加ObjectInputValidation接口的实现，用来验证反序列化之后得到的对象是否合法。</p>
+<h4 id="自定义对象序列化"><a href="#自定义对象序列化" class="headerlink" title="自定义对象序列化"></a>自定义对象序列化</h4><h5 id="Serializable接口"><a href="#Serializable接口" class="headerlink" title="Serializable接口"></a>Serializable接口</h5><p><code>Serializable</code>接口是一个标记接口，接口内没有任何方法，但是在实际的序列化和反序列化过程中，jvm通过一些契约规则来满足用户自定义需求。</p>
+<p>基本的对象序列化机制让开发人员可以在包含哪些域上进行定制。如果想对序列化的过程进行更加细粒度的控制，就需要在类中添加writeObject和对应的 readObject方法。这两个方法属于前面提到的序列化机制的隐含契约的一部分。在通过ObjectOutputStream的 writeObject方法写入对象的时候，如果这个对象的类中定义了writeObject方法，就会调用该方法，并把当前 ObjectOutputStream对象作为参数传递进去。writeObject方法中一般会包含自定义的序列化逻辑，比如在写入之前修改域的值，或是写入额外的数据等。对于writeObject中添加的逻辑，在对应的readObject中都需要反转过来，与之对应。</p>
+<p>在添加自己的逻辑之前，推荐的做法是先调用Java的默认实现。在writeObject方法中通过ObjectOutputStream的defaultWriteObject来完成，在readObject方法则通过ObjectInputStream的defaultReadObject来实现。下面的代码在对象的序列化流中写入了一个额外的字符串。</p>
+<pre><code>private void writeObject(ObjectOutputStream output) throws IOException {
+    output.defaultWriteObject();
+    output.writeUTF(&quot;Hello World&quot;);
+}
+
+private void readObject(ObjectInputStream input) throws IOException, ClassNotFoundException {
+    input.defaultReadObject();
+    String value = input.readUTF();    
+    System.out.println(value);
+
+} 
+</code></pre><h5 id="Externalizable接口"><a href="#Externalizable接口" class="headerlink" title="Externalizable接口"></a>Externalizable接口</h5><p><code>Externalizable</code> 是一个包含方法签名的接口,包括writeExternal和readExternal: </p>
+<pre><code>public void readExternal(ObjectInput arg0) throws IOException,  
+           ClassNotFoundException {  
+       Object obj = arg0.readObject();       
+}  
+
+public void writeExternal(ObjectOutput arg0) throws IOException {   
+       arg0.writeObject(&quot;Hello world&quot;);  
+}  
+</code></pre><p>参考:<br><a href="http://www.infoq.com/cn/articles/cf-java-object-serialization-rmi" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/cf-java-object-serialization-rmi</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java序列化/" rel="tag"><i class="fa fa-tag"></i> java序列化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/thinking-clearly-about-performance/" rel="prev" title="Thinking Clearly about Performance笔记">
+                Thinking Clearly about Performance笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化"><span class="nav-number">1.</span> <span class="nav-text">什么是序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA内置序列化介绍"><span class="nav-number">2.</span> <span class="nav-text">JAVA内置序列化介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本介绍"><span class="nav-number">2.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FAQ"><span class="nav-number">2.2.</span> <span class="nav-text">FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哪些东东会被序列化"><span class="nav-number">2.2.1.</span> <span class="nav-text">哪些东东会被序列化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何控制序列化字段"><span class="nav-number">2.2.2.</span> <span class="nav-text">如何控制序列化字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么反序列化时不成功"><span class="nav-number">2.2.3.</span> <span class="nav-text">为什么反序列化时不成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现了Serializable接口为什么还是序列化不成功？"><span class="nav-number">2.2.4.</span> <span class="nav-text">实现了Serializable接口为什么还是序列化不成功？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#父类实现了Serializable接口，子类不想序列化怎么办？"><span class="nav-number">2.2.5.</span> <span class="nav-text">父类实现了Serializable接口，子类不想序列化怎么办？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是compatible-changes-and-incompatible-changes"><span class="nav-number">2.2.6.</span> <span class="nav-text">什么是compatible changes and incompatible changes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反序列化后的对象和new-的对象有什么区别"><span class="nav-number">2.2.7.</span> <span class="nav-text">反序列化后的对象和new 的对象有什么区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#序列化安全性"><span class="nav-number">2.2.8.</span> <span class="nav-text">序列化安全性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义对象序列化"><span class="nav-number">2.2.9.</span> <span class="nav-text">自定义对象序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Serializable接口"><span class="nav-number">2.2.9.1.</span> <span class="nav-text">Serializable接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Externalizable接口"><span class="nav-number">2.2.9.2.</span> <span class="nav-text">Externalizable接口</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="READING NOTES,zsh,javadoc,NoClassDefFoundError," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="oh-my-zshhttps://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview https://github.com/robbyrussell/oh-my-zsh/wiki/Themes zsh才是王道啊,各种插件,很爽. 我用colored-man colorize sublime mvn terminalapp插件.theme用">
+<meta name="keywords" content="READING NOTES,zsh,javadoc,NoClassDefFoundError">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2014年04月Reading Notes">
+<meta property="og:url" content="http://bohr.me/2014-04-reading-notes/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="oh-my-zshhttps://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview https://github.com/robbyrussell/oh-my-zsh/wiki/Themes zsh才是王道啊,各种插件,很爽. 我用colored-man colorize sublime mvn terminalapp插件.theme用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T06:37:23.977Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2014年04月Reading Notes">
+<meta name="twitter:description" content="oh-my-zshhttps://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview https://github.com/robbyrussell/oh-my-zsh/wiki/Themes zsh才是王道啊,各种插件,很爽. 我用colored-man colorize sublime mvn terminalapp插件.theme用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/2014-04-reading-notes/"/>
+
+
+
+
+
+  <title>2014年04月Reading Notes | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-04-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2014年04月Reading Notes</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-01T21:52:17+08:00">
+                2014-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="oh-my-zsh"><a href="#oh-my-zsh" class="headerlink" title="oh-my-zsh"></a><a id="zsh">oh-my-zsh</a></h2><p><a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview</a></p>
+<p><a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Themes" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh/wiki/Themes</a></p>
+<p>zsh才是王道啊,各种插件,很爽.</p>
+<p>我用<code>colored-man colorize sublime mvn terminalapp</code>插件.theme用<code>avit</code>,再装上<a href="http://ethanschoonover.com/solarized" target="_blank" rel="noopener">Solarized Dark</a>,prefect!!!</p>
+<a id="more"></a>
+<h2 id="Portia-the-open-source-visual-web-scraper"><a href="#Portia-the-open-source-visual-web-scraper" class="headerlink" title="Portia, the open source visual web scraper!"></a>Portia, the open source visual web scraper!</h2><p><a href="http://blog.scrapinghub.com/2014/04/01/announcing-portia/" target="_blank" rel="noopener">http://blog.scrapinghub.com/2014/04/01/announcing-portia/</a></p>
+<p><a href="https://github.com/scrapinghub/portia" target="_blank" rel="noopener">https://github.com/scrapinghub/portia</a></p>
+<p>可视化的网页抓取工具,多么牛掰啊.</p>
+<h2 id="java8-javadoc对格式要求更严格了"><a href="#java8-javadoc对格式要求更严格了" class="headerlink" title="java8,javadoc对格式要求更严格了."></a>java8,javadoc对格式要求更严格了.</h2><p><a href="http://docs.oracle.com/javase/8/docs/technotes/guides/javadoc/whatsnew-8.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/8/docs/technotes/guides/javadoc/whatsnew-8.html</a></p>
+<p>The javadoc tool now has support for checking the content of javadoc comments for issues that could lead to various problems, such as invalid HTML or accessibility issues, in the files that are generated by javadoc. The feature is enabled by default, and can also be controlled by the new -Xdoclint option. For more details, see the output from running “javadoc -X”. This feature is also available in javac, although it is not enabled by default there.</p>
+<p>所以以前能成功生成文档的现在变为:</p>
+<pre><code>/Users/bohr/code/yjf/maven-plugin/target/generated-sources/plugin/com/yiji/maven/HelpMojo.java:26: warning: no description for @author
+ * @author
+   ^
+/Users/bohr/code/yjf/maven-plugin/target/generated-sources/plugin/com/yiji/maven/    HelpMojo.java:27: warning: no description for @version
+ * @version
+   ^
+</code></pre><p>修改maven doc插件如下,忽略异常先:</p>
+<pre><code> &lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.9.1&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;failOnError&gt;false&lt;/failOnError&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;attach-javadocs&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jar&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre><h2 id="Performance-Considerations-in-Distributed-Applications"><a href="#Performance-Considerations-in-Distributed-Applications" class="headerlink" title="Performance Considerations in Distributed Applications"></a>Performance Considerations in Distributed Applications</h2><p><a href="http://apmblog.compuware.com/2009/09/28/performance-considerations-in-distributed-applications/" target="_blank" rel="noopener">http://apmblog.compuware.com/2009/09/28/performance-considerations-in-distributed-applications/</a></p>
+<p>一篇老文,主要谈到了分布式应用中一些性能关注点.文章部分内容加上自己总结如下:</p>
+<h3 id="The-devil-in-disguise"><a href="#The-devil-in-disguise" class="headerlink" title="The devil in disguise"></a>The devil in disguise</h3><ol>
+<li><p>序列化</p>
+<p> 序列化的重要性体现在,序列化本身需要消耗的cpu时间,而且序列化后的内容的大小也会影响传输时间.一般来说用二进制协议效率更高.soap协议最好还是不要在内部使用了:第一,序列化和反序列化效率不高(<a href="https://fi.java.net/" target="_blank" rel="noopener">FI</a>应该会快,没亲测);第二,里面无意义的信息太多了.</p>
+<p> 除了性能,还要考虑易用性,也就是说序列化后数据的兼容性问题.这个处理不好就会引起非常严重的事故.so,我们现在的dubbo序列化选hessian,分布式缓存/消息中间件中用到序列化的地方用的是兼容性的kryo(带有字段信息).等以后性能问题凸显的时候,会考虑用dubbo自带的序列化或者kryo.在数据量较大的交互时,还需要考虑提供阀值压缩数据.</p>
+<p> 虽然分布式服务框架一般会提供多版本功能,理论上是不要考虑兼容性的.每次升级接口时,升级版本就搞定.但是在服务器不是足够多的情况下,还是不考虑了,增加了运维成本.</p>
+</li>
+<li><p>CONNECTIONS</p>
+<p> 这个不多说,长连接+连接池.这里需要注意的是,长连接一定要有心跳机制来保活.</p>
+</li>
+<li><p>线程模型</p>
+<p> 原文只是谈到了同步和异步处理,现在比较好的做法是有专门的io线程来io请求.不过最好不要在io线程上做序列化和反序列的操作.让io线程单纯点,io处理能力更强.</p>
+</li>
+<li><p>网络</p>
+<p> 这点确实容易忽掉,而且很多开发人员对网络都不是很熟悉(include me!),万兆(40G?)交换机+千兆网卡应该是必须的吧.</p>
+</li>
+</ol>
+<h3 id="The-beauty-of-remoting-technologies-is-…"><a href="#The-beauty-of-remoting-technologies-is-…" class="headerlink" title="The beauty of remoting technologies is …"></a>The beauty of remoting technologies is …</h3><p>   这部分作者说了不少,我的观点是:java自带的序列化比较慢,最好不要用;distributed garbage collector 最好不要碰;内部系统不要玩<code>WS-*</code>;消息中间件是个好东东,一般企业到后期还是会需要到消息总线,不过神马都往总线里面丢,最终ESB implementor自己就是瓶颈,合理的规划业务很重要.</p>
+<h3 id="What-can-go-wrong"><a href="#What-can-go-wrong" class="headerlink" title="What can go wrong"></a>What can go wrong</h3><ol>
+<li><p>Anti Pattern: Wrong Protocol</p>
+<p> 选择合适的协议,内部通信就不要用webservice了.涉及到互操性的场景,可以考虑hessian提供的二进制协议.</p>
+</li>
+<li><p>Anti Pattern: Chatty Application</p>
+<p> 总的来说就是,<code>分布式对象设计第一定律:不要分布式使用对象</code>,尽量减少远程调用+粗粒度的接口+读缓存.</p>
+</li>
+<li><p>Anti Pattern: Big Messages</p>
+<p> 接口不要携带多余的,不相关的信息.这条和上条需要仔细权衡了.</p>
+</li>
+<li><p>Anti Pattern: Distributed Deployment</p>
+<p> 还是分布式对象设计第一定律.</p>
+</li>
+</ol>
+<h2 id="Don‘t-Trust-Your-Log-Files-How-and-Why-to-Monitor-ALL-Exceptions"><a href="#Don‘t-Trust-Your-Log-Files-How-and-Why-to-Monitor-ALL-Exceptions" class="headerlink" title="Don‘t Trust Your Log Files: How and Why to Monitor ALL Exceptions"></a><a id="Exceptions">Don‘t Trust Your Log Files: How and Why to Monitor ALL Exceptions</a></h2><p><a href="http://apmblog.compuware.com/2014/04/01/dont-trust-your-log-files-how-and-why-to-monitor-all-exceptions/" target="_blank" rel="noopener">http://apmblog.compuware.com/2014/04/01/dont-trust-your-log-files-how-and-why-to-monitor-all-exceptions/</a></p>
+<p>异常开销比较大,所以,业务异常尽量不要去收集栈信息,还要去属性第三方api,减少异常被吞掉的情况.可以参考下这篇<a href="http://bohr.me/jdk7-exception/">blog</a>.</p>
+<h2 id="Heartbleed-test"><a href="#Heartbleed-test" class="headerlink" title="Heartbleed test"></a>Heartbleed test</h2><p><a href="http://filippo.io/Heartbleed/" target="_blank" rel="noopener">http://filippo.io/Heartbleed/</a></p>
+<p>c语言没处理好是多么的恐怖啊.</p>
+<h2 id="tomcat关闭时出现NoClassDefFoundError"><a href="#tomcat关闭时出现NoClassDefFoundError" class="headerlink" title="tomcat关闭时出现NoClassDefFoundError"></a><a id="tomcat_NoClassDefFoundError">tomcat关闭时出现NoClassDefFoundError</a></h2><p>某dubbo应用,在tomcat在关闭时,报了下面的异常,</p>
+<pre><code>java.lang.NoClassDefFoundError: org/jboss/netty/util/internal/ExecutorUtil
+</code></pre><p>so,顺便分析下tomcat容器关闭时的内存泄漏检测机制.</p>
+<p>首先有个三个东东:</p>
+<ol>
+<li><p><code>org.apache.catalina.core.JreMemoryLeakPreventionListener</code></p>
+<p> 普通的java程序的类加载顺序是由父到子(先在父classloader中找,找不到在到子classloader中加载),这样做是为了安全和节省内存.web容器类加载器为了做到隔离,一般先是在子classloader中找,找不到在委托给父classloader.</p>
+<p> 此listener主要是通过使用java classloader或者tomcat 系统classloader来加载类,避免<code>WebappClassLoader</code>加载类后reload释放不了,同时也避免了内存浪费.还对一些东东进行了调整.</p>
+<p> 源代码中段话说的很形象:<code>Use the system classloader as the victim for all this ClassLoader pinning we&#39;re about to do.</code></p>
+</li>
+<li><p><code>org.apache.catalina.loader.WebappClassLoader</code></p>
+<p> 相关逻辑主要在<code>stop</code>方法中:</p>
+<ul>
+<li>调用<code>org.apache.catalina.loader.JdbcLeakPrevention</code> 来deregister Driver</li>
+<li>找出所有应用线程,如果线程还在执行,则打印警告信息.如果启用了<code>clearReferencesStopThreads</code>,使用反射来关闭线程池或者线程.</li>
+<li>清理ThreadLocal</li>
+<li>清理各种cache…</li>
+<li>清理资源路径</li>
+</ul>
+</li>
+</ol>
+<pre><code>&lt;a id=&quot;load_class_step&quot; class=&quot;anchor&quot;&gt;加载类步骤&lt;/a&gt;:
+
+1. 判断WebappClassLoader是否关闭,如果已关闭,报异常,打印日志
+2. 检查resourceEntries缓存
+3. 使用当前类加载器加载
+4. 使用SystemClassLoader加载
+5. 如果启用delegate,从父加载器加载
+6. 从`WEB-INFO/classes`和`WEB-INFO/lib`目录加载
+7. 用父类加载器来加载
+8. 加载不到抛出`ClassNotFoundException`
+</code></pre><ol>
+<li><p><code>org.apache.catalina.core.ThreadLocalLeakPreventionListener</code></p>
+<p> 清理线程池.</p>
+</li>
+</ol>
+<p>再分析下dubbo怎么关闭的:</p>
+<ol>
+<li>dubbo中的每个provide都是<code>ServiceBean</code>对象,此对象实现<code>DisposableBean</code>.在容器关闭时,<code>ServiceBean</code>取消注册.</li>
+<li><code>com.alibaba.dubbo.config.AbstractConfig</code>中注册了一个<code>ShutdownHook</code>,调用<code>ProtocolConfig.destroyAll()</code>,清理资源(比如关闭和注册中心的连接和关闭netty)</li>
+</ol>
+<p>这里需要注意下,调用<code>org.apache.catalina.loader.WebappClassLoader#stop</code>和调用<code>ProtocolConfig.destroyAll()</code>的不是同一个线程.而且<code>org.apache.catalina.loader.WebappClassLoader#started</code>字段并不是<code>volatile</code>的,有可能出现并发状态下的的不一致.这个时候,<code>WebappClassLoader</code>已经<code>started=true</code>了,然而<code>ShutdownHook</code>线程读到的值为false,继续去加载类,由于各种缓存也清空了,最终会抛出<code>ClassNotFoundException</code>(参考<a href="#load_class_step">加载步骤</a>)</p>
+<p>参考:</p>
+<pre><code>http://wiki.apache.org/tomcat/MemoryLeakProtection
+</code></pre><h2 id="实战-Groovy-使用闭包、ExpandoMetaClass-和类别进行元编程"><a href="#实战-Groovy-使用闭包、ExpandoMetaClass-和类别进行元编程" class="headerlink" title="实战 Groovy: 使用闭包、ExpandoMetaClass 和类别进行元编程"></a>实战 Groovy: 使用闭包、ExpandoMetaClass 和类别进行元编程</h2><p><a href="http://www.ibm.com/developerworks/cn/java/j-pg06239.html" target="_blank" rel="noopener">http://www.ibm.com/developerworks/cn/java/j-pg06239.html</a></p>
+<p><code>println &quot;ifconfig en0&quot;.execute().text</code>,这行代码使用fluent api+元编程,执行linux命令,打印结果.</p>
+<p>这个特性对于测试同学来说就非常重要,就这么直接mock原类的行为,很方便.</p>
+<h2 id="Venkat-Subramaniam-讨论多语言编程、JVM-和多核处理"><a href="#Venkat-Subramaniam-讨论多语言编程、JVM-和多核处理" class="headerlink" title="Venkat Subramaniam 讨论多语言编程、JVM 和多核处理"></a>Venkat Subramaniam 讨论多语言编程、JVM 和多核处理</h2><p>这篇文章很精彩,看了这篇文章有学习scala和groovy的冲动.摘录一些原文比较精彩的内容:</p>
+<h3 id="1-关于多语言编程"><a href="#1-关于多语言编程" class="headerlink" title="1.关于多语言编程"></a>1.关于多语言编程</h3><p>Ola Bini 曾在他的语言金字塔中很好地阐述关于语言。在语言金字塔中,Scala 或 Java 可以非常有效地编写基础架构代码。在此基础之上，他谈到了一个更具动态性的分层。在这一层中，利用元编程功能。可以说，元编程带来的最大优势就是能够减少您需要编写的代码量。最直观的体验就是代码数量的减少，您可以在代码中编写非常灵活的内容。在此基础之上，金字塔的塔尖是更为特定于领域的语言层，即 DSL 层。</p>
+<p>使用动态语言编程时，最重要的是设定更出色的准则，以便指导单元测试的编写，确保代码不会偏离原意，准确执行您希望的操作</p>
+<h3 id="2-关于多核并行"><a href="#2-关于多核并行" class="headerlink" title="2.关于多核并行:"></a>2.关于多核并行:</h3><p>一种方法是推行不可变性，也就是说：我不会更改任何东西。您处理的所有数据都是不可变，由于不可变，因此也不需<br>要同步。这解决了冲突问题，但我要如何在线程间通信？如何交换数据？为此，我们可以使用 Erlang 和 Scala 奉行的基于 Actor 的模型。使用 Actor，然后通过来回传递数据在 Actor 之间通信，但数据仍然保持不可变，整个过程极为安全。</p>
+<p>软件事务处理内存模型所做的是将您的数据访问绑定到事务边界内，就像数据库为您提供 ACID（原子性、一致性、隔离和持久性）时一样。它为您提供了这种功能，但您无法在内存中实现数据持久性，因此它会处理原子性、一致性和隔离。<br>您可以通过三种方法处理并行性。<strong><em>在解决并行性时,最糟糕的方法就是共享的可变性，这就是同步模型。更好的方法是采用基于 Actor 的模型，在线程间传输不可变数据。如果存在不频繁的写入操作和极其频繁的读取操作，那么第三个选择就是事务软件内存。</em></strong></p>
+<h2 id="Baby’s-First-Garbage-Collector"><a href="#Baby’s-First-Garbage-Collector" class="headerlink" title="Baby’s First Garbage Collector"></a>Baby’s First Garbage Collector</h2><p><a href="http://journal.stuffwithstuff.com/2013/12/08/babys-first-garbage-collector/" target="_blank" rel="noopener">http://journal.stuffwithstuff.com/2013/12/08/babys-first-garbage-collector/</a></p>
+<p><a href="">https://github.com/munificent/mark-sweep/blob/master/main.c</a></p>
+<p>用c实现的一个简单的gc,采用Marking and sweeping的方式,大致能明白gc如何工作了.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/READING-NOTES/" rel="tag"><i class="fa fa-tag"></i> READING NOTES</a>
+          
+            <a href="/tags/zsh/" rel="tag"><i class="fa fa-tag"></i> zsh</a>
+          
+            <a href="/tags/javadoc/" rel="tag"><i class="fa fa-tag"></i> javadoc</a>
+          
+            <a href="/tags/NoClassDefFoundError/" rel="tag"><i class="fa fa-tag"></i> NoClassDefFoundError</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014-03-reading-notes/" rel="next" title="2014年03月Reading Notes">
+                <i class="fa fa-chevron-left"></i> 2014年03月Reading Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/pojo-perperty/" rel="prev" title="java对象属性复制">
+                java对象属性复制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#oh-my-zsh"><span class="nav-number">1.</span> <span class="nav-text">oh-my-zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Portia-the-open-source-visual-web-scraper"><span class="nav-number">2.</span> <span class="nav-text">Portia, the open source visual web scraper!</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java8-javadoc对格式要求更严格了"><span class="nav-number">3.</span> <span class="nav-text">java8,javadoc对格式要求更严格了.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Performance-Considerations-in-Distributed-Applications"><span class="nav-number">4.</span> <span class="nav-text">Performance Considerations in Distributed Applications</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-devil-in-disguise"><span class="nav-number">4.1.</span> <span class="nav-text">The devil in disguise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-beauty-of-remoting-technologies-is-…"><span class="nav-number">4.2.</span> <span class="nav-text">The beauty of remoting technologies is …</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-can-go-wrong"><span class="nav-number">4.3.</span> <span class="nav-text">What can go wrong</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Don‘t-Trust-Your-Log-Files-How-and-Why-to-Monitor-ALL-Exceptions"><span class="nav-number">5.</span> <span class="nav-text">Don‘t Trust Your Log Files: How and Why to Monitor ALL Exceptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Heartbleed-test"><span class="nav-number">6.</span> <span class="nav-text">Heartbleed test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat关闭时出现NoClassDefFoundError"><span class="nav-number">7.</span> <span class="nav-text">tomcat关闭时出现NoClassDefFoundError</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战-Groovy-使用闭包、ExpandoMetaClass-和类别进行元编程"><span class="nav-number">8.</span> <span class="nav-text">实战 Groovy: 使用闭包、ExpandoMetaClass 和类别进行元编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Venkat-Subramaniam-讨论多语言编程、JVM-和多核处理"><span class="nav-number">9.</span> <span class="nav-text">Venkat Subramaniam 讨论多语言编程、JVM 和多核处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-关于多语言编程"><span class="nav-number">9.1.</span> <span class="nav-text">1.关于多语言编程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-关于多核并行"><span class="nav-number">9.2.</span> <span class="nav-text">2.关于多核并行:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Baby’s-First-Garbage-Collector"><span class="nav-number">10.</span> <span class="nav-text">Baby’s First Garbage Collector</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

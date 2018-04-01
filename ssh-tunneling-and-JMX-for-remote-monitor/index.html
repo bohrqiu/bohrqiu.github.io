@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SSH TUNNELING,JMX," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="很多时候，我们需要连到远程应用服务器上去观察java进程的运行情况。由于邪恶的防火墙限制我们很难直接连到应用服务器。所以，也有了本文…">
+<meta name="keywords" content="SSH TUNNELING,JMX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用ssh tunneling和JMX远程监控java程序">
+<meta property="og:url" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="很多时候，我们需要连到远程应用服务器上去观察java进程的运行情况。由于邪恶的防火墙限制我们很难直接连到应用服务器。所以，也有了本文…">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/network_topology.jpg">
+<meta property="og:image" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling1.jpg">
+<meta property="og:image" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling2.jpg">
+<meta property="og:image" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling3.jpg">
+<meta property="og:updated_time" content="2018-04-01T09:29:10.559Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用ssh tunneling和JMX远程监控java程序">
+<meta name="twitter:description" content="很多时候，我们需要连到远程应用服务器上去观察java进程的运行情况。由于邪恶的防火墙限制我们很难直接连到应用服务器。所以，也有了本文…">
+<meta name="twitter:image" content="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/network_topology.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/"/>
+
+
+
+
+
+  <title>使用ssh tunneling和JMX远程监控java程序 | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用ssh tunneling和JMX远程监控java程序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-05-18T21:52:17+08:00">
+                2013-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>很多时候，我们需要连到远程应用服务器上去观察java进程的运行情况。由于邪恶的防火墙限制我们很难直接连到应用服务器。所以，也有了本文…<br><a id="more"></a><br>常见的网络拓扑结构如下：</p>
+<p><img src="/ssh-tunneling-and-JMX-for-remote-monitor/network_topology.jpg" alt=""></p>
+<p>如上图所示，办公电脑通过互联网连接跳板机,在跳板机上，我们可以访问应用服务器，查看应用服务器日志或做其他操作。现在我们需要在办公电脑上监控应用服务器1上的java进程。</p>
+<h2 id="ssh-tunneling"><a href="#ssh-tunneling" class="headerlink" title="ssh tunneling"></a>ssh tunneling</h2><p>由于防火墙的限制，我们不能直接访问应用服务器。我们可以通过ssh tunneling来实现从办公电脑访问到应用服务器服务端口。</p>
+<ul>
+<li><p>跳板机：内网ip：192.168.0.1 外网ip：14.17.32.211 ssh端口：22</p>
+</li>
+<li><p>应用服务器1：内网ip：192.168.0.2 应用端口：11113</p>
+</li>
+</ul>
+<p>通过ssh tunneling，我们利用ssh client建立ssh tunneling映射如下：</p>
+<pre><code>127.0.0.1:11113-&gt;14.17.32.211:22-&gt;192.168.0.2:11113
+</code></pre><p>本地应用客户端通过访问本地11113端口，ssh client会把请求转发到应用服务器192.168.0.2:11113</p>
+<h2 id="JMX"><a href="#JMX" class="headerlink" title="JMX"></a>JMX</h2><p>一个典型的jmx url：</p>
+<p>service:jmx:rmi://localhost:5000/jndi/rmi://localhost:6000/jmxrmi</p>
+<p>这个JMX URL可以分为如下几个部分：</p>
+<ul>
+<li><p>service:jmx: 这个是JMX URL的标准前缀，所有的JMX URL都必须以该字符串开头。</p>
+</li>
+<li><p>rmi: 这个是connector server的传输协议，在这个url中是使用rmi来进行传输的。JSR 160规定了所有connector server都必须至少实现rmi传输，是否还支持其他的传输协议依赖于具体的实现。比如MX4J就支持soap、soap+ssl、hessian、burlap等等传输协议。</p>
+</li>
+<li><p>localhost:5000: 这个是connector server的IP和端口，该部分是一个可选项，可以被省略掉。因为我们可以通过后面的服务注册端口，拿到jmx服务运行的端口信息。</p>
+</li>
+<li><p>/jndi/rmi://localhost:6000/jmxrmi: 这个是connector server的路径，具体含义取决于前面的传输协议。比如该URL中这串字符串就代表着该connector server的stub是使用jndi api绑定在rmi://localhost:6000/jmxrmi这个地址。可以理解为，localhost:6000提供了服务的注册查询端口，具体的jmx服务实现在localhost:5000</p>
+</li>
+</ul>
+<p>java进程一般通过如下的配置启动jmx：</p>
+<pre><code>-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=192.168.0.2  -Dcom.sun.management.jmxremote.port=11113 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false
+</code></pre><p>通过上面的配置可以看出，只配置了服务注册查询端口11113，而实际的jmx服务运行端口是在运行时通过11113获取到的。</p>
+<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><p>上面提到了用ssh tunneling来实现端口转发，跳过防火墙的限制，也讲到了jmx的服务暴露方式。同时引出了我们遇到的问题，我们为了监控远程服务器上的java进程，我们能通过本地的11113端口访问到远程服务器上的JMX服务注册查询端口11113，但是JMX服务运行端口，我们不知道(因为是在运行时随机指定的)，这样貌似走进了死胡同。</p>
+<p>幸运的是我们自己来初始化JMXConnectorServer时，我们可以指定具体的jmx服务端口，并且还可以指定JMX服务端口和JMX注册查询端口为同一个端口。比如我们可以设置JMX url为：</p>
+<pre><code>service:jmx:rmi://localhost:11113/jndi/rmi://localhost:11113/jmxrmi
+</code></pre><h3 id="解决方案如下："><a href="#解决方案如下：" class="headerlink" title="解决方案如下："></a>解决方案如下：</h3><ol>
+<li><p>通过Java Agent实现在java业务代码运行之前，启动jmx server，并且设置jxm服务注册查询端口和服务端口为同一端口，JMX URL为：</p>
+<pre><code>service:jmx:rmi://127.0.0.1:11113/jndi/rmi://127.0.0.1:11113/jmxrmi
+</code></pre></li>
+</ol>
+<ol>
+<li>通过ssh tunneling实现端口转发，我们的JMX client只需要访问本地的端口就能跳过防火墙的限制</li>
+</ol>
+<p>注意：这里ip地址写为127.0.0.1是有原因的，看看我们的请求流程:</p>
+<ul>
+<li>JMX client访问本地的127.0.0.1:11113</li>
+<li>注册查询请求被ssh tunneling转发到应用服务192.168.0.2:11113</li>
+<li>应用服务器上的java进程JMX注册查询服务会告诉JMX client,JMX服务在127.0.0.1:11113</li>
+<li>然后JMX client再访问127.0.0.1:11113</li>
+<li>服务请求又被ssh tunneling转发到应用服务192.168.0.2:11113，这次建立了JMX服务请求连接</li>
+</ul>
+<h3 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h3><ol>
+<li>下载<a href="https://github.com/bohrqiu/jmx_agent.git" target="_blank" rel="noopener">jmx agent</a>后执行<code>mvn package</code>，在target目录会生成jmxagent-0.0.1.jar，上传此jar包到服务器</li>
+<li><p>配置java服务进程启动参数</p>
+<pre><code>-javaagent:/root/jmxagent-0.0.1.jar -Djmx.rmi.agent.hostname=127.0.0.1 -Djmx.rmi.agent.port=11113
+</code></pre><p> 上面设置jmx服务ip为127.0.0.1，服务端口为11113，使用javaagent jar包路径为/root/jmxagent-0.0.1.jar</p>
+</li>
+<li><p>启动java服务</p>
+<p> 在控制台中，可以看到<code>Start the RMI connector server</code>的字样，说明服务正常启动了。</p>
+</li>
+<li><p>建立ssh tunneling</p>
+<p> 在xshell中配置ssh tunneling很简单，只需要两个步骤：</p>
+<p> 配置连接，我们这里需要连接到跳板机的ssh服务，如下图：    </p>
+<p> <img src="/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling1.jpg" alt=""></p>
+<p> 配置tunneling，配置稳定端口11113，应用服务器192.168.0.2:11113</p>
+<p> <img src="/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling2.jpg" alt=""></p>
+</li>
+<li><p>使用jmx client监控远程服务</p>
+<p> 在jvisualvm中添加JMX连接，如下图：</p>
+<p> <img src="/ssh-tunneling-and-JMX-for-remote-monitor/xshell_ssh_tunneling3.jpg" alt=""></p>
+</li>
+<li><p>enjoy!    </p>
+</li>
+</ol>
+<p>PS:附带一个maven启用此解决方案的脚本</p>
+<pre><code>export MAVEN_OPTS=&quot;-server -Xms8192m -Xmx8192m -XX:PermSize=128m -XX:MaxPermSize=256m -XX:+PrintGCTimeStamps -XX:+PrintGCDetails  -XX:SurvivorRatio=4 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:MaxTenuringThreshold=5 -XX:+CMSClassUnloadingEnabled -verbosegc  -Xloggc:/var/log/xxx/gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/xxx/oom.hprof  -Djava.awt.headless=true  -javaagent:/root/jmxagent-0.0.1.jar -Djmx.rmi.agent.hostname=127.0.0.1 -Djmx.rmi.agent.port=11113&quot;
+mvn exec:java -Dexec.mainClass=&quot;com.xxx.Bootstrap&quot; &amp;
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SSH-TUNNELING/" rel="tag"><i class="fa fa-tag"></i> SSH TUNNELING</a>
+          
+            <a href="/tags/JMX/" rel="tag"><i class="fa fa-tag"></i> JMX</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/jdk7-exception/" rel="next" title="使用jdk7新增异常构造器提高异常性能">
+                <i class="fa fa-chevron-left"></i> 使用jdk7新增异常构造器提高异常性能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/log-tuning/" rel="prev" title="日志优化">
+                日志优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh-tunneling"><span class="nav-number">1.</span> <span class="nav-text">ssh tunneling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMX"><span class="nav-number">2.</span> <span class="nav-text">JMX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">3.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案如下："><span class="nav-number">3.1.</span> <span class="nav-text">解决方案如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作步骤"><span class="nav-number">3.2.</span> <span class="nav-text">操作步骤</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

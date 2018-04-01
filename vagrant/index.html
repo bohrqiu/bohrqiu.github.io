@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="vagrant," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="vagrant挺火的,用于快速搭建开发环境.官方网站一行大字Development environments made easy.很惹眼.他可以实现可分发的环境搭建. 我们现在要快速搭建开发测试环境的需求很强烈,我们希望使用TA来快速搭建我们的开发测试环境.so,begin… 1.Centos上安装Virtaul Box[^1]1.1 安装问题unable to find the sources">
+<meta name="keywords" content="vagrant">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用vagrant">
+<meta property="og:url" content="http://bohr.me/vagrant/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="vagrant挺火的,用于快速搭建开发环境.官方网站一行大字Development environments made easy.很惹眼.他可以实现可分发的环境搭建. 我们现在要快速搭建开发测试环境的需求很强烈,我们希望使用TA来快速搭建我们的开发测试环境.so,begin… 1.Centos上安装Virtaul Box[^1]1.1 安装问题unable to find the sources">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T06:46:41.872Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用vagrant">
+<meta name="twitter:description" content="vagrant挺火的,用于快速搭建开发环境.官方网站一行大字Development environments made easy.很惹眼.他可以实现可分发的环境搭建. 我们现在要快速搭建开发测试环境的需求很强烈,我们希望使用TA来快速搭建我们的开发测试环境.so,begin… 1.Centos上安装Virtaul Box[^1]1.1 安装问题unable to find the sources">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/vagrant/"/>
+
+
+
+
+
+  <title>使用vagrant | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/vagrant/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用vagrant</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-07-07T21:52:17+08:00">
+                2014-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>vagrant挺火的,用于快速搭建开发环境.官方网站一行大字<code>Development environments made easy.</code>很惹眼.他可以实现可分发的环境搭建.</p>
+<p>我们现在要快速搭建开发测试环境的需求很强烈,我们希望使用TA来快速搭建我们的开发测试环境.so,begin…</p>
+<h2 id="1-Centos上安装Virtaul-Box-1"><a href="#1-Centos上安装Virtaul-Box-1" class="headerlink" title="1.Centos上安装Virtaul Box[^1]"></a>1.<code>Centos</code>上安装<code>Virtaul Box</code>[^1]</h2><h3 id="1-1-安装问题unable-to-find-the-sources-of-your-current-Linux-kernel-Specify-KERN-DIR-lt-directory-gt-and-run-Make-again-2"><a href="#1-1-安装问题unable-to-find-the-sources-of-your-current-Linux-kernel-Specify-KERN-DIR-lt-directory-gt-and-run-Make-again-2" class="headerlink" title="1.1 安装问题unable to find the sources of your current Linux kernel. Specify KERN_DIR=&lt;directory&gt; and run Make again.[^2]"></a>1.1 安装问题<code>unable to find the sources of your current Linux kernel. Specify KERN_DIR=&lt;directory&gt; and run Make again.</code>[^2]</h3><p>Virtaul Box原因是<code>uname -r</code>和<code>ls /usr/src/kernels/</code>版本不一致,需要执行<code>yum update</code>,可以把国内的yum镜像用起来,会快点.完了重启下.</p>
+<p>参考:</p>
+<pre><code>http://rationallyparanoid.com/articles/virtualbox-centos-6.2.html
+https://www.centos.org/forums/viewtopic.php?t=5603
+</code></pre><h2 id="2-Centos上安装vagrant-3"><a href="#2-Centos上安装vagrant-3" class="headerlink" title="2.Centos上安装vagrant[^3]"></a>2.<code>Centos</code>上安装<code>vagrant</code>[^3]</h2><h3 id="2-1-static-IP-on-a-bridged-interface"><a href="#2-1-static-IP-on-a-bridged-interface" class="headerlink" title="2.1 static IP on a bridged interface"></a>2.1 <code>static IP on a bridged interface</code></h3><p>由于是公用的环境,会有很多个童鞋去访问,所以需要固定ip,并且上面的服务大家也可以自由访问,所以需要桥接网络.<br>但是官方网站上没有这样的配置,最后在github[^4]上发现了解决方案,测试了N遍,终于对头了:</p>
+<pre><code>config.vm.network &quot;public_network&quot;, :bridge =&gt; &quot;eth0&quot;, :ip =&gt; &quot;192.168.46.51&quot;
+</code></pre><p>如果是mac上,就用:</p>
+<pre><code>config.vm.network &quot;public_network&quot;, :bridge =&gt; &quot;en0: Wi-Fi (AirPort)&quot;, :ip   =&gt; &quot;192.168.1.222&quot;
+</code></pre><p>这样也需要注意下,如果要搭建多套环境,最好还是开一个新的网段,别和其他系统的ip冲突了.</p>
+<p>如果只是你自己一个人玩,使用host-only吧,很简单.</p>
+<h3 id="2-2-ext4-file-system-inconsistency系统稳定性问题"><a href="#2-2-ext4-file-system-inconsistency系统稳定性问题" class="headerlink" title="2.2 ext4 file system inconsistency系统稳定性问题"></a>2.2 <code>ext4 file system inconsistency</code>系统稳定性问题</h3><p>不知道什么原因,过段时间就启动不了,最后通过<code>ssh tunneling</code>打开<code>Virtaul Box</code>图形化界面才发现了这个<code>ext4 file system inconsistency</code>问题.</p>
+<p>错误日志如下:</p>
+<pre><code>There is a known Linux kernel bug which can lead to the corruption of the virtual disk image under these conditions.
+Either enable the host I/O cache permanently in the VM settings or put the disk image and the snapshot folder onto a different file system.
+The host I/O cache will now be enabled for this medium.
+</code></pre><p>这是一个kernel的bug,centos forum上遇到这个问题[^5],其他的虚拟化vmware也有同样的问题.</p>
+<p>如果<code>enable host I/O cache</code>,又会遇到各种问题[^6].比如<code>data loss</code>,<code>I/O errors</code>,<code>I/O requests time out</code>,<code>Physical memory waste</code>都是童鞋们不能接受的.</p>
+<p>只有选择使用不同的文件系统,<code>fdisk -l</code>看下<code>/home</code>还比较大,有上T的空间.</p>
+<pre><code>#卸载home分区
+umount /dev/mapper/VolGroup-lv_home
+#格式化
+mkfs.ext3 /dev/mapper/VolGroup-lv_home
+#装载home分区
+mount /dev/mapper/VolGroup-lv_home /home
+</code></pre><p>最后需要修改 <code>/etc/fstab</code>,改变挂载分区为<code>ext3</code>,重启后<code>sudo parted -l</code>看生效没有.现在可以在<code>/home</code>目录启动vagrant.</p>
+<h3 id="2-3-guest分配多核反而更慢"><a href="#2-3-guest分配多核反而更慢" class="headerlink" title="2.3 guest分配多核反而更慢"></a>2.3 guest分配多核反而更慢</h3><p>如果开启多核(比如设置为20核),又遇到启动很慢的问题[^7].原因是:</p>
+<blockquote>
+<p>VMs with multiple vCPUs require that all allocated cores be free before processing can begin. This means, if you have a 2 vCPU machine,2 physical cores must be available, and a 4 vCPU requires 4 physical cores</p>
+</blockquote>
+<p>我开启20核,等了半个小时实在等不下去了.</p>
+<p>查看cpu个数<code>grep &#39;physical id&#39; /proc/cpuinfo | sort -u</code>,2个物理cpu.查看每个cpu核心数,<code>grep &#39;core id&#39; /proc/cpuinfo | sort -u | wc -l</code>,每个cpu6个核心. 按照</p>
+<blockquote>
+<p>One point to note is that if you assign many more vCPUs than you have physical CPUs the system may run slower because the host spends more time scheduling threads than actually running them.</p>
+</blockquote>
+<p>,理论上12个应该是最优的,但是感觉还是不太靠谱,测试某app启动性能:</p>
+<table>
+<thead>
+<tr>
+<th>cpus</th>
+<th>启动费时1</th>
+<th>启动费时2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>34664</td>
+<td>34291</td>
+</tr>
+<tr>
+<td>2</td>
+<td>29040</td>
+<td>29104</td>
+</tr>
+<tr>
+<td>4</td>
+<td>26205</td>
+<td>26495</td>
+</tr>
+<tr>
+<td>6</td>
+<td>27207</td>
+<td>28566</td>
+</tr>
+<tr>
+<td>8</td>
+<td>48087</td>
+<td>44483</td>
+</tr>
+</tbody>
+</table>
+<p>根据上面的测试,给vm配置4 cpus是最优的.卧槽,咱这服务两个物理cpu,每个cpu6 个核心,在加上<code>Hyperthreading</code>,<code>processor</code>都有24个了.如果这台服务器上有多个vm,咱这个测试最优的cpu数还会更少.</p>
+<h2 id="3-制作package"><a href="#3-制作package" class="headerlink" title="3.制作package"></a>3.制作package</h2><h3 id="3-1-初始化vagrant环境"><a href="#3-1-初始化vagrant环境" class="headerlink" title="3.1 初始化vagrant环境"></a>3.1 初始化vagrant环境</h3><p>下载一个官方提供的base box[^8],用于初始化环境.这里我们选择CentOS 6.4 x86_64[^9].<br>在前面提到的ext3分区上进行:</p>
+<pre><code>#添加镜像到 Vagrant
+vagrant box add yiji package.box
+#初始化环境
+vagrant init yiji
+</code></pre><p>当前目录会有一个<code>Vagrantfile</code>文件,加上前面测试的东东:</p>
+<pre><code>config.vm.network &quot;public_network&quot;, :bridge =&gt; &quot;eth0&quot;, :ip =&gt; &quot;192.168.46.51&quot;
+config.vm.provider :virtualbox do |vb|
+    vb.gui = false
+    #设置内存
+    vb.customize [&quot;modifyvm&quot;, :id, &quot;--memory&quot;, &quot;5120&quot;]
+    #设置虚拟机ip
+    vb.customize [&quot;modifyvm&quot;, :id, &quot;--cpus&quot;, &quot;4&quot;]
+    #设置ioapic,启用多个cpu时,必须设置.如果就一个cpu就不要设置,影响性能
+    vb.customize [&quot;modifyvm&quot;, :id, &quot;--ioapic&quot;, &quot;on&quot;]
+    #vb.customize [&quot;modifyvm&quot;, :id, &quot;--cpuexecutioncap&quot;, &quot;50&quot;]
+end
+</code></pre><p>启动虚拟机并ssh登陆:</p>
+<pre><code>#启动虚拟机
+vagrant up
+#ssh登陆
+vagrant ssh
+</code></pre><h3 id="3-2-初始化VM环境"><a href="#3-2-初始化VM环境" class="headerlink" title="3.2 初始化VM环境"></a>3.2 初始化VM环境</h3><p>ssh登陆后,此时是用vagrant用户登陆的,这个时候神马事情都干不了,切换到root用户</p>
+<pre><code>#修改root密码
+sudo passwd root
+#切换到root账户
+su - root
+</code></pre><p>配置路由和dns服务器:</p>
+<pre><code>sudo route del default
+sudo route add default gw 192.168.46.254
+echo &quot;nameserver 192.168.45.10&quot; &gt; /etc/resolv.conf
+echo &quot;nameserver 8.8.8.8&quot; &gt;&gt; /etc/resolv.conf
+</code></pre><p>添加定时常用定时任务:</p>
+<pre><code>#每12小时时间服务同步
+0 */12 * * * rdate -s time.nist.gov
+#每天清理日志
+0 0 * * * /script/deletelog.sh
+</code></pre><p>关闭防火墙:</p>
+<pre><code>chkconfig ip6tables off
+chkconfig iptables off
+</code></pre><p>为了集中控制jvm的启动参数,定义java应用依赖环境变量:</p>
+<pre><code>export APP_JAVA_OPTS=&quot;-Xms256m -Xmx512m&quot;
+</code></pre><p>所有的java应用启动脚本中把<code>APP_JAVA_OPTS</code>加在启动参数的最后,它的优先级最高,就很方便的控制所有的jvm进程内存大小了.</p>
+<p>上面有些东西可以脚本化的,尽量就脚本化,比如在<code>/etc/rc.d/rc.local</code>增加启动脚本<code>init.sh</code> .其他脚本分为 <code>init_network.sh</code> <code>init_env.sh</code> <code>init_common_app.sh</code> <code>init_app.sh</code></p>
+<h3 id="3-3-安装memcache"><a href="#3-3-安装memcache" class="headerlink" title="3.3 安装memcache"></a>3.3 安装memcache</h3><p>安装:</p>
+<pre><code>yum install memcached
+</code></pre><p>配置文件:</p>
+<pre><code>/etc/sysconfig/memcached
+</code></pre><p>命令:</p>
+<pre><code>service memcached start/stop/restart/status
+</code></pre><p>设置开机启动:</p>
+<pre><code>chkconfig memcached on
+</code></pre><p>修改<code>/etc/init.d/memcached</code>可以修改memcache启动参数</p>
+<h3 id="3-4-安装rabbitmq"><a href="#3-4-安装rabbitmq" class="headerlink" title="3.4 安装rabbitmq"></a>3.4 安装rabbitmq</h3><p>安装:</p>
+<pre><code>yum install rabbitmq
+ #安装webui
+ rabbitmq-plugins enable rabbitmq_management
+ #启用guest账户 访问web ui
+ echo &quot;[{rabbit, [{loopback_users, []}]}].&quot; &gt;/etc/rabbitmq/rabbitmq.config
+</code></pre><p>常用命令:</p>
+<pre><code>service rabbitmq-server stop/start/etc.
+</code></pre><p>web ui访问地址,账号密码guest/guest:</p>
+<pre><code>http://192.168.46.51:15672/
+</code></pre><p>设置开机启动:</p>
+<pre><code>chkconfig rabbitmq-server on
+</code></pre><h3 id="3-5-安装其他软件"><a href="#3-5-安装其他软件" class="headerlink" title="3.5 安装其他软件"></a>3.5 安装其他软件</h3><p>jdk/maven/memcache/zookeeper/rabbitmq/dubbo-monitor-simple/dubbo-admin</p>
+<h3 id="3-6-服务列表说明"><a href="#3-6-服务列表说明" class="headerlink" title="3.6 服务列表说明"></a>3.6 服务列表说明</h3><table>
+<thead>
+<tr>
+<th>服务</th>
+<th>服务端口</th>
+<th>web ui 端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>memcache</td>
+<td>11211</td>
+<td>无</td>
+</tr>
+<tr>
+<td>zookeeper</td>
+<td>2181</td>
+<td>无</td>
+</tr>
+<tr>
+<td>rabbitmq</td>
+<td>5672</td>
+<td>15672</td>
+</tr>
+<tr>
+<td>dubbo-monitor</td>
+<td>7070</td>
+<td>7071</td>
+</tr>
+<tr>
+<td>dubbo-admin</td>
+<td>无</td>
+<td>7073</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-7-制作分发包"><a href="#3-7-制作分发包" class="headerlink" title="3.7 制作分发包"></a>3.7 制作分发包</h3><pre><code>vagrant package
+</code></pre><p>上面命令会在当前目录生成一个<code>package.box</code>文件,此文件拷贝到其他服务器,就可以快速搭建系统了.</p>
+<h3 id="3-8-常用vagrant-命令"><a href="#3-8-常用vagrant-命令" class="headerlink" title="3.8 常用vagrant 命令"></a>3.8 常用vagrant 命令</h3><pre><code>#初始化环境,此命令会生成Vagrantfile配置文件,如果当前目录有Vagrantfile,不要执行此命令,直接up吧
+vagrant init
+
+#启动虚拟机  
+vagrant up
+
+#关闭虚拟机  
+vagrant halt
+
+# 重新启动虚拟机,如果Vagrantfile被修改后,执行此命令才能生效.
+#但是修改cpu相关参数,此命令也不能重新加载配置,这个时候把虚拟机先停下来,
+#通过ssh tunneling在gui界面里调整
+vagrant reload 
+
+#SSH至虚拟机
+vagrant ssh
+
+#查看虚拟机运行状态
+vagrant status
+
+# 销毁当前虚拟机
+vagrant destroy  
+
+#add box
+vagrant box add boxname xxx.box
+
+#remove box
+
+vagrant box remove boxname
+
+#list box
+vagrant box list
+</code></pre><h2 id="4-写在最后"><a href="#4-写在最后" class="headerlink" title="4.写在最后"></a>4.写在最后</h2><p><code>virtual box</code>的性能让人担忧,如果部署应用太多需要仔细权衡下,如果只是搭建单机环境,使用vagrant还是很ok的.</p>
+<p>[^1]: <a href="https://www.virtualbox.org/wiki/Linux_Downloads" target="_blank" rel="noopener"><code>Virtual Box</code>下载地址</a><br>[^2]: <a href="https://www.centos.org/forums/viewtopic.php?t=5603" target="_blank" rel="noopener">unable to find the sources of your current Linux kernel</a><br>[^3]: <a href="http://www.vagrantup.com/downloads.htmlhttp://www.vagrantup.com/downloads.html" target="_blank" rel="noopener"><code>vagrant</code>下载地址</a><br>[^4]: <a href="https://github.com/mitchellh/vagrant/pull/1745" target="_blank" rel="noopener">Static ip addresses on public networks</a><br>[^5]: <a href="https://www.centos.org/forums/viewtopic.php?t=4436" target="_blank" rel="noopener">ext4 file system inconsistency</a><br>[^6]: <a href="https://www.virtualbox.org/manual/ch05.html#iocaching" target="_blank" rel="noopener">Host I/O caching</a><br>[^7]: <a href="http://www.reddit.com/r/linux/comments/1tqlsz/adding_cpus_to_virtualbox_guests_makes_guests/" target="_blank" rel="noopener">Adding CPUs to Virtualbox guests makes guests boot SLOWER</a><br>[^8]: <a href="http://www.vagrantbox.es/" target="_blank" rel="noopener">vagrant base box</a><br>[^9]: <a href="https://github.com/2creatives/vagrant-centos/releases/download/v6.4.2/centos64-x86_64-20140116.box" target="_blank" rel="noopener">vagrant base box CentOS 6.4 x86_64</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vagrant/" rel="tag"><i class="fa fa-tag"></i> vagrant</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014-06-reading-notes/" rel="next" title="2014年06月Reading Notes">
+                <i class="fa fa-chevron-left"></i> 2014年06月Reading Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/hibernate-no-session-in-dubbo/" rel="prev" title="hibernate应用报could not initialize proxy - no Session分析">
+                hibernate应用报could not initialize proxy - no Session分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Centos上安装Virtaul-Box-1"><span class="nav-number">1.</span> <span class="nav-text">1.Centos上安装Virtaul Box[^1]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-安装问题unable-to-find-the-sources-of-your-current-Linux-kernel-Specify-KERN-DIR-lt-directory-gt-and-run-Make-again-2"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 安装问题unable to find the sources of your current Linux kernel. Specify KERN_DIR=&lt;directory&gt; and run Make again.[^2]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Centos上安装vagrant-3"><span class="nav-number">2.</span> <span class="nav-text">2.Centos上安装vagrant[^3]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-static-IP-on-a-bridged-interface"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 static IP on a bridged interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-ext4-file-system-inconsistency系统稳定性问题"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 ext4 file system inconsistency系统稳定性问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-guest分配多核反而更慢"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 guest分配多核反而更慢</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-制作package"><span class="nav-number">3.</span> <span class="nav-text">3.制作package</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-初始化vagrant环境"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 初始化vagrant环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-初始化VM环境"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 初始化VM环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-安装memcache"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 安装memcache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-安装rabbitmq"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 安装rabbitmq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-安装其他软件"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 安装其他软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-服务列表说明"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 服务列表说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-制作分发包"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 制作分发包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-常用vagrant-命令"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 常用vagrant 命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-写在最后"><span class="nav-number">4.</span> <span class="nav-text">4.写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

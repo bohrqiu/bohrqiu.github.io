@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="share," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一次技术问答最近一年多都没有写博客了，技术上做了很多有意义的事情，也有一些经验上的积累，逐步沉淀到博客上。 今天回答某公司的技术上的一些疑问，把问题和回答贴上来。逐步养自己的技术观。 1. 如何做数据安全防范？还有哪些支付安全需要注意？数据安全防范主要分为两个方面：  内部  数据库管理员职责单一，不能既懂业务，又懂数据库 数据库合理管控 日志脱敏 线上导入到线下的测试数据需要审核   外部  防">
+<meta name="keywords" content="share">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次技术问答">
+<meta property="og:url" content="http://bohr.me/一次技术问答/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="一次技术问答最近一年多都没有写博客了，技术上做了很多有意义的事情，也有一些经验上的积累，逐步沉淀到博客上。 今天回答某公司的技术上的一些疑问，把问题和回答贴上来。逐步养自己的技术观。 1. 如何做数据安全防范？还有哪些支付安全需要注意？数据安全防范主要分为两个方面：  内部  数据库管理员职责单一，不能既懂业务，又懂数据库 数据库合理管控 日志脱敏 线上导入到线下的测试数据需要审核   外部  防">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T09:09:50.613Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一次技术问答">
+<meta name="twitter:description" content="一次技术问答最近一年多都没有写博客了，技术上做了很多有意义的事情，也有一些经验上的积累，逐步沉淀到博客上。 今天回答某公司的技术上的一些疑问，把问题和回答贴上来。逐步养自己的技术观。 1. 如何做数据安全防范？还有哪些支付安全需要注意？数据安全防范主要分为两个方面：  内部  数据库管理员职责单一，不能既懂业务，又懂数据库 数据库合理管控 日志脱敏 线上导入到线下的测试数据需要审核   外部  防">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/一次技术问答/"/>
+
+
+
+
+
+  <title>一次技术问答 | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/一次技术问答/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一次技术问答</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-28T21:52:17+08:00">
+                2017-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一次技术问答"><a href="#一次技术问答" class="headerlink" title="一次技术问答"></a>一次技术问答</h2><p>最近一年多都没有写博客了，技术上做了很多有意义的事情，也有一些经验上的积累，逐步沉淀到博客上。</p>
+<p>今天回答某公司的技术上的一些疑问，把问题和回答贴上来。逐步<code>养</code>自己的技术观。</p>
+<h3 id="1-如何做数据安全防范？还有哪些支付安全需要注意？"><a href="#1-如何做数据安全防范？还有哪些支付安全需要注意？" class="headerlink" title="1. 如何做数据安全防范？还有哪些支付安全需要注意？"></a>1. 如何做数据安全防范？还有哪些支付安全需要注意？</h3><p>数据安全防范主要分为两个方面：</p>
+<ol>
+<li><p>内部</p>
+<ul>
+<li>数据库管理员职责单一，不能既懂业务，又懂数据库</li>
+<li>数据库合理管控</li>
+<li>日志脱敏</li>
+<li>线上导入到线下的测试数据需要审核</li>
+</ul>
+</li>
+<li><p>外部</p>
+<p> 防止数据被泄露出去，比如sql防注入，服务器权限合理管控，数据访问需要进行合理的授权(比如遍历id就能把数据查出来)</p>
+</li>
+</ol>
+<p>技术上的安全关注下owasp top 10，业务上的安全需要属于风控了，这块我了解的比较少，比如基本的同卡进出。</p>
+<h3 id="2-认证授权怎样拦截无效用户？"><a href="#2-认证授权怎样拦截无效用户？" class="headerlink" title="2. 认证授权怎样拦截无效用户？"></a>2. 认证授权怎样拦截无效用户？</h3><p>上下文说得不是很清楚。我理解为，认证服务的能力。除了功能性需求，可能还需要一些非功能性需求。比如认证服务需要使用缓存，认证服务需要有限流。</p>
+<h3 id="3-分布式性能提升的方案-数据模型设计有哪些最佳实践？"><a href="#3-分布式性能提升的方案-数据模型设计有哪些最佳实践？" class="headerlink" title="3. 分布式性能提升的方案. 数据模型设计有哪些最佳实践？"></a>3. 分布式性能提升的方案. 数据模型设计有哪些最佳实践？</h3><p>这个话题太大，我只能大概说下：</p>
+<ol>
+<li>首先要平衡组件和服务之间的关系，毕竟分布式第一定律：不要分布式</li>
+<li>分布式场景，应该要考虑允许数据不一致的情况，合适的引入缓存</li>
+<li>所有的性能问题，其实是怎么把资源榨干，了解各种资源的特性，就了解了如何取舍资源利用率</li>
+<li>性能需要考虑，在项目前期，要对性能有预期，留下足够扩展的点，不要过多投入，也不能完全不管。</li>
+</ol>
+<h3 id="4-交易相关分布式事务控制-log的处理方式-异常处理机制请随意分享一些实际的经验"><a href="#4-交易相关分布式事务控制-log的处理方式-异常处理机制请随意分享一些实际的经验" class="headerlink" title="4. 交易相关分布式事务控制. log的处理方式. 异常处理机制请随意分享一些实际的经验"></a>4. 交易相关分布式事务控制. log的处理方式. 异常处理机制请随意分享一些实际的经验</h3><ol>
+<li>分布式事务不要碰，简单的做法：服务提供方幂等+服务使用方努力尝试。这样做开销最小，毕竟失败不是常态。</li>
+<li>log不要阻塞业务的执行。log中应该要保留请求唯一id，便于做链路分析。open-tracing还不错。</li>
+<li>异常的处理原则：a. 业务尽量不要处理异常，交给框架，这样代码写起来会很优雅(框架异常处理器来处理)。b. 不要吞掉底层异常 c. 业务异常要考虑下是否必须收集栈信息(不收集栈信息可以减少日志，并提高性能)</li>
+</ol>
+<h3 id="5-分享一下中间件使用场景"><a href="#5-分享一下中间件使用场景" class="headerlink" title="5. 分享一下中间件使用场景"></a>5. 分享一下中间件使用场景</h3><p><code>中间件</code>这个词太大了。没办法讲。</p>
+<h3 id="6-用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低"><a href="#6-用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低" class="headerlink" title="6. 用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低"></a>6. 用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低</h3><p>这个不是dubbo的问题。该异步的异步，该并行的并行，能缓存的缓存，性能自然好了。</p>
+<h3 id="7-封装mq做同步返回替代rpc同步返回机制是否可行"><a href="#7-封装mq做同步返回替代rpc同步返回机制是否可行" class="headerlink" title="7. 封装mq做同步返回替代rpc同步返回机制是否可行"></a>7. 封装mq做同步返回替代rpc同步返回机制是否可行</h3><p>mq做同步返回？mq本来就是异步的，同步只是在交互上的同步，由两个异步的场景+等待组合成对外部的异步，这样做意义不大把？</p>
+<p>soa中，dubbo只是提供了一种解决rpc的手段，不要忘记，消息在很多场景下比用rpc好得多。</p>
+<h3 id="8-定时服务只能单点部署，如何做高可用"><a href="#8-定时服务只能单点部署，如何做高可用" class="headerlink" title="8. 定时服务只能单点部署，如何做高可用"></a>8. 定时服务只能单点部署，如何做高可用</h3><p>定时任务可以做高可用，开源有解决方案，quartz也有解决方案。两种思路：</p>
+<ol>
+<li>基于quartz官方的数据库方案。</li>
+<li>数据库存任务，用zookeeper之类的来做任务分配，用quartz来做节点上的定时任务。</li>
+</ol>
+<h3 id="9-怎样才能评估服务拆分的合理性"><a href="#9-怎样才能评估服务拆分的合理性" class="headerlink" title="9. 怎样才能评估服务拆分的合理性"></a>9. 怎样才能评估服务拆分的合理性</h3><ul>
+<li>若非可重用，先尽量不要拆分。微服务这样的入大流的名词，做起来需要很多基础设施做支撑。单体应用能支撑得很好，组件化，模块化也很不错。</li>
+<li>服务拆分尽量按照领域来设计，高内聚、低耦合是目标(参考面向对象设计的基本原则)。服务粒度靠业务场景养出来的，准则很多，需要根据业务场景来逐步演进。</li>
+<li>公司的技术架构能改变公司的业务发展现状！！！技术真的能带来生产力！！！可以参考阿里巴巴<code>大中台，小前台</code>的思路。不过要看阶段，合适的阶段做合适的事情，技术能带来价值，也能带来麻烦。一切都是取舍。</li>
+</ul>
+<h3 id="10-web项目分布式集群时session共享有什么好的实践。"><a href="#10-web项目分布式集群时session共享有什么好的实践。" class="headerlink" title="10. web项目分布式集群时session共享有什么好的实践。"></a>10. web项目分布式集群时session共享有什么好的实践。</h3><p>spring session+redis或者spring session+内存网格(Hazelcast\ Ignite）</p>
+<h3 id="11-Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的"><a href="#11-Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的" class="headerlink" title="11. Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的"></a>11. Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的</h3><p>我们内部的版本修复了这个问题。步骤如下：</p>
+<ul>
+<li>provider通知consumer,不要发新请求过来（zookeeper unregister service）</li>
+<li>provider等待服务执行完毕 (provider计数)</li>
+<li>consumer等待服务执行完毕 (执行完毕后provider计数)</li>
+<li>provider关闭</li>
+<li>cusumer关闭</li>
+</ul>
+<h3 id="12-易极付这边的页面自动生成技术是如何实现的？"><a href="#12-易极付这边的页面自动生成技术是如何实现的？" class="headerlink" title="12. 易极付这边的页面自动生成技术是如何实现的？"></a>12. 易极付这边的页面自动生成技术是如何实现的？</h3><p>通过自动生成的业务主要用于后台管理，包括：新增，修改，删除，分页，导入，导出等功能。做起来比较简单，访问数据库获取元数据，通过freemarker生成代码。</p>
+<h3 id="13-支付系统的异步通知的实现，如何优雅的控制通知的频率"><a href="#13-支付系统的异步通知的实现，如何优雅的控制通知的频率" class="headerlink" title="13. 支付系统的异步通知的实现，如何优雅的控制通知的频率"></a>13. 支付系统的异步通知的实现，如何优雅的控制通知的频率</h3><p>我们内部有一个通知服务，所有要对外通知的系统向通知服务发送消息。通知系统记录任务，通过异步http向外发送消息。每个任务维护通知的状态。现在通知间隔是逐步递增的。</p>
+<h3 id="14-包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包"><a href="#14-包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包" class="headerlink" title="14. 包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包"></a>14. 包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包</h3><p>gradle有5年多没有用了，大概参考官方文档<a href="https://docs.gradle.org/current/userguide/dependency_management.html#sec:controlling_caching" target="_blank" rel="noopener">gradle:controlling_caching</a>可以做到。</p>
+<h3 id="15-遇到回调先于同步返回的情况，该如何处理？"><a href="#15-遇到回调先于同步返回的情况，该如何处理？" class="headerlink" title="15. 遇到回调先于同步返回的情况，该如何处理？"></a>15. 遇到回调先于同步返回的情况，该如何处理？</h3><p>对于服务调用方，需要考虑幂等。谁先回来都无所谓。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/share/" rel="tag"><i class="fa fa-tag"></i> share</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016-08-reading-notes/" rel="next" title="2016年05月Reading Notes">
+                <i class="fa fa-chevron-left"></i> 2016年05月Reading Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一次技术问答"><span class="nav-number">1.</span> <span class="nav-text">一次技术问答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-如何做数据安全防范？还有哪些支付安全需要注意？"><span class="nav-number">1.1.</span> <span class="nav-text">1. 如何做数据安全防范？还有哪些支付安全需要注意？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-认证授权怎样拦截无效用户？"><span class="nav-number">1.2.</span> <span class="nav-text">2. 认证授权怎样拦截无效用户？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-分布式性能提升的方案-数据模型设计有哪些最佳实践？"><span class="nav-number">1.3.</span> <span class="nav-text">3. 分布式性能提升的方案. 数据模型设计有哪些最佳实践？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-交易相关分布式事务控制-log的处理方式-异常处理机制请随意分享一些实际的经验"><span class="nav-number">1.4.</span> <span class="nav-text">4. 交易相关分布式事务控制. log的处理方式. 异常处理机制请随意分享一些实际的经验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-分享一下中间件使用场景"><span class="nav-number">1.5.</span> <span class="nav-text">5. 分享一下中间件使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低"><span class="nav-number">1.6.</span> <span class="nav-text">6. 用dubbo框架多服务之间rpc调用同步返回这种需求有什么好的方法来保证实时性返回，因为整个服务链调执行完后还需要每个链路挨个返回效率很低</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-封装mq做同步返回替代rpc同步返回机制是否可行"><span class="nav-number">1.7.</span> <span class="nav-text">7. 封装mq做同步返回替代rpc同步返回机制是否可行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-定时服务只能单点部署，如何做高可用"><span class="nav-number">1.8.</span> <span class="nav-text">8. 定时服务只能单点部署，如何做高可用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-怎样才能评估服务拆分的合理性"><span class="nav-number">1.9.</span> <span class="nav-text">9. 怎样才能评估服务拆分的合理性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-web项目分布式集群时session共享有什么好的实践。"><span class="nav-number">1.10.</span> <span class="nav-text">10. web项目分布式集群时session共享有什么好的实践。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的"><span class="nav-number">1.11.</span> <span class="nav-text">11. Dubbo服务不停机升级，如何让正在运行的处理完毕，并且不接收新请求的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-易极付这边的页面自动生成技术是如何实现的？"><span class="nav-number">1.12.</span> <span class="nav-text">12. 易极付这边的页面自动生成技术是如何实现的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-支付系统的异步通知的实现，如何优雅的控制通知的频率"><span class="nav-number">1.13.</span> <span class="nav-text">13. 支付系统的异步通知的实现，如何优雅的控制通知的频率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包"><span class="nav-number">1.14.</span> <span class="nav-text">14. 包的版本使用SNAPSHOT，怎样确保使用gradle下载的是最新的jar包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-遇到回调先于同步返回的情况，该如何处理？"><span class="nav-number">1.15.</span> <span class="nav-text">15. 遇到回调先于同步返回的情况，该如何处理？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

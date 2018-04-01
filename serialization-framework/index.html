@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="序列化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="序列化框架选型分布式应用中,序列化很关键,选择一个合适的序列化框架能给分布式应用带来性能红利,还能减少不必要的麻烦.本文仅仅从我遇到的一些实际问题来说明序列化的选型.更深入部分也可以参考java序列化 序列化框架的性能可以参考jvm-serializers,Kryo的性能还是很牛叉的. 除了性能,还要考虑兼容性/序列化后的大小.如果仅仅考虑性能,我们选择Kryo就足够了.但是Kryo有些用着不爽的">
+<meta name="keywords" content="序列化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="序列化框架选型">
+<meta property="og:url" content="http://bohr.me/serialization-framework/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="序列化框架选型分布式应用中,序列化很关键,选择一个合适的序列化框架能给分布式应用带来性能红利,还能减少不必要的麻烦.本文仅仅从我遇到的一些实际问题来说明序列化的选型.更深入部分也可以参考java序列化 序列化框架的性能可以参考jvm-serializers,Kryo的性能还是很牛叉的. 除了性能,还要考虑兼容性/序列化后的大小.如果仅仅考虑性能,我们选择Kryo就足够了.但是Kryo有些用着不爽的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T06:52:47.058Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="序列化框架选型">
+<meta name="twitter:description" content="序列化框架选型分布式应用中,序列化很关键,选择一个合适的序列化框架能给分布式应用带来性能红利,还能减少不必要的麻烦.本文仅仅从我遇到的一些实际问题来说明序列化的选型.更深入部分也可以参考java序列化 序列化框架的性能可以参考jvm-serializers,Kryo的性能还是很牛叉的. 除了性能,还要考虑兼容性/序列化后的大小.如果仅仅考虑性能,我们选择Kryo就足够了.但是Kryo有些用着不爽的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/serialization-framework/"/>
+
+
+
+
+
+  <title>序列化框架选型 | qiubo's life</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/serialization-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">序列化框架选型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-26T21:52:17+08:00">
+                2014-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="序列化框架选型"><a href="#序列化框架选型" class="headerlink" title="序列化框架选型"></a>序列化框架选型</h3><p>分布式应用中,序列化很关键,选择一个合适的序列化框架能给分布式应用带来性能红利,还能减少不必要的麻烦.本文仅仅从我遇到的一些实际问题来说明序列化的选型.更深入部分也可以参考<a href="http://bohr.me/2012/04/02/java-serialization.html">java序列化</a></p>
+<p>序列化框架的性能可以参考<a href="https://github.com/eishay/jvm-serializers/wiki" target="_blank" rel="noopener">jvm-serializers</a>,<code>Kryo</code>的性能还是很牛叉的.</p>
+<p>除了性能,还要考虑兼容性/序列化后的大小.如果仅仅考虑性能,我们选择<code>Kryo</code>就足够了.但是Kryo有些用着不爽的地方,比如不是线程安全的/兼容性.</p>
+<h4 id="1-兼容性"><a href="#1-兼容性" class="headerlink" title="1.兼容性"></a>1.兼容性</h4><p>字段增删不兼容,这个问题有时候很麻烦.比如用memache做缓存,把对象序列化后存入memcache,如果出现字段增删的情况,必须在服务重启的时候把缓存清空,不然就会导致<a href="http://bohr.me/2013/11/03/kryo-oom.html">灰常严重的BUG</a>.但是如果应用服务器有多台,这个问题还是避免不了.总会有个时间窗口会出现不同服务器上的同一个应用有不同的类版本,仍然可能会出现灰常严重的BUG.</p>
+<p>现在的<code>Kryo</code>提供了兼容性的支持,使用<code>CompatibleFieldSerializer.class</code>,在<code>kryo.writeClassAndObject</code>写入的信息如下:</p>
+<pre><code>class name|field lenght|field1 name|field2 name|field1 value| filed2 value
+</code></pre><p>读入<code>kryo.readClassAndObject</code>时,会先读入<code>field names</code>.然后匹配当前反序列化类的field和顺序,构造结果.</p>
+<p>子类和父类中有同名的字段时，kryo反序列化会丢失字段值,出现问题的原因和<a href="http://bohr.me/2013/11/29/hessian-java-serialization.html">hessian</a>出问题一样.</p>
+<p>给kryo提交了一个<a href="https://github.com/EsotericSoftware/kryo/pull/187" target="_blank" rel="noopener">improvement</a>,在初始化类型信息时,去掉父类中重复名称的field.</p>
+<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>非线程安全也很好处理,每次都new对象出来,当然这样不是最佳的使用方式.通过线程变量来解决会比较合理,保证了性能还能提供很方便使用的工具类.</p>
+<h4 id="3-如何生成对象"><a href="#3-如何生成对象" class="headerlink" title="3.如何生成对象"></a>3.如何生成对象</h4><p>对于没有无参构造器的类来说，生成新对象是个问题，可以使用java内部的机制来new一个对象。<br>可以参考下<a href="https://github.com/magro/kryo-serializers/blob/master/src/main/java/de/javakaffee/kryoserializers/KryoReflectionFactorySupport.java" target="_blank" rel="noopener">KryoReflectionFactorySupport</a>的实现方式</p>
+<h4 id="4-性能"><a href="#4-性能" class="headerlink" title="4.性能"></a>4.性能</h4><p>下面测试了java下的各种序列化实现方式的性能</p>
+<pre><code>0 Serialisation    write=4,206ns read=16,945ns total=21,151ns
+ 1 Serialisation    write=3,626ns read=18,205ns total=21,831ns
+0 MemoryByteBuffer write=270ns read=324ns total=594ns
+ 1 MemoryByteBuffer write=270ns read=330ns total=600ns
+ 0 MemoryByteBufferWithNativeOrder  write=357ns read=360ns total=717ns
+ 1 MemoryByteBufferWithNativeOrder  write=323ns read=359ns total=682ns
+ 0 DirectByteBuffer write=236ns read=325ns total=561ns
+ 1 DirectByteBuffer write=231ns read=301ns total=532ns
+ 0 DirectByteBufferWithNativeOrder  write=261ns read=310ns total=571ns
+ 1 DirectByteBufferWithNativeOrder  write=243ns read=290ns total=533ns
+ 0 UnsafeMemory write=28ns read=82ns total=110ns
+ 1 UnsafeMemory write=24ns read=75ns total=99ns
+ 0 kryo write=373ns read=348ns total=721ns
+ 1 kryo write=390ns read=386ns total=776ns
+ 0 kryoWithCompatibleFields write=1,037ns read=1,625ns total=2,662ns
+ 1 kryoWithCompatibleFields write=1,038ns read=1,657ns total=2,695ns
+ 0 kryoWithCompatibleFieldsAndDuplicateFieldAccept  write=1,077ns read=1,560ns total=2,637ns
+ 1 kryoWithCompatibleFieldsAndDuplicateFieldAccept  write=1,064ns read=1,583ns total=2,647ns
+ 0 kryoWithUnsafe   write=164ns read=204ns total=368ns
+ 1 kryoWithUnsafe   write=168ns read=210ns total=378ns
+ 0 fastjson write=1,942ns read=5,834ns total=7,776ns
+ 1 fastjson write=1,873ns read=5,879ns total=7,752ns
+</code></pre><p>每种序列化执行1000000次,并且有预热. 各组数据相对比较,可以得出一些结论:</p>
+<ul>
+<li>直接调用unsafe,最快,但是最麻烦</li>
+<li>java自带的序列化很慢,最好不要用</li>
+<li>kryo2.22提供的unsafe支持,性能非常卓越</li>
+<li>kryo兼容性序列化器,开销挺大.写需要写入字段名,读的时候还需要做匹配撮合,读比写慢</li>
+<li>fastjson也挺快的,兼容性\跨语言互操性俱佳.</li>
+</ul>
+<p>序列化后的字节大小可以参考<a href="https://github.com/eishay/jvm-serializers/wiki" target="_blank" rel="noopener">jvm-serializers</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/序列化/" rel="tag"><i class="fa fa-tag"></i> 序列化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014-01-reading-notes/" rel="next" title="2014年01月Reading Notes">
+                <i class="fa fa-chevron-left"></i> 2014年01月Reading Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014-02-reading-notes/" rel="prev" title="2014年02月Reading Notes">
+                2014年02月Reading Notes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化框架选型"><span class="nav-number">1.</span> <span class="nav-text">序列化框架选型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-兼容性"><span class="nav-number">1.1.</span> <span class="nav-text">1.兼容性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-线程安全"><span class="nav-number">1.2.</span> <span class="nav-text">2.线程安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如何生成对象"><span class="nav-number">1.3.</span> <span class="nav-text">3.如何生成对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-性能"><span class="nav-number">1.4.</span> <span class="nav-text">4.性能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
