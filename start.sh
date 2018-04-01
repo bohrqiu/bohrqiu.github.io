@@ -1,1 +1,1 @@
-hexo generate -w
+hexo server
