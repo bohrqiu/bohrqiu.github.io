@@ -947,27 +947,6 @@
     </entry>
     
     <entry>
-      <title>cxf如何传字段为null</title>
-      <link href="/cxf-trans-filed-null/"/>
-      <url>/cxf-trans-filed-null/</url>
-      <content type="html"><![CDATA[<p>传输对象如下：</p><pre><code>public class EmailSenderOrder {private String clientName=&quot;test&quot;;//clientName默认值为test}</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p><pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); emailSenderOrder.setClientName(null); </code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br><a id="more"></a><br>默认情况下，如果field为null，cxf client生成的报文中没有这个field的报文，这就导致在反序列化时，初始化对象时用了默认值。</p><p>可以如下解决：</p><pre><code>//通过字段序列化@XmlAccessorType(XmlAccessType.FIELD) public class EmailSenderOrder {//如果clientName为null，生成报文&lt;clientName xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:nil=&quot;true&quot;/&gt;@XmlElement(name = &quot;clientName&quot;, nillable = true) private String clientName=&quot;test&quot;;}</code></pre>]]></content>
-      
-      <categories>
-          
-          <category> java </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> cxf </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
       <title>zookeeper</title>
       <link href="/zookeeper-dev-ops/"/>
       <url>/zookeeper-dev-ops/</url>
@@ -1004,6 +983,27 @@
         <tags>
             
             <tag> hessian </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cxf如何传字段为null</title>
+      <link href="/cxf-trans-filed-null/"/>
+      <url>/cxf-trans-filed-null/</url>
+      <content type="html"><![CDATA[<p>传输对象如下：</p><pre><code>public class EmailSenderOrder {private String clientName=&quot;test&quot;;//clientName默认值为test}</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p><pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); emailSenderOrder.setClientName(null); </code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br><a id="more"></a><br>默认情况下，如果field为null，cxf client生成的报文中没有这个field的报文，这就导致在反序列化时，初始化对象时用了默认值。</p><p>可以如下解决：</p><pre><code>//通过字段序列化@XmlAccessorType(XmlAccessType.FIELD) public class EmailSenderOrder {//如果clientName为null，生成报文&lt;clientName xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:nil=&quot;true&quot;/&gt;@XmlElement(name = &quot;clientName&quot;, nillable = true) private String clientName=&quot;test&quot;;}</code></pre>]]></content>
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> cxf </tag>
             
         </tags>
       
