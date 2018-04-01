@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="日志优化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一些日志优化相关的东东. 1. 关掉没用的appender现在我们所有的系统都会把日志输出到指定的文件，为了本地开发测试方便，我们也会把日志输出到控制台。在生产环境输出到控制台是完全没有必要的，既浪费了存储空间，又浪费了性能，请在生产环境去掉ConsoleAppender  logback去掉ch.qos.logback.core.ConsoleAppender log4j去掉org.apache">
+<meta name="keywords" content="日志优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日志优化">
+<meta property="og:url" content="http://bohr.me/log-tuning/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="一些日志优化相关的东东. 1. 关掉没用的appender现在我们所有的系统都会把日志输出到指定的文件，为了本地开发测试方便，我们也会把日志输出到控制台。在生产环境输出到控制台是完全没有必要的，既浪费了存储空间，又浪费了性能，请在生产环境去掉ConsoleAppender  logback去掉ch.qos.logback.core.ConsoleAppender log4j去掉org.apache">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-01T16:53:17.060Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="日志优化">
+<meta name="twitter:description" content="一些日志优化相关的东东. 1. 关掉没用的appender现在我们所有的系统都会把日志输出到指定的文件，为了本地开发测试方便，我们也会把日志输出到控制台。在生产环境输出到控制台是完全没有必要的，既浪费了存储空间，又浪费了性能，请在生产环境去掉ConsoleAppender  logback去掉ch.qos.logback.core.ConsoleAppender log4j去掉org.apache">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/log-tuning/"/>
+
+
+
+
+
+  <title>日志优化 | qiubo's life</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e81935b4d5ec7e3e782fe240cbd9c21c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/log-tuning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">日志优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-07-09T21:52:17+08:00">
+                2013-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一些日志优化相关的东东.</p>
+<h2 id="1-关掉没用的appender"><a href="#1-关掉没用的appender" class="headerlink" title="1. 关掉没用的appender"></a>1. 关掉没用的appender</h2><p>现在我们所有的系统都会把日志输出到指定的文件，为了本地开发测试方便，我们也会把日志输出到控制台。在生产环境输出到控制台是完全没有必要的，既浪费了存储空间，又浪费了性能，请在生产环境去掉ConsoleAppender</p>
+<ul>
+<li>logback去掉<code>ch.qos.logback.core.ConsoleAppender</code></li>
+<li>log4j去掉<code>org.apache.log4j.ConsoleAppender</code></li>
+</ul>
+<p>使用logback的同学也可以如下操作：</p>
+<p>1.添加依赖</p>
+<pre><code>&lt;dependency&gt;
+        &lt;groupId&gt;org.codehaus.janino&lt;/groupId&gt;
+        &lt;artifactId&gt;janino&lt;/artifactId&gt;
+        &lt;version&gt;2.5.16&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><p>2.修改logback.xml中原ConsoleAppender配置如下：</p>
+<pre><code>&lt;if condition=&apos;property(&quot;os.name&quot;).toUpperCase().contains(&quot;WINDOWS&quot;)&apos;&gt;
+    &lt;then&gt;
+        &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+            &lt;encoder&gt;
+                &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}:%L-%msg%n%n&lt;/pattern&gt;
+            &lt;/encoder&gt;
+        &lt;/appender&gt;
+        &lt;root&gt;
+            &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
+        &lt;/root&gt;
+    &lt;/then&gt;
+&lt;/if&gt;
+</code></pre><p>上面的配置表示在windows中运行时日志输出到控制台，在其他系统中日志不输出到控制台</p>
+<h2 id="2-禁用日志收集栈信息"><a href="#2-禁用日志收集栈信息" class="headerlink" title="2. 禁用日志收集栈信息"></a>2. 禁用日志收集栈信息</h2><p>在写日志时，打印行号能方便我们快速定位出问题的代码。此功能通过生成栈信息，然后定位到合适的栈帧来实现。禁用此功能会提高日志性能。</p>
+<p>异步日志实现默认关闭了收集栈信息，见<code>ch.qos.logback.classic.AsyncAppender#includeCallerData</code></p>
+<p>对于同步日志，只需要把<code>pattern</code>中的<code>%L</code>去掉就可以禁用栈信息。</p>
+<h2 id="3-使用异步日志"><a href="#3-使用异步日志" class="headerlink" title="3. 使用异步日志"></a>3. 使用异步日志</h2><h3 id="3-1-logback"><a href="#3-1-logback" class="headerlink" title="3.1 logback"></a>3.1 logback</h3><p>logback只需要用异步appender包裹原来的appender就可以了</p>
+<pre><code>&lt;appender name=&quot;ASYNC_ROLLING-cs&quot; class=&quot;com.yjf.common.log.LogbackAsyncAppender&quot;&gt;
+    &lt;appender-ref ref=&quot;ROLLING-cs&quot; /&gt;
+&lt;/appender&gt;
+</code></pre><p>目前我们使用了用于输出日志到文件的<code>ch.qos.logback.core.rolling.RollingFileAppender</code>和输出日志到rabbitmq的<code>com.yjf.monitor.client.integration.log.appender.jms.LogbackMsgRollingAppenderAdapter</code>，请都用上面的<code>LogbackAsyncAppender</code>包裹住。</p>
+<p>此配置下，对象先放入一个队列，然后由另外一个线程来处理具体的日志输出，实现异步化，实现流程如下：</p>
+<ul>
+<li>queue大小为1024，如果queue剩余空间小于100时,会做丢弃判断</li>
+<li>如果queue剩余空间小于100时，会丢弃TRACE、DEBUG日志，也会丢弃LoggerName不以com.yjf开始的INFO日志</li>
+<li>如果queue没有剩余空间为0时，会阻塞业务线程，直到queue有剩余空间</li>
+<li>输出日志到文件的appender，由于会用锁来控制多线程的写入，这种用单线程来写文件的方式很完美。</li>
+<li>输出日志到rabbitmq的appender，<code>LogbackMsgRollingAppenderAdapter</code>在并发下会有性能问题，因为<code>LogbackMsgRollingAppenderAdapter</code>内部只用到一个channel，如果遇到高并发场景，请给<code>CachingConnectionFactory</code>设置合理的channelCacheSize值</li>
+</ul>
+<h3 id="3-2-log4j"><a href="#3-2-log4j" class="headerlink" title="3.2 log4j"></a>3.2 log4j</h3><ul>
+<li>写日志到文件的appender，用<code>org.apache.log4j.AsyncAppender</code>代替<code>org.apache.log4j.DailyRollingFileAppender</code></li>
+<li>写日志到rabbitmq的appender，建议用<code>com.yjf.common.log.Log4jAsynAmqpAppender</code>，内部也用queue来实现异步化</li>
+</ul>
+<h2 id="4-logger-api增强"><a href="#4-logger-api增强" class="headerlink" title="4. logger api增强"></a>4. logger api增强</h2><p>下面是常用的使用方式：</p>
+<pre><code>logger.info(&quot;金额无效,手续费大于或者等于提现总金额.charge:{},amount:{}&quot;, new Object[] { 1, 2, 3 });
+logger.info(&quot;金额无效,手续费大于或者等于提现总金额.charge:{},amount:{},test:{}&quot;, 1, 2, 3); 
+LoggerFormat.info(String.format(&quot;金额无效,手续费大于或者等于提现总金额.charge:%s,amount:%s,test:%s&quot;, 1, 2,3), logger);
+</code></pre><p>第一种是slf4j提供的原生api，第二种是yjf-common-utils提供的支持可变的参数的logger，第三种是yjf-common-util提供的日志工具类。这三种使用方式在日志级别为error的情况下，跑一百万次测试出的性能数据如下：</p>
+<pre><code>LoggerFactoryTest.testLogOri: [measured 1000000 out of 1020000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 2, GC.time: 0.62, time.total: 2.67, time.warmup: 0.04, time.bench: 2.63
+
+LoggerFactoryTest.testYjfLogger: [measured 1000000 out of 1020000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 1, GC.time: 0.72, time.total: 3.43, time.warmup: 0.06, time.bench: 3.37
+
+LoggerFactoryTest.testLogUtils: [measured 1000000 out of 1020000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 14, GC.time: 1.78, time.total: 11.62, time.warmup: 0.22, time.bench: 11.40
+</code></pre><p>从这些数据可以看出，第三种使用方式由于在方法调用时就有字符串拼接的开销，在error级别下，性能肯定不是很好。</p>
+<p>在日志级别为info情况下，这种差距不是很大，但是如果我们使用异步日志，字符串的拼接在独立的线程中完成，不会在调用线程中完成，业务整体执行时间会减少。</p>
+<p>第三种方式还有一个问题，行号永远显示的是LoggerFormat.info方法的行号，不便于我们定位问题。“懒”的同学就用第二种方式吧，支持变长参数，例子如下：</p>
+<pre><code>import com.yjf.common.log.Logger;
+import com.yjf.common.log.LoggerFactory;
+...        
+Logger logger = LoggerFactory.getLogger(LoggerFactoryTest.class
+    .getName());
+...
+logger.info(&quot;xx:{} xx:{} xx:{}&quot;,&quot;a&quot;,&quot;b&quot;,&quot;c&quot;);
+logger.info(&quot;xx:{} xx:{} xx:[]&quot;, &quot;a&quot;,&quot;b&quot;,&quot;c&quot;, new RuntimeException(&quot;挂了&quot;));
+</code></pre><p>请不要再使用<code>com.yjf.common.log.LoggerFormat</code>和<code>com.yjf.common.lang.util.PrintLogTool</code></p>
+<h2 id="5-tomcat日志优化"><a href="#5-tomcat日志优化" class="headerlink" title="5. tomcat日志优化"></a>5. tomcat日志优化</h2><p>tomcat embed默认日志使用的是<code>org.apache.juli.logging.DirectJDKLog</code>，此日志使用了<code>java.util.logging.Logger</code>，此logger使用了jre下面的配置文件<code>$JAVA_HOME\jre\lib\logging.properties</code>，此配置文件配置了一个处理器<code>java.util.logging.ConsoleHandler</code>，它只做了一个事情，使用<code>System.err</code>来作为默认的日志输出，也就是说tomcat embed遇到不能处理的异常后，用System.err来打印日志。(见：<code>org.apache.catalina.core.StandardWrapperValve#invoke</code>方法)</p>
+<p>我们使用的的tomcat和tomcat embed有点差别，tomcat 中使用了<code>org.apache.juli.FileHandler</code>，此输出位置为<code>$CATALINA_HOME/logs/localhost.yyyy-MM-dd.log</code>，也就是说tomcat在遇到他搞不定的异常时，把日志输出到了此位置。<br>tomcat把输出和错误输出都打印到catalina.out文件了，见catalina.sh</p>
+<pre><code>org.apache.catalina.startup.Bootstrap &quot;$@&quot; start \
+  &gt;&gt; &quot;$CATALINA_OUT&quot; 2&gt;&amp;1 &quot;&amp;&quot;
+</code></pre><p>这也解释了上次易交易产品遇到的那个问题，spring mvc action递归调用自己，catalina.out文件中没有异常日志。但是我在本地使用tomcat embed测试，会在控制台输出<code>StackOverflowError</code>。</p>
+<p>tomcat日志优化点：</p>
+<ul>
+<li>用<code>org.apache.juli.AsyncFileHandler</code>代替<code>org.apache.juli.FileHandler</code></li>
+<li>现在我们应用的日志目录都改为<code>/var/log/webapps/{project_name}/</code>。为了便于管理，tomcat 所有日志文件也会输出到<code>/var/log/webapps/{project_name}/</code>路径</li>
+</ul>
+<p>以上优化已提交到定制化tomcat模板。</p>
+<h2 id="6-优化J-U-C"><a href="#6-优化J-U-C" class="headerlink" title="6.优化J.U.C"></a>6.优化J.U.C</h2><p>J.U.L代表java内置的日志机制，上面部分提到tomcat在遇到他搞不定的异常时，会把日志输出到<code>localhost.yyyy-MM-dd.log</code>。这样很不爽，很多同学在检查应用异常时，下意识的不会去看此日志文件，为了避免此问题，请使用下面的解决方案：</p>
+<ol>
+<li><p>使用<code>com.yjf.common.log.LogbackConfigListener</code>,使用方法见doc</p>
+<p> 请使用yjf-common-util版本大于等于1.6.9.20130708的包</p>
+</li>
+<li><p>logback增加配置</p>
+<pre><code>&lt;contextListener class=&quot;ch.qos.logback.classic.jul.LevelChangePropagator&quot;&gt;
+    &lt;resetJUL&gt;true&lt;/resetJUL&gt;
+  &lt;/contextListener&gt;
+</code></pre></li>
+</ol>
+<p>从此以后，所有的异常日志都会在应用日志文件中找到。</p>
+<h2 id="7-性能测试"><a href="#7-性能测试" class="headerlink" title="7. 性能测试"></a>7. 性能测试</h2><p>测试四种情况，普通日志输出，普通日志禁用线程栈信息，异步日志，异步日志禁用线程栈信息，测试结果如下：</p>
+<pre><code>LoggerPerfTest.testCommonLogger: [measured 100000 out of 101000 rounds, threads: 16 (physical processors: 4)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 2, GC.time: 0.12, time.total: 10.73, time.warmup: 0.11, time.bench: 10.62
+
+LoggerPerfTest.testCommonLoggerWithoutStackInfo: [measured 100000 out of 101000 rounds, threads: 16 (physical processors: 4)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 2, GC.time: 0.04, time.total: 3.93, time.warmup: 0.14, time.bench: 3.79
+
+LoggerPerfTest.testAsyncLogger: [measured 100000 out of 101000 rounds, threads: 16 (physical processors: 4)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 3, GC.time: 0.15, time.total: 2.77, time.warmup: 0.06, time.bench: 2.71
+
+LoggerPerfTest.testAsyncLoggerWithoutStackInfo: [measured 100000 out of 101000 rounds, threads: 16 (physical processors: 4)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 0, GC.time: 0.00, time.total: 1.86, time.warmup: 0.00, time.bench: 1.85
+</code></pre><p>可见异步日志性能会提升不少，不收集栈信息性能也会提升不少。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>给攻城狮一个小小的鼓励！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay1.jpg" alt="qiubo 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay1.jpg" alt="qiubo 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/日志优化/" rel="tag"><i class="fa fa-tag"></i> 日志优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ssh-tunneling-and-JMX-for-remote-monitor/" rel="next" title="使用ssh tunneling和JMX远程监控java程序">
+                <i class="fa fa-chevron-left"></i> 使用ssh tunneling和JMX远程监控java程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/web-layer-cluster/" rel="prev" title="web服务器集群技术">
+                web服务器集群技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTQwMC8xMTkzNg=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-关掉没用的appender"><span class="nav-number">1.</span> <span class="nav-text">1. 关掉没用的appender</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-禁用日志收集栈信息"><span class="nav-number">2.</span> <span class="nav-text">2. 禁用日志收集栈信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用异步日志"><span class="nav-number">3.</span> <span class="nav-text">3. 使用异步日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-logback"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 logback</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-log4j"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 log4j</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-logger-api增强"><span class="nav-number">4.</span> <span class="nav-text">4. logger api增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-tomcat日志优化"><span class="nav-number">5.</span> <span class="nav-text">5. tomcat日志优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-优化J-U-C"><span class="nav-number">6.</span> <span class="nav-text">6.优化J.U.C</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-性能测试"><span class="nav-number">7.</span> <span class="nav-text">7. 性能测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

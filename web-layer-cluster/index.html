@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+  
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="web cluster," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="web服务器集群技术包括web负载均衡和http session 失效转移">
+<meta name="keywords" content="web cluster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web服务器集群技术">
+<meta property="og:url" content="http://bohr.me/web-layer-cluster/index.html">
+<meta property="og:site_name" content="qiubo&#39;s life">
+<meta property="og:description" content="web服务器集群技术包括web负载均衡和http session 失效转移">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.project-voldemort.com/voldemort/images/physical_arch.png">
+<meta property="og:updated_time" content="2018-04-01T16:53:17.055Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="web服务器集群技术">
+<meta name="twitter:description" content="web服务器集群技术包括web负载均衡和http session 失效转移">
+<meta name="twitter:image" content="http://www.project-voldemort.com/voldemort/images/physical_arch.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://bohr.me/web-layer-cluster/"/>
+
+
+
+
+
+  <title>web服务器集群技术 | qiubo's life</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e81935b4d5ec7e3e782fe240cbd9c21c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">qiubo's life</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Stay Hungry, Stay Foolish</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/web-layer-cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">web服务器集群技术</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-08-12T21:52:17+08:00">
+                2013-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>web服务器集群技术包括web负载均衡和http session 失效转移<br><a id="more"></a></p>
+<h2 id="1-负载均衡"><a href="#1-负载均衡" class="headerlink" title="1.负载均衡"></a>1.负载均衡</h2><p>负载均衡我们主要关注以下四点：</p>
+<h3 id="1-1-实现负载均衡的算法"><a href="#1-1-实现负载均衡的算法" class="headerlink" title="1.1 实现负载均衡的算法"></a>1.1 实现负载均衡的算法</h3><p>实现的算法很多，可以参考<a href="http://www.cnblogs.com/shanyou/archive/2012/11/09/2763272.html" target="_blank" rel="noopener">此文章</a>。最好是选用通过检测后端服务器状态来实现最优的负载均衡。</p>
+<h3 id="1-2-健康检查"><a href="#1-2-健康检查" class="headerlink" title="1.2 健康检查"></a>1.2 健康检查</h3><p>当一台服务器失效了，负载均衡器应当检测出失效并不再将请求分发到这台服务器上。同样，它也要检测服务器是否恢复正常，并恢复分发请求。</p>
+<p>健康检测要关注检测状态所消耗的时间，比如haproxy如下的配置：</p>
+<pre><code>check inter 2000 rise 2 fall 3
+</code></pre><p>检测周期为2s，连续成功2次认为节点恢复，连续失败3次认为节点不能提供服务。这里就存在负载均衡和后端服务状态不一致的时间窗口6s，我们需要通过一些机制或者手段去掉这6s对用户的影响或者尽量减少对用户的影响。</p>
+<p>通过haproxy的redispatch机制，我们可以减少对用户的影响。通过在负载均衡上主动关闭流量，我们几乎可以做到完全屏蔽用户的影响(关闭流量会引导新请求到其他节点，对于正在处理的请求，我们最好是等一段时间，让他处理完，等待时间和影响用户感知，这个由业务来权衡)。</p>
+<h3 id="1-3-会话粘滞"><a href="#1-3-会话粘滞" class="headerlink" title="1.3 会话粘滞"></a>1.3 会话粘滞</h3><p>机制很多，我觉得比较好的方式是在第一次http请求时向cookie写入节点信息(减少代理上网造成的不均衡)，后续的请求都转发到此节点。</p>
+<p>我们需要根据不同的应用选择是否启用会话粘滞。如果是接口调用，我们没有必要支持会话粘滞；如果是web页面，我们需要启用此特性。还需要注意的一点是，负载均衡上的会话超时时间设置应该大于或者等于web容器的会话超时时间设置。</p>
+<h3 id="1-4-其他"><a href="#1-4-其他" class="headerlink" title="1.4 其他"></a>1.4 其他</h3><p>其他功能和负载均衡关系不是很大，但是可以放在负载均衡设备上来做。比如ssl卸载、gzip压缩、内容缓存。在我们访问量比较少的情况下，这些操作还是放在web容器来做吧，省钱。</p>
+<h2 id="2-Session失效转移"><a href="#2-Session失效转移" class="headerlink" title="2. Session失效转移"></a>2. Session失效转移</h2><p>session失效转移是说在用户访问的某节点挂掉后，用户还能够正常的获取session做操作，这里面通常会涉及到三个问题：</p>
+<h3 id="2-1-全局http-session-id"><a href="#2-1-全局http-session-id" class="headerlink" title="2.1 全局http session id"></a>2.1 全局http session id</h3><p>如果session不能唯一，这肯定要天下大乱，后面我会谈到在memcached-session-manager中怎么保证session id不重复</p>
+<h3 id="2-2-如何备份会话状态"><a href="#2-2-如何备份会话状态" class="headerlink" title="2.2 如何备份会话状态"></a>2.2 如何备份会话状态</h3><p>常见的机制有：数据库备份、广播复制(所有集群内的web容器都保存所有的会话)、对等复制(每台服务器任意选择一台服务器备份)、中心状态服务器复制(session保存到中心服务器)、分布式缓存(现在大多数互联网企业选择的方案)</p>
+<h3 id="2-3-备份的频率和粒度"><a href="#2-3-备份的频率和粒度" class="headerlink" title="2.3 备份的频率和粒度"></a>2.3 备份的频率和粒度</h3><p>备份频率和粒度很影响性能和可靠性</p>
+<h4 id="2-3-1-备份频率："><a href="#2-3-1-备份频率：" class="headerlink" title="2.3.1 备份频率："></a>2.3.1 备份频率：</h4><ul>
+<li>在web请求处理结束后备份 </li>
+<li>固定时间间隔备份</li>
+</ul>
+<p>memcached-session-manager灵活的使用了web请求结束后备份和固定时间间隔机制检查，来提高性能。</p>
+<h4 id="2-3-2-备份粒度："><a href="#2-3-2-备份粒度：" class="headerlink" title="2.3.2 备份粒度："></a>2.3.2 备份粒度：</h4><ul>
+<li><p>整个会话</p>
+<p>  每次都备份整个会话，这样可以带来易用性，但是性能不佳</p>
+</li>
+<li><p>修改过的会话</p>
+<p>  仅当会话修改后才备份会话。当“session.setAttribute()”或 “session.removeAttribute()”被调用后，则认为会话被修改过。所以这种方式，我们在修改会话内的对象时，必须主动调一次set/removeAttribute,让它知道这个会话已经被修改。我们可以在序列化对象时做压缩尽量减少网络的开销。</p>
+</li>
+<li><p>修改过的属性</p>
+<p>  这种方式带来最小的网络开销，可能会遇到一些问题。比如后端缓存服务器是否支持，属性之间的交叉引用如何识别等。属性交叉引用可以通过计算所有属性的hash值来判断某属性的修改是否会影响到其他属性，我们需要权衡网络开销和cpu消耗</p>
+</li>
+</ul>
+<h2 id="3-我们的选择"><a href="#3-我们的选择" class="headerlink" title="3. 我们的选择"></a>3. 我们的选择</h2><h3 id="3-1-负载均衡"><a href="#3-1-负载均衡" class="headerlink" title="3.1 负载均衡"></a>3.1 负载均衡</h3><p>负载均衡可以用硬件或者软件来实现。如果从成本的角度考虑，现阶段用软负载可能更好。我们需要从性能、稳定性、负载的产品重要性几个方面来考虑</p>
+<h3 id="3-2-session失效转移"><a href="#3-2-session失效转移" class="headerlink" title="3.2 session失效转移"></a>3.2 session失效转移</h3><p>我们采用缓存集群来保存session，数据的可用性、一致性交给缓存集群。备份粒度和频率我们通过组件来实现。</p>
+<h4 id="3-2-1-分布式缓存产品的选择"><a href="#3-2-1-分布式缓存产品的选择" class="headerlink" title="3.2.1 分布式缓存产品的选择"></a>3.2.1 分布式缓存产品的选择</h4><p>备份的粒度是决定我们选择分布式缓存产品的一个重要因素。备份整个会话或者修改过的会话，我们可以选择key-value类型的nosql缓存组件。如果我们要支持<code>备份修改过的属性</code>,我们需要选择支持更多数据(比如支持内置的命名空间，MAP)结构的nosql缓存组件。</p>
+<p>memcached、mongodb、redis、tair、mongodb、voldemort…有很多很多nosql产品我们可以选择。选择机会多了，选择也就越难了。</p>
+<p>根据CAP理论，我们只能在一致性、可用性、分区容错性上取舍，根据不同的应用场景来选择不同的处理方式。没有绝对的最优，只有不断的根据我们不同阶段的特点选择不同的产品。</p>
+<p>对于缓存来说最好的选择方案是选择支持灵活的路由机制(服务端路由或者client路由保证AP)，支持丰富的数据结构(从易用性和性能考虑)，支持数据持久化(保证A，最好是有这个特性，当然缓存嘛，只是来加快应用的，不应该把数据只存在缓存中，不能保证高可用)，支持多版本控制(尽量保证C)。</p>
+<p>下图是voldemort(有幸参与过此产品的应用开发)的物理架构图。大多数的nosql产品都面临这下面三种物理架构的抉择。</p>
+<p><img src="http://www.project-voldemort.com/voldemort/images/physical_arch.png" alt=""></p>
+<p>memcached、redis只支持客户端路由，严格意义上讲，它算不上分布式缓存组件。如果要达到高可用性和分区容错性，我们需要自己来存多份(<a href="http://www.project-voldemort.com/voldemort/design.html" target="_blank" rel="noopener">NRW</a>Routing Parameters部分)</p>
+<p>选择mongodb、mongodb、tair、voldemort算是比较好的方案，鉴于我们的运维能力，可能hold不住，暂时只能呵呵了。tair相对来说，很适合我们的应用场景，支持比纯KV更丰富的数据结构，支持服务端路由，支持服务端NRW。</p>
+<p>目前我们选择memcached作为缓存组件。</p>
+<h4 id="3-2-2-session备份组件的选择"><a href="#3-2-2-session备份组件的选择" class="headerlink" title="3.2.2 session备份组件的选择"></a>3.2.2 session备份组件的选择</h4><p>我们可以通过filter来备份session。但是对于后端缓存组件选用memcached来说，这样会存在一个问题。存储的key为sessionid，通过hash或者<a href="http://blog.csdn.net/sparkliang/article/details/5279393" target="_blank" rel="noopener">一致性hash</a>来实现路由，这样在memcached集群拓扑变动时，会造成路由的迁移(拓扑变动造成路由到不同的memcached服务器)。对于应用来说，缓存丢失了。</p>
+<p>如果我们能把第一次选择memcached节点写入到sessionid里面，后续的请求都根据sessionid中的node信息选择memcached，这样在节点动态调整时，不会造成缓存丢失。但是我们在filter中不能改变sessionid的值，所以我们选择了<a href="https://code.google.com/p/memcached-session-manager/" target="_blank" rel="noopener">memcached-session-manager</a>。</p>
+<h2 id="4-memcached-session-manager"><a href="#4-memcached-session-manager" class="headerlink" title="4.memcached-session-manager"></a>4.memcached-session-manager</h2><h3 id="4-1-主要特性如下："><a href="#4-1-主要特性如下：" class="headerlink" title="4.1 主要特性如下："></a>4.1 主要特性如下：</h3><ul>
+<li><p>Supports Tomcat 6 and Tomcat 7</p>
+</li>
+<li><p>Handles sticky or non-sticky sessions</p>
+<p>  启用session sticky时，memcached作为二级缓存，tomcat不挂掉时，不会从memcached取数据</p>
+</li>
+<li><p>No Single Point of Failure</p>
+</li>
+<li><p>Handles tomcat failover</p>
+<p>  tomcat挂掉时从memcached读取session</p>
+</li>
+<li><p>Handles memcached failover</p>
+<p>  non-sticky模式下，由于jvm没有缓存session，它会把session存到两台memcached，保证可用性。<br>  在sticky模式下，jvm缓存着session，一台memcached也会存session，也保证了可用性。</p>
+<p>  当然，这个只是相对的保证了可用性，不能完全保证可用性。</p>
+</li>
+<li><p>Comes with pluggable session serialization</p>
+<p>  我们可以选择kryo作为序列化组件</p>
+</li>
+<li><p>Allows asynchronous session storage for faster response times</p>
+<p>  在请求响应之前，异步写入session到memcached</p>
+</li>
+<li><p>Sessions are only sent to memcached if they’re actually modified</p>
+<p>  仅当session被修改时，才存储session</p>
+</li>
+<li><p>JMX management &amp; monitoring</p>
+<p>  提供JMX管理监控功能</p>
+</li>
+</ul>
+<h3 id="4-2-代码分析"><a href="#4-2-代码分析" class="headerlink" title="4.2 代码分析"></a>4.2 代码分析</h3><p>考虑到性能，我们只采用sticky模式(jvm和一个memcached中存session)，主要的功能实现如下：</p>
+<ul>
+<li><p>session创建</p>
+<p>  a.<code>request.getSession()</code>调用<code>MemcachedSessionService#createSession</code>,创建session</p>
+<p>  b.用<code>org.apache.catalina.util.SessionIdGenerator</code>生成sessionid，</p>
+<p>  c.在sessionid中加入memcached节点信息(<code>MemcachedSessionService.newSessionId</code>，通过<code>NodeIdService.getMemcachedNodeId</code>随机选择节点)</p>
+<p>  注意：SessionIdGenerator只能保证jvm内的不重复，多个jvm下需要另外的id生成机制，如果加上jvmRoute可以避规这个问题。</p>
+</li>
+</ul>
+<ul>
+<li><p>session恢复</p>
+<p>  a.首先在本地session缓存中找session，如果有此session。就用此session</p>
+<p>  b.如果本地缓存没有session，则MemcachedSessionService.findSession通过用户请求传来的sessionid从memcached服务器找session</p>
+</li>
+</ul>
+<ul>
+<li><p>session存储</p>
+<p>  在请求结束后(de.javakaffee.web.msm.RequestTrackingHostValve:173)，会检测session是否有修改(调用session.setAttribute标记此session被修改)。如果修改，(de.javakaffee.web.msm.BackupSessionService:205)创建一个BackupSessionTask，在检查到session内容改变后异步(通过序列化后的的byte数组做hash比较)写入memcached。</p>
+</li>
+</ul>
+<ul>
+<li><p>session过期策略</p>
+<p>  如果仅仅使用session.maxInactiveInterval，在session初始化时设置此key的过期时间。这需要在每次session被访问时都修改memcached中的getLastAccessedTime，这样做效率不是太好。所以在memcached-session-manager通过容器来提供周期性的回调，检查需要过期的时间。</p>
+<p>  通过ContainerBackgroundProcessor线程来周期性的回调MemcachedBackupSessionManager.backgroundProcess()方法。过期时间为：session.maxInactiveInterval - timeIdle</p>
+<p>  注意：需要保证memcached和应用服务器时间一致</p>
+</li>
+<li><p>session销毁</p>
+<p>  MemcachedBackupSessionManager.removeInternal，会把memcached和jvm中的session清理掉</p>
+<p>  注意：在销毁session时如果memcached挂掉，会出现不一致的情况。</p>
+</li>
+<li><p>可靠性</p>
+<p>  选择采用sticky模式时，没有多份复制数据。如果很不幸，tomcat和memcached都挂了，session就丢失了。见官方<a href="https://groups.google.com/forum/#!topic/memcached-session-manager/W6z6eSuhAJ0" target="_blank" rel="noopener">maillist</a>。</p>
+<p>  在非sticky模式下，session会保存到两个memcached(MemcachedSessionService:1079)。但是tomcat本地没有存储session，会影响所有的请求性能。</p>
+</li>
+</ul>
+<ul>
+<li><p>memcached状态检测</p>
+<p>  在创建、查找session、恢复session时，都会通过NodeAvailabilityCache检测memcached状态，检测后端memcached状态间隔50ms(MemcachedNodesManager.NODE_AVAILABILITY_CACHE_TTL)</p>
+</li>
+</ul>
+<h3 id="4-3-最佳实践"><a href="#4-3-最佳实践" class="headerlink" title="4.3 最佳实践"></a>4.3 最佳实践</h3><p>根据上面的代码分析，以下的最佳实践适合我们。</p>
+<p>对于我们的开发同学，session里面的对象修改后，需要setAttribute下。</p>
+<p>对于运维同学：</p>
+<ul>
+<li><p>设置tomcat jvmRoute，避免sessionid重复</p>
+</li>
+<li><p>MemcachedSessionService.setMemcachedProtocol设置二进制协议</p>
+</li>
+<li><p>MemcachedSessionService.setSessionBackupTimeout 默认异步操作100ms超时，在网络不好的情况下会出现大量的异常，设置长点。</p>
+</li>
+<li><p>MemcachedSessionService.setOperationTimeout是memcached客户端和服务端通信时的超时时间,不能设置太短</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>给攻城狮一个小小的鼓励！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay1.jpg" alt="qiubo 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay1.jpg" alt="qiubo 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web-cluster/" rel="tag"><i class="fa fa-tag"></i> web cluster</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/log-tuning/" rel="next" title="日志优化">
+                <i class="fa fa-chevron-left"></i> 日志优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/kryo-oom/" rel="prev" title="Kryo反序列化时版本不一致导致OOM">
+                Kryo反序列化时版本不一致导致OOM <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNTQwMC8xMTkzNg=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="qiubo" />
+            
+              <p class="site-author-name" itemprop="name">qiubo</p>
+              <p class="site-description motion-element" itemprop="description">Keep running!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bohrqiu" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:qiuboboy@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://qiuduo.me/" title="qiuduo" target="_blank">qiuduo</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-负载均衡"><span class="nav-number">1.</span> <span class="nav-text">1.负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-实现负载均衡的算法"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 实现负载均衡的算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-健康检查"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 健康检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-会话粘滞"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 会话粘滞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-其他"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Session失效转移"><span class="nav-number">2.</span> <span class="nav-text">2. Session失效转移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-全局http-session-id"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 全局http session id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-如何备份会话状态"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 如何备份会话状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-备份的频率和粒度"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 备份的频率和粒度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-备份频率："><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 备份频率：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-备份粒度："><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 备份粒度：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-我们的选择"><span class="nav-number">3.</span> <span class="nav-text">3. 我们的选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-负载均衡"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 负载均衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-session失效转移"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 session失效转移</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-分布式缓存产品的选择"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 分布式缓存产品的选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-session备份组件的选择"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 session备份组件的选择</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-memcached-session-manager"><span class="nav-number">4.</span> <span class="nav-text">4.memcached-session-manager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-主要特性如下："><span class="nav-number">4.1.</span> <span class="nav-text">4.1 主要特性如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-代码分析"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-最佳实践"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 最佳实践</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2013 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qiubo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.1/velocity.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/velocity/1.2.1/velocity.ui.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
