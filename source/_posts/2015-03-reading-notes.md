@@ -1,14 +1,4 @@
 ---
-layout: post
-title: 2015年03月Reading Notes
-image:
-  feature: abstract-10.jpg
-tags: [READING NOTES]
-comments: true
-share: true
----
-
----
 title: 2015年03月Reading Notes
 date: 2015-03-02 21:52:17
 categories: java

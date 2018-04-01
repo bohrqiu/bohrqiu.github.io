@@ -1,14 +1,4 @@
 ---
-layout: post
-title: 2015年04月Reading Notes
-image:
-  feature: abstract-10.jpg
-tags: [READING NOTES,nashorn,java reflect]
-comments: true
-share: true
----
-
----
 title: 2015年04月Reading Notes
 date: 2015-04-01 21:52:17
 categories: java
@@ -32,7 +22,7 @@ tags:
 	private static String isPrime = " function test(num) {\n" + "if (num % 2 == 0)" + "return false;" + "for (var i = 3; i * i <= num; i += 2)"
 										+ "if (num % i == 0)" + "return false;" + "return true;" + "}";
 	private Supplier<Predicate<Long>> supplier = Suppliers.memoize(() -> getFilter());
-	
+
 	private Predicate getFilter() {
 		Invocable invocable = (Invocable) this.engine;
 		try {
@@ -46,7 +36,7 @@ tags:
 	public void testJavaScriptWithMemoize() throws Exception {
 		supplier.get().test(172673l);
 	}
-	
+
 对比了下`nashorn`和`groovy`的性能：
 
 	NashornPerfTest.testJavaScript: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
@@ -70,7 +60,7 @@ tags:
                 //submit transaction B to threadpool
            }
 	})；
-	
+
 在事务A中加上此钩子，在`afterCommit`方法中向线程池提交事务A任务。具体处理代码`AbstractPlatformTransactionManager#triggerAfterCommit`，`ThreadLocal`清理`AbstractPlatformTransactionManager#cleanupAfterCompletion`.
 
 ## Web应用的缓存设计模式
@@ -88,7 +78,7 @@ robbin大哥讲解了对`ORM`缓存的理解.我司也有不少项目用了`ORM`
  	testInvokeMethod_Reflectasm_withCache  avgt   20     9.784 ±  0.745  ns/op
  	testInvokeMethod_reflect               avgt   20  1513.409 ± 85.396  ns/op
  	testInvokeMethod_reflect_withCache     avgt   20    29.444 ±  1.863  ns/op
- 	
+
 上面的数据测试了`直接调用java方法`、`通过反射调用java`、`通过ReflectASM调用java`，`withCache`意思是把中间对象缓存起来。
 反射确实很慢，但是只要把反射对象缓存起来，性能提升很大，`Reflectasm_withCache`比`reflect_withCache`快了3倍多。
 
@@ -116,7 +106,7 @@ robbin大哥讲解了对`ORM`缓存的理解.我司也有不少项目用了`ORM`
 			throw new IllegalArgumentException("Method not found: " + paramInt);
 		}
 	}
-	
+
 补充:
 
 --
@@ -130,7 +120,7 @@ robbin大哥讲解了对`ORM`缓存的理解.我司也有不少项目用了`ORM`
  	MHOpto.reflect                      avgt   15  11.599 ± 0.646  ns/op
  	MHOpto.unreflect_invoke             avgt   15  11.147 ± 0.743  ns/op
  	MHOpto.unreflect_invokeExact        avgt   15  11.392 ± 0.518  ns/op
- 	
+
  	ROUND 2:
  	Benchmark                           Mode  Cnt   Score   Error  Units
 	MHOpto.mh_invoke                    avgt   15  11.799 ± 0.847  ns/op
@@ -142,7 +132,7 @@ robbin大哥讲解了对`ORM`缓存的理解.我司也有不少项目用了`ORM`
 	MHOpto.unreflect_invokeExact        avgt   15  11.828 ± 0.666  ns/op
 
 `MethodHandle`太牛叉了。
-	
+
 ## <a name="spring_async_servelt" >spring mvc的异步servlet实现</a>
 
 spring异步web处理流程，我们先以`Controller`方法返回`Callable`对象为例
