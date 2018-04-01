@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-04-reading-notes/">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/be-happy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="qiubo">
@@ -329,7 +329,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015-04-reading-notes/" itemprop="url">2015年04月Reading Notes</a></h1>
+                <a class="post-title-link" href="/be-happy/" itemprop="url">don't worry, be happy!</a></h1>
         
 
         <div class="post-meta">
@@ -341,8 +341,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-05-02T22:46:13+08:00">
-                2015-05-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-22T21:52:17+08:00">
+                2015-11-22
               </time>
             
 
@@ -351,6 +351,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -381,125 +403,304 @@
       
         
           
-            <hr>
-<p>title: 2015年04月Reading Notes<br>date: 2015-04-01 21:52:17<br>categories: java<br>tags:</p>
-<ul>
-<li>READING NOTES</li>
-<li>nashorn</li>
-<li>java reflect</li>
-</ul>
-<hr>
-<h2 id="Enterprise-Nashorn"><a href="#Enterprise-Nashorn" class="headerlink" title="Enterprise Nashorn"></a><a name="enterprise_nashorn">Enterprise Nashorn</a></h2><p><a href="https://community.oracle.com/docs/DOC-910779" target="_blank" rel="noopener">https://community.oracle.com/docs/DOC-910779</a></p>
-<p>本文讲述了<code>Nashorn</code>的一些使用场景：</p>
-<ol>
-<li>由外部提供计算逻辑，服务端执行计算逻辑返回结果</li>
-<li>用java来定义接口，js来写逻辑，方便动态更新计算逻辑。(比如短信中的路由策略，需要经常更新)</li>
-<li>写shell脚本(访问数据库，访问网络,监控…)</li>
+            <h3 id="情绪地雷区避雷方案："><a href="#情绪地雷区避雷方案：" class="headerlink" title="情绪地雷区避雷方案："></a>情绪地雷区避雷方案：</h3><ol>
+<li>安排B计划 (比如等人吃饭，提前准备点事做，别人没到就做自己的事)</li>
+<li>公开自己的情绪死穴 (比如提前给人说哪些是不喜欢的，如果你这样做了，我也避免不了我不发脾气)</li>
 </ol>
-<p><code>Nashorn</code>的性能比前任强多了，但是和java比较还是有差距，主要的性能开销在js-&gt;java上。在关注性能的场景，可以在业务使用时，采用方法2，并缓存proxy对象。</p>
-<pre><code>private static String isPrime = &quot; function test(num) {\n&quot; + &quot;if (num % 2 == 0)&quot; + &quot;return false;&quot; + &quot;for (var i = 3; i * i &lt;= num; i += 2)&quot;
-                                    + &quot;if (num % i == 0)&quot; + &quot;return false;&quot; + &quot;return true;&quot; + &quot;}&quot;;
-private Supplier&lt;Predicate&lt;Long&gt;&gt; supplier = Suppliers.memoize(() -&gt; getFilter());
-
-private Predicate getFilter() {
-    Invocable invocable = (Invocable) this.engine;
-    try {
-        this.engine.eval(isPrime);
-        return invocable.getInterface(Predicate.class);
-    } catch (Exception ex) {
-        throw Throwables.propagate(ex);
-    }
-}
-@Test
-public void testJavaScriptWithMemoize() throws Exception {
-    supplier.get().test(172673l);
-}
-</code></pre><p>对比了下<code>nashorn</code>和<code>groovy</code>的性能：</p>
-<pre><code>NashornPerfTest.testJavaScript: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
- round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 96, GC.time: 0.25, time.total: 34.20, time.warmup: 3.44, time.bench: 30.76
-NashornPerfTest.testJava: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
- round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.28, time.warmup: 0.01, time.bench: 0.27
-NashornPerfTest.testJavaScriptWithMemoize: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
- round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.35, time.warmup: 0.06, time.bench: 0.29
-GroovyTest.testGroovyWithMemoize: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
- round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 5, GC.time: 0.07, time.total: 3.86, time.warmup: 1.75, time.bench: 2.11
-</code></pre><h2 id="spring-多线程中两个事务执行顺序控制"><a href="#spring-多线程中两个事务执行顺序控制" class="headerlink" title="spring 多线程中两个事务执行顺序控制"></a>spring 多线程中两个事务执行顺序控制</h2><p>有些场景需要控制两个事务的执行顺序，比如事务A执行完后，需要事务B中执行费时操作。因为是费时操作，一般会把事务B放到独立的线程中执行。然而事务A和事务B在不同的线程中，事务B还会依赖事务A提交的数据。如果在事务A中新启动线程执行事务B，有可能事务A还没有提交，就开始执行事务B了。这种场景需要保证事务A提交后，才能在新线程中执行事务B。</p>
-<p>可以使用<code>TransactionSynchronizationManager</code>来解决这个问题：</p>
-<pre><code>TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
-       void afterCommit(){
-            //submit transaction B to threadpool
-       }
-})；
-</code></pre><p>在事务A中加上此钩子，在<code>afterCommit</code>方法中向线程池提交事务A任务。具体处理代码<code>AbstractPlatformTransactionManager#triggerAfterCommit</code>，<code>ThreadLocal</code>清理<code>AbstractPlatformTransactionManager#cleanupAfterCompletion</code>.</p>
-<h2 id="Web应用的缓存设计模式"><a href="#Web应用的缓存设计模式" class="headerlink" title="Web应用的缓存设计模式"></a>Web应用的缓存设计模式</h2><p><a href="">http://robbinfan.com/blog/38/orm-cache-sumup</a></p>
-<p>robbin大哥讲解了对<code>ORM</code>缓存的理解.我司也有不少项目用了<code>ORM</code>,大多数人没有使用缓存的意识,有这样意识的同学提到过用<code>ehcache</code>,这在单节点的情况下，工作得很好，但是到了线上多机部署，数据不一致的问题就会出现，至少也要选用分布式缓存系统来实现哈。还有一点，因为有了缓存，数据订正这种事情就要谨慎了。</p>
-<h2 id="java反射的性能"><a href="#java反射的性能" class="headerlink" title="java反射的性能"></a><a name="java_reflect">java反射的性能</a></h2><p>先看看下面的数据：</p>
-<pre><code>Benchmark                                  Mode  Cnt     Score    Error  Units
- testInvokeMethod_Direct                avgt   20     0.587 ±  0.036  ns/op
- testInvokeMethod_Reflectasm            avgt   20    39.940 ±  1.957  ns/op
- testInvokeMethod_Reflectasm_withCache  avgt   20     9.784 ±  0.745  ns/op
- testInvokeMethod_reflect               avgt   20  1513.409 ± 85.396  ns/op
- testInvokeMethod_reflect_withCache     avgt   20    29.444 ±  1.863  ns/op
-</code></pre><p>上面的数据测试了<code>直接调用java方法</code>、<code>通过反射调用java</code>、<code>通过ReflectASM调用java</code>，<code>withCache</code>意思是把中间对象缓存起来。<br>反射确实很慢，但是只要把反射对象缓存起来，性能提升很大，<code>Reflectasm_withCache</code>比<code>reflect_withCache</code>快了3倍多。</p>
-<p><code>Reflectasm</code>的原理是生成java源代码来实现反射的调用，下面就是生成的源代码。</p>
-<pre><code>package reflectasm;
-import java.util.Map;
-import com.esotericsoftware.reflectasm.MethodAccess;
-public class PojoMethodAccess extends MethodAccess {
-    public Object invoke(Object paramObject, int paramInt, Object[] paramArrayOfObject) {
-        Pojo localPojo = (Pojo) paramObject;
-        switch (paramInt) {
-            case 0:
-                return Boolean.valueOf(localPojo.equals((Object) paramArrayOfObject[0]));
-            case 1:
-                return localPojo.toString();
-            case 2:
-                return Integer.valueOf(localPojo.hashCode());
-            case 3:
-                return localPojo.getName();
-            case 4:
-                localPojo.setName((String) paramArrayOfObject[0]);
-                return null;
-        }
-        throw new IllegalArgumentException(&quot;Method not found: &quot; + paramInt);
-    }
-}
-</code></pre><p>补充:</p>
-<p>–</p>
-<pre><code>ROUND 1:
-Benchmark                           Mode  Cnt   Score   Error  Units
- MHOpto.mh_invoke                    avgt   15  11.332 ± 0.577  ns/op
- MHOpto.mh_invokeExact               avgt   15  10.605 ± 0.667  ns/op
- MHOpto.mh_invokeExact_static_fianl  avgt   15   3.797 ± 0.201  ns/op
- MHOpto.plain                        avgt   15   4.093 ± 0.156  ns/op
- MHOpto.reflect                      avgt   15  11.599 ± 0.646  ns/op
- MHOpto.unreflect_invoke             avgt   15  11.147 ± 0.743  ns/op
- MHOpto.unreflect_invokeExact        avgt   15  11.392 ± 0.518  ns/op
-
- ROUND 2:
- Benchmark                           Mode  Cnt   Score   Error  Units
-MHOpto.mh_invoke                    avgt   15  11.799 ± 0.847  ns/op
-MHOpto.mh_invokeExact               avgt   15  11.830 ± 0.637  ns/op
-MHOpto.mh_invokeExact_static_fianl  avgt   15   4.415 ± 0.191  ns/op
-MHOpto.plain                        avgt   15   4.084 ± 0.300  ns/op
-MHOpto.reflect                      avgt   15  12.191 ± 0.637  ns/op
-MHOpto.unreflect_invoke             avgt   15  11.535 ± 0.816  ns/op
-MHOpto.unreflect_invokeExact        avgt   15  11.828 ± 0.666  ns/op
-</code></pre><p><code>MethodHandle</code>太牛叉了。</p>
-<h2 id="spring-mvc的异步servlet实现"><a href="#spring-mvc的异步servlet实现" class="headerlink" title="spring mvc的异步servlet实现"></a><a name="spring_async_servelt">spring mvc的异步servlet实现</a></h2><p>spring异步web处理流程，我们先以<code>Controller</code>方法返回<code>Callable</code>对象为例</p>
-<ol>
-<li>http线程处理请求到Controller方法，返回Callable结果</li>
-<li>spring选用<code>CallableMethodReturnValueHandler</code>来处理Callable结果，提交Callable到线程池，当前http线程返回,参考<code>WebAsyncManager.startCallableProcessing()</code></li>
-<li>线程池中线程执行<code>Callable</code>任务，并且<code>dispatch</code>请求到容器，参考<code>WebAsyncManager.setConcurrentResultAndDispatch()</code></li>
-<li>容器选取http线程继续处理请求</li>
+<h3 id="情绪管理在生活与工作中的应用"><a href="#情绪管理在生活与工作中的应用" class="headerlink" title="情绪管理在生活与工作中的应用"></a>情绪管理在生活与工作中的应用</h3><ol>
+<li><p>正向思考</p>
+<p> 凡事往正面的角度去想，选取对自己最有利的注解</p>
+</li>
+<li><p>转移注意力</p>
+<p> 去做能带来好情绪的活动或事情。比如吃自己最喜爱的食物</p>
+</li>
+<li><p>让开放的肢体动作带动情绪</p>
+<p> 比如去爬山，去跑步，去旅游。</p>
+</li>
+<li><p>透过问句引导自己改变认知</p>
+<pre><code>a.对方是故意的还是无心的？
+b.这件事还有没有其他角度与意义可以让我感觉更好？
+c.如果我希望自己的情绪变好，现在我应该做什么？
+d.这样做是真的会让情绪变好还是会有后遗症？
+e.我可以寻求谁的帮助来改善自己的情绪？
+</code></pre></li>
 </ol>
-<p>通过分析源代码，下面几点需要关注下：</p>
 <ol>
-<li><p><strong>dispatch请求后，又会执行filterchain</strong>，我们需要保证filter只执行一次，filter最好继承<code>OncePerRequestFilter</code>。</p>
+<li>发现自己情绪有失控的感觉或倾向，必要时离开现场</li>
+<li>把不满、愤怒、失意等负面情绪写在纸上，然后烧掉、冲掉、寄出或者收藏</li>
+<li>了解自身的有点，积极表现自己，但求尽心尽力</li>
+<li>多看别人的好，适度予以宽容的对待</li>
+<li><p>接近拥有心灵智慧的良师益友</p>
+<p> 智慧不起烦恼，慈悲没有敌人</p>
 </li>
-<li><p>spring内置了几种异步结果处理器，<code>CallableMethodReturnValueHandler</code>、<code>AsyncTaskMethodReturnValueHandler</code>、<code>DeferredResultMethodReturnValueHandler</code>分别支持方法返回<code>Callable</code>,<code>WebAsyncTask</code>,<code>DeferredResult</code>。</p>
+<li><p>提醒自己：世间事都只是过程而非结果</p>
+<p>每件事最终都会过去，包括我自己(凡人必有一死)</p>
 </li>
-<li><p><code>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#taskExecutor</code>此默认线程池为<code>SimpleAsyncTaskExecutor</code>，此<code>taskExecutor</code>每次都会都会新建线程来处理任务，生产环境建议单独配置线程池。</p>
+<li><p>全力以赴后，放下得失心，因为你没有办法决定所有的事一定如你所愿</p>
+<p>战胜对手只是人生的赢家，战胜自己才是命运的强者</p>
+</li>
+</ol>
+<h3 id="哈佛大学推荐20个快乐的习惯"><a href="#哈佛大学推荐20个快乐的习惯" class="headerlink" title="哈佛大学推荐20个快乐的习惯"></a>哈佛大学推荐20个快乐的习惯</h3><ol>
+<li><p>be grateful    (学会感恩)</p>
+<p> 让自己变慢脚步，看看你的四周，关注生活中的细微之处：人行道上淡紫色的花，美丽的日落，洗去你一天疲惫的淋浴，伴侣眼中的笑容。当你的感恩之心能够欣赏生活的美，思考和祝福，你自然就充满了幸福感。</p>
+</li>
+<li><p>choose your friedns wisely</p>
+<p> 如果你想变得开心的话，要选择和乐观的朋友在一起，他们能欣赏你真实的自己，让你的生活变得更丰富，快乐，有意义。</p>
+</li>
+<li><p>cultivate compassion (培养同情心)</p>
+<p> 当我们代替别人，站在另一个角度看问题，我们更能用同情心，客观和有效的处理问题。生活中就会少一些冲突，多一点快乐。</p>
+</li>
+<li><p>keep leaning</p>
+<p> 学习让我们保持年轻，梦想让我们充满活力。我们运用大脑，进行运作的时候，我们就不大会想不开心心的事情，我们会变得更开心和满足。</p>
+</li>
+<li><p>become a problem solver (学会解决问题)</p>
+</li>
+<li>do what you love</li>
+<li><p>live in the present</p>
+<p> 你感到沮丧，是因为你活在过去。你会感到担忧和焦虑，是因为你活在未来。但是当你感到满足，开心和平和时，你才是活在当下。</p>
+</li>
+<li><p>laugh often</p>
+<p> 　笑是对抗生气或沮丧最有力的的东西。不要把生活看的太严肃。要学会在每日的奋斗中寻找幽默感和笑声。
+ 　</p>
+</li>
+<li><p>practice forgiveness</p>
+<p> 憎恨和生气是对自我的惩罚。当你释怀的时候，事实上你是在对自己施以善意。最重要的是，学会原谅自己。每个人都犯错。只有通过我们的错误，我们才慢慢学会如何成为一个更强大，更好的人。</p>
+</li>
+<li><p>say thanks often</p>
+<p>对生活中的祝福要学会欣赏。向那些让你生活变好的人，无论或大或小，表达出你的欣赏之情也同样重要。</p>
+</li>
+<li><p>create deeper connections （学会深交）</p>
+<p>我们的幸福感会在和另一个人的深交中不断猛增。专注聆听是加强这种关系纽带和把幸福感带给自己和别人的两个最重要的方面。</p>
+</li>
+<li><p>keep you agreement</p>
+<p>我们的自尊是建立在我们对自己守承诺的情况下。高度的自尊和幸福感有直接关联。所以要对自己和别人遵守承诺。</p>
+</li>
+<li><p>meditate （冥想）</p>
+</li>
+<li><p>focus on what you’re doing</p>
+<p>当你全身心投入一件事的时候，你就会处于一个开心的状态。当我们处于这种状态，你就不大会关心别人对你怎么看，不大会被不大重要的事情干扰。结果呢？更幸福，当然啦！</p>
+</li>
+<li><p>be optimistic</p>
+<p>对于开心的人来说，玻璃都一直是半满的。每当你面对一个挑战时，如果你倾向于想象最坏的想法，那就自我转换这种情况。告诉你自己一个状况中的好处或者你从中学到的东西。乐观肯定能驱动成功和幸福感。</p>
+</li>
+<li><p>love unconditionally</p>
+<p>没人是完美的,接受你自己所有的不完美,也要这样对待别人。无条件的爱一个人并不意味着你要花所有的时间和他们在一起，或者帮助他们解决问题。无条件的爱意味着接受真实的他们，以他们自己的步伐，让他们自己摸索。</p>
+</li>
+<li><p>don’t give up</p>
+<p>没有完成的方案和不断的失败不可避免的会削弱你的自尊。如果你决定做某事，做完它。</p>
+</li>
+<li><p>do you best and then let go</p>
+<p>每个人都有局限性。而且有时候尽管我们很努力做一件事情，但是总会事与愿违。所以做最好的自己，然后放手。当你尽了全力，你就没有遗憾了。</p>
+</li>
+<li><p>take care of yourself</p>
+<p>一个健康的身体是幸福的关键。如果你身体不好，你无论如何努力，都很难快乐。确信自己吃得好，做锻炼，找点时间休息。好好照顾你的身体，大脑和精神。</p>
+</li>
+<li><p>give back （学会给予）</p>
+<p>做好事是最能确保你心情好的方法之一。根据哈佛，人们做好事，他们的大脑变得活跃，就好像当你经历别的奖励时，大脑所受的刺激。所以，那些关心别人的人要比不大关心别人的人更开心。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-11-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015-11-reading-notes/" itemprop="url">2015年11月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-01T21:52:17+08:00">
+                2015-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Next-Generation-Session-Management-with-Spring-Session"><a href="#Next-Generation-Session-Management-with-Spring-Session" class="headerlink" title="Next Generation Session Management with Spring Session"></a><a name="spring-session">Next Generation Session Management with Spring Session</a></h2><p><a href="http://www.infoq.com/articles/Next-Generation-Session-Management-with-Spring-Session" target="_blank" rel="noopener">http://www.infoq.com/articles/Next-Generation-Session-Management-with-Spring-Session</a></p>
+<p>在大规模集群的场景，无状态的应用能减少运维成本、缩短应用恢复时间。spring session主要解决了web应用session持久化的问题。把session存储在应用外部，让应用无状态。</p>
+<p>spring session主要提供如下能力：</p>
+<ol>
+<li>把session的存储逻辑抽取出来，可以选择rdis，或者自己实现session存储</li>
+<li>使用websocket也能保持会话</li>
+<li>非web应用也能使用会话</li>
+<li>支持多个session(可以登陆多个用户)</li>
+<li>Restful API也能通过http header维护会话</li>
+</ol>
+<p>spring session 1.1版本支持<code>HttpSessionListener</code>.如果使用的redis，spring session通过key过期时的过期事件+redis消息推送来实现。可惜我们用的是<code>codis</code>，我们实现了<code>DisabledRedisMessageListenerContainer</code>把这个能力屏蔽了。</p>
+<p>更多参考：<a href="http://docs.spring.io/spring-session/docs/current-SNAPSHOT/reference/html5/#introduction" target="_blank" rel="noopener">spring session 官方文档</a> <a href="https://github.com/spring-projects/spring-session/issues/4" target="_blank" rel="noopener">Add HttpSessionListener Support</a></p>
+<h2 id="The-Twelve-Factor-App"><a href="#The-Twelve-Factor-App" class="headerlink" title="The Twelve-Factor App"></a><a name="the-twelve-factor-app">The Twelve-Factor App</a></h2><p><a href="http://12factor.net" target="_blank" rel="noopener">http://12factor.net</a></p>
+<p>The twelve-factor app is a methodology for building software-as-a-service apps.</p>
+<ol>
+<li><p>Codebase:One codebase tracked in revision control, many deploys</p>
+<p> one codebase per app（all tracked in revision control）, but there will be many deploys of the app(one or more staging use same code,use multi config file or configuration management system for different stage ). </p>
+</li>
+<li><p>Dependencies:Explicitly declare and isolate dependencies</p>
+<p>  declares all dependencies via a dependency declaration manifest,and use dependencies check strategy to ensure that no implicit dependencies.</p>
+</li>
+<li><p>Config:Store config in the environment</p>
+<p> use mutli config file （<a href="http://bohr.me/env-aware/">build env-awared app</a>）     or use configuration management system （<a href="http://cloud.spring.io/spring-cloud-config/" target="_blank" rel="noopener">spring cloud config</a>）</p>
+</li>
+<li><p>Backing Services:Treat backing services as attached resources</p>
+<p> app makes no distinction between local and third party services（both are attached resources）. A deploy should be able to swap out a local MySQL database with one managed by a third party (such as Amazon RDS) without any changes to the app’s code. </p>
+</li>
+<li><p>Build, release, run:Strictly separate build and run stages</p>
+<p> app uses strict separation between the build, release, and run stages. For example, it is impossible to make changes to the code at runtime, since there is no way to propagate those changes back to the build stage（we can put dynamic part code into db ）.</p>
+</li>
+<li><p>Processes:Execute the app as one or more stateless processes</p>
+<p> Twelve-factor processes are stateless and share-nothing. Any data that needs to persist must be stored in a stateful backing service, typically a database.Sticky sessions should never be used or relied upon. </p>
+</li>
+<li><p>Port binding:Export services via port binding</p>
+<p> The twelve-factor app is completely self-contained and does not rely on runtime injection of a webserver into the execution environment to create a web-facing service. The web app exports HTTP as a service by binding to a port, and listening to requests coming in on that port.</p>
+</li>
+<li><p>Concurrency:Scale out via the process model</p>
+<p>processes are a first class citizen.Processes in the twelve-factor app take strong cues from the unix process model for running service daemons. Using this model, the developer can architect their app to handle diverse workloads by assigning each type of work to a process type.</p>
+</li>
+<li><p>Disposability:Maximize robustness with fast startup and graceful shutdown</p>
+<p> Processes should strive to minimize startup time.</p>
+<p> Processes shut down gracefully （ ceasing to listen on the service port,thereby refusing any new requests, allowing any current requests to finish, and then exiting.）when they receive a SIGTERM signal from the process manager.</p>
+<p> For a worker process, graceful shutdown is achieved by <strong>returning the current job to the work queue</strong>.Implicit in this model is that all jobs are <strong>reentrant</strong>, which typically is achieved by wrapping the results in a transaction, or making the operation <code>idempotent</code>.</p>
+<p> Processes should also be robust against sudden death, in the case of a failure in the underlying hardware.  A recommended approach is use of a robust queueing backend that returns jobs to the queue when clients disconnect or time out. Either way, a twelve-factor app is architected to handle unexpected, non-graceful terminations. </p>
+</li>
+<li><p>Dev/prod parity:Keep development, staging, and production as similar as possible</p>
+</li>
+</ol>
+<pre><code>  x      | Traditional app           | Twelve-factor app     |
+--------------------|------------------|-----------------------|
+Time between deploys | Weeks   | Hours   |
+Code authors vs code deployers  | Different people | Same people  |
+Dev vs production environments  | Divergent | As similar as possible  |
+
+The twelve-factor developer resists the urge to use different backing services between development and production, even when adapters theoretically abstract away any differences in backing services.
+</code></pre><ol>
+<li><p>Logs:Treat logs as event streams</p>
+<p>A twelve-factor app never concerns itself with routing or storage of its output stream(maybe dont fit for java app).</p>
+</li>
+<li><p>Admin processes:Run admin/management tasks as one-off processes</p>
+<p>One-off admin processes should be run in an identical environment as the regular long-running processes of the app. They run against a release, using the same codebase and config as any process run against that release. Admin code must ship with application code to avoid synchronization issues.</p>
 </li>
 </ol>
 
@@ -658,146 +859,6 @@ MHOpto.unreflect_invokeExact        avgt   15  11.828 ± 0.666  ns/op
 </li>
 <li>执行任何java类</li>
 <li>修改后，编译此java类就能看到修改后的效果了。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-03-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015-03-reading-notes/" itemprop="url">2015年03月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-07T14:13:53+08:00">
-                2015-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<p>title: 2015年03月Reading Notes<br>date: 2015-03-02 21:52:17<br>categories: java<br>tags:</p>
-<ul>
-<li>READING NOTES</li>
-</ul>
-<hr>
-<h2 id="The-Asset-Pipeline"><a href="#The-Asset-Pipeline" class="headerlink" title="The Asset Pipeline"></a>The Asset Pipeline</h2><p><a href="http://guides.rubyonrails.org/asset_pipeline.html" target="_blank" rel="noopener">http://guides.rubyonrails.org/asset_pipeline.html</a></p>
-<p><code>Asset Pipeline</code>对网站的静态资源进行预处理(合并、简化、压缩、预处理coffeescirpt sass等)。对于静态资源的处理，这里面提到的<code>Fingerprinting</code>来优化http 缓存可以借鉴下。</p>
-<p><code>Fingerprinting</code>技术是在文件名中加上文件内容的标识，当文件内容改变时，文件名也改变。比如文件<code>global.css</code>加入md5的指纹后，文件名为<code>global-908e25f4bf641868d8683022a5b62f54.css</code>.</p>
-<p>以前我们经常用<code>query string</code>中来标识版本，比如<code>main.js?1.4</code>/<code>main.js?v=1.4</code>.这种方式在某些CDN中有问题(有些CDN只识别文件名，新的版本文件会替换原版本的文件，在部署这个时间窗口会导致页面混乱)。</p>
-<p>在使用浏览器缓存时，一般涉及到http header包括下面两种方案:</p>
-<ol>
-<li><code>Expires</code>和<code>Cache-Control: max-age</code> (没有过期之前，完全不发送请求)</li>
-<li><code>Last-Modifed</code>和<code>ETag</code> (内容协商，需要发一个请求，如果内容没有变化，响应304)</li>
-</ol>
-<p>当方案2和<code>Fingerprinting</code>结合起来时，就比较完美了。对于现在很多开放CDN来讲，基本上都会用方案1，这是开源库名字里面的版本号就起着<code>Fingerprinting</code>的作用。也有用方案2的，估计是出于统计分析的目的。</p>
-<p>对于静态资源的缓存，理想的组合是：</p>
-<ol>
-<li>配置很长的本地缓存时间(善用<code>Expires</code>和<code>Cache-Control: max-age</code>)，比如1年</li>
-<li>通过<code>Fingerprinting</code>控制缓存(静态资源文件改变，对应的html的资源引用url也改变)</li>
 </ol>
 
           
