@@ -405,7 +405,7 @@
           
             <h2 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h2><p><a href="https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/" target="_blank" rel="noopener">https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/</a></p>
 <p>前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。</p>
-<h3 id="1-模块分离"><a href="#1-模块分离" class="headerlink" title="1. 模块分离"></a>1. 模块分离</h3><p>前端项目和后端项目由不同的团队开发，并且要维护前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。</p>
+<h3 id="1-模块分离"><a href="#1-模块分离" class="headerlink" title="1. 模块分离"></a>1. 模块分离</h3><p>前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。</p>
 <h3 id="2-构建方案"><a href="#2-构建方案" class="headerlink" title="2. 构建方案"></a>2. 构建方案</h3><h4 id="2-1-前端环境"><a href="#2-1-前端环境" class="headerlink" title="2.1 前端环境"></a>2.1 前端环境</h4><p>首先保证前端构建环境一致，使用<code>frontend-maven-plugin</code>插件安装基础环境并在打包时执行前端构建命令。</p>
 <h4 id="2-2-all-in-one-jar"><a href="#2-2-all-in-one-jar" class="headerlink" title="2.2 all in one jar"></a>2.2 all in one jar</h4><p>部署时可以引入nginx来serve静态页面，动态请求反向代理到后端服务器。但是对于小型项目来说，这样的部署成本太大了，每次上线成本也比较大。理想的方式是用后端应用服务器提供静态页面输出能力，前端后端<code>all in one jar</code>.</p>
 <p>使用<code>maven-resources-plugin</code>插件把前端模块的打包输出物拷贝到后端项目中,最终打一个jar包。</p>
