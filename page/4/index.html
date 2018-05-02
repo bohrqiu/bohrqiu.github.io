@@ -310,6 +310,229 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-05-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014-05-reading-notes/" itemprop="url">2014年05月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-05-29T21:52:17+08:00">
+                2014-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="面向GC的Java编程"><a href="#面向GC的Java编程" class="headerlink" title="面向GC的Java编程"></a>面向GC的Java编程</h2><p><a href="http://coolshell.cn/articles/11541.html" target="_blank" rel="noopener">http://coolshell.cn/articles/11541.html</a></p>
+<p>好文,总结的很不错.</p>
+<h2 id="spring-boot-Initializr"><a href="#spring-boot-Initializr" class="headerlink" title="spring boot Initializr"></a>spring boot Initializr</h2><p><a href="http://start.spring.io/" target="_blank" rel="noopener">http://start.spring.io/</a></p>
+<p>有了这个,创建spring boot项目就快了.</p>
+<h2 id="OOM-Killer"><a href="#OOM-Killer" class="headerlink" title="OOM Killer"></a>OOM Killer</h2><p>很早听说OOM Killer这个东东,感觉很神秘.而且以前分析某次线上故障,我得出的结论是OOM Killer,但是没有找到日志,囧!最近在玩vagrant,用的ubuntu box,虚拟机内存分配512m,某应用配置jvm内存<code>-Xms256M -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=256m</code>.应用在启动过程中日志刷了一会儿就不动了,<code>command+c</code>结束后,console报出:</p>
+<pre><code>INFO: Initializing Spring root WebApplicationContext
+^C./tomcat.sh: line 6:  7649 Killed                  nohup mvn clean tomcat7:run -Dspring.profiles.active=$env -Dsys.name=$sysname &gt; &quot;$logfile&quot; 2&gt;&amp;1 &lt; /dev/null
+</code></pre><p>找了很久,在<code>/var/log/syslog</code>发现如下日志:</p>
+<pre><code>May 22 09:47:41 vagrant-ubuntu-saucy-64 kernel: [ 5499.448534] Out of memory: Kill process 7649 (java) score 788 or sacrifice child
+May 22 09:47:41 vagrant-ubuntu-saucy-64 kernel: [ 5499.449012] Killed process 7649 (java) total-vm:1460964kB, anon-rss:407220kB, file-rss:0kB
+</code></pre><p>这篇文章解释如何处理<a href="http://www.vpsee.com/2013/10/how-to-configure-the-linux-oom-killer/" target="_blank" rel="noopener">oom</a></p>
+<h2 id="vagrant"><a href="#vagrant" class="headerlink" title="vagrant"></a>vagrant</h2><p><a href="https://github.com/astaxie/Go-in-Action/blob/master/ebook/zh/01.2.md" target="_blank" rel="noopener">https://github.com/astaxie/Go-in-Action/blob/master/ebook/zh/01.2.md</a></p>
+<p><a href="http://blog.segmentfault.com/fenbox/1190000000264347" target="_blank" rel="noopener">http://blog.segmentfault.com/fenbox/1190000000264347</a></p>
+<p><a href="http://docs.vagrantup.com/v2/getting-started/index.html" target="_blank" rel="noopener">http://docs.vagrantup.com/v2/getting-started/index.html</a></p>
+<p>如果mac环境下虚拟机出现Failed to load VMMR0.r0 (VERR_SUPLIB_WORLD_WRITABLE),执行<code>sudo chmod o-w /Applications</code>再试试.</p>
+<h2 id="构建高可用系统的常用招数"><a href="#构建高可用系统的常用招数" class="headerlink" title="构建高可用系统的常用招数"></a>构建高可用系统的常用招数</h2><p> <a href="http://bluedavy.me/?p=468" target="_blank" rel="noopener">http://bluedavy.me/?p=468</a></p>
+<p>大牛的总结,分享+总结下:</p>
+<ol>
+<li><p>监控和报警</p>
+<p>  监控和报警能提前发现问题/缩短故障时间,前提是得能正确的评估监控点.</p>
+</li>
+<li><p>SPoF(Single Point of Failure)</p>
+<p>  单点故障也分层次的,不过我们coder一般只关注服务层面.服务尽量做到无状态,只需要做负载就ok了.不能做成无状态的就需要做集群了.实在不行的就做成主备.</p>
+</li>
+<li><p>解耦</p>
+<p> 后端业务通过消息/事件来解耦(Eventbus也不错),前端页面模块化,互相不影响.</p>
+</li>
+<li><p>隔离</p>
+<p> 隔离既要防止依赖的系统之间相互影响(防止故障传播),也要防止同一节点上的不同服务相互影响(资源隔离).</p>
+<p> 宏观层面,区分服务重要性,如果都能服务化就好做了.不同服务可以选择配置不同个数的服务节点.重要的,访问量大的就多加点节点.这需要监控系统能准确评估服务访问情况.</p>
+<p> 微观层面,在服务内部,服务对外提供的能力一般通过线程池大小和请求队列长度来控制.在这里,大不一定就好,多也不定就好.</p>
+</li>
+</ol>
+<ol>
+<li><p>容灾</p>
+<p>  这里谈了几点:超时控制/非关键业务自动降级(用dubbo实现就很方便)/手动降级/自恢复能力(比如druid连接池)/自我保护能力</p>
+</li>
+</ol>
+<p>自己补充点,快速故障恢复能力(日志很重要)/避免人为故障(减少开发人员犯错误的机会)/简单可依赖(能简单做的就绝对不玩花哨) </p>
+<h2 id="Uses-MySQL-to-store-schema-less-data"><a href="#Uses-MySQL-to-store-schema-less-data" class="headerlink" title="Uses MySQL to store schema-less data"></a>Uses MySQL to store schema-less data</h2><p><a href="http://backchannel.org/blog/friendfeed-schemaless-mysql" target="_blank" rel="noopener">http://backchannel.org/blog/friendfeed-schemaless-mysql</a></p>
+<p>如何用mysql来存储schema-less的数据,实现很简单.</p>
+<p>数据表:</p>
+<pre><code>CREATE TABLE entities (
+    added_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id BINARY(16) NOT NULL,
+        updated TIMESTAMP NOT NULL,
+    body MEDIUMBLOB,
+    UNIQUE KEY (id),
+    KEY (updated)
+) ENGINE=InnoDB;
+</code></pre><p>假如内容是:</p>
+<pre><code>{
+    &quot;id&quot;: &quot;71f0c4d2291844cca2df6f486e96e37c&quot;,
+    &quot;user_id&quot;: &quot;f48b0440ca0c4f66991c4d5f6a078eaf&quot;,
+    &quot;feed_id&quot;: &quot;f48b0440ca0c4f66991c4d5f6a078eaf&quot;,
+    &quot;title&quot;: &quot;We just launched a new backend system for FriendFeed!&quot;,
+    &quot;link&quot;: &quot;http://friendfeed.com/e/71f0c4d2-2918-44cc-a2df-6f486e96e37c&quot;,
+    &quot;published&quot;: 1235697046,
+    &quot;updated&quot;: 1235697046,
+}
+</code></pre><p>如果要给title建立索引,创建新表</p>
+<pre><code>CREATE TABLE index_title (
+    title varchar(100) ,
+    entity_id BINARY(16) NOT NULL UNIQUE,
+       PRIMARY KEY (user_id, entity_id)
+) ENGINE=InnoDB;
+</code></pre><p>查询的时候先从索引表查出entity_id,然后在去entities表查询详细数据.可以存储数据为text,方便数据库直接操作(必要性不是很大,text太占内存了),当然最好还是存储压缩后的二进制数据.不是经常改动的数据,应用层在加上一层cache.</p>
+<p>索引可以异步建立,定时任务周期性的去找updated的新数据.</p>
+<h2 id="为什么tomcat应用三分钟还关不掉"><a href="#为什么tomcat应用三分钟还关不掉" class="headerlink" title="为什么tomcat应用三分钟还关不掉"></a>为什么tomcat应用三分钟还关不掉</h2><p>这种问题一般是因为还有非deamon线程在容器关闭时没有正确的关闭导致的.可以在执行tomcat shutdown脚本后,jstack线程栈,看下还有哪些非deamon线程在执行.</p>
+<p>应用使用线程持一定要记得关闭线程池,可以用spring提供的.</p>
+<pre><code>&lt;bean id=&quot;taskExecutor&quot;
+      class=&quot;org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor&quot;&gt;
+    &lt;property name=&quot;corePoolSize&quot; value=&quot;10&quot;/&gt;
+    &lt;property name=&quot;keepAliveSeconds&quot; value=&quot;200&quot;/&gt;
+    &lt;property name=&quot;maxPoolSize&quot; value=&quot;50&quot;/&gt;
+    &lt;property name=&quot;queueCapacity&quot; value=&quot;1000&quot;/&gt;
+    &lt;property name=&quot;awaitTerminationSeconds&quot; value=&quot;60&quot;/&gt;
+    &lt;property name=&quot;waitForTasksToCompleteOnShutdown&quot; value=&quot;true&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>注意最后面两个参数.</p>
+<h2 id="The-New-RBAC-Resource-Based-Access-Control"><a href="#The-New-RBAC-Resource-Based-Access-Control" class="headerlink" title="The New RBAC: Resource-Based Access Control"></a>The New RBAC: Resource-Based Access Control</h2><p>最近看看shiro的相关资料,看到这篇文章.以前也隐隐约约思考过权限控制,也感觉<a href="http://en.wikipedia.org/wiki/Role-Based_Access_Control" target="_blank" rel="noopener">RBAC</a>控制粒度太粗了.作者提到<code>Explicit Access Control</code>概念,通过资源来解耦角色,控制粒度更细.从权限的分配角度来说,这样使用也更方便,可以把权限分配到某个用户/某个组/某个角色.</p>
+<p>当然,我们把资源的权限和角色一一对于,角色有层次关系并且可以继承,RBAC也可以胜任细粒度的权限控制.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/maven-transitive-dependency-exception/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1899,293 +2122,6 @@ jekyll serve --watch
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/dependency-management/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/dependency-management/" itemprop="url">依赖管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-14T21:52:17+08:00">
-                2014-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h1><p>项目依赖问题很让人头痛，也出了很多事故，线上线下都很闹心。本着让大家都能开心的原则😄，在<strong>@培根</strong>童鞋的要求下，刚好我对maven很熟，刚好我对公司遇到的依赖问题也很了解，写了此文档。</p>
-<p>请您带着一个大大的问号<strong>?</strong>阅读此文档.您可以把您遇到的依赖问题(此文档没有包含的)发给我,丰富案例库.您可以补充依赖检查中的不足之处,毕竟我个人的能力有限.您可以分享一些灰常有用的插件,方便大家.您可以谈谈您对依赖风险控制的想法.<strong>Help Me Help You!</strong></p>
-<h2 id="一-依赖管理目标"><a href="#一-依赖管理目标" class="headerlink" title="一.依赖管理目标"></a>一.依赖管理目标</h2><ol>
-<li>此规范更新后,使用方不需要修改代码</li>
-<li>规范开源jar包版本</li>
-<li>检查传递依赖</li>
-<li>检查项目classpath中是否有类名相同的依赖jar包</li>
-<li>检查已知不能使用的jar包</li>
-<li>定义常用插件</li>
-<li>优化yjf-common-util依赖,不是每个项目都使用的包定义为provided,由项目自己引入</li>
-</ol>
-<h2 id="二-如何实现目标"><a href="#二-如何实现目标" class="headerlink" title="二.如何实现目标"></a>二.如何实现目标</h2><h3 id="1-创建公共父pom"><a href="#1-创建公共父pom" class="headerlink" title="1.创建公共父pom"></a>1.创建公共父pom</h3><ul>
-<li>定义所有易极付项目都依赖的父pom <code>com.yiji.yiji-parent</code></li>
-<li>此pom为SNAPSHOT</li>
-<li>此pom在<code>dependencyManagement</code>中定义常用jar包的版本</li>
-<li>此pom显示依赖<code>yjf-common-util</code> <code>guava</code> <code>log</code></li>
-<li>此pom使用<code>maven-enforcer-plugin</code>来规范传递依赖,要求当前依赖的版本和传递依赖版本一样或者比传递依赖版本高(比如A-&gt;Cv1 ,A-&gt;D-&gt;Cv2,如果<code>v1&lt;v2</code>,则打包失败)</li>
-<li>此pom使用<code>maven-enforcer-plugin</code>来规范引入会导致已知问题的包(比如我们的项目都使用<code>slf4j</code>和<code>logback</code>,那我们的依赖中不能出现<code>org.slf4j:slf4j-log4j12</code>)</li>
-<li>此pom使用<code>com.yiji.maven.yiji-maven-plugin</code>来检查classpath中是否有类名相同的jar包出现.如果有,在<code>console</code>中也会提示警告,在执行打包命令的目录生成<code>dependency-check.log</code>文件,此文件中会记录检查了哪些包.同时,以后我们也可以通过此日志文件来了解我们项目间的依赖情况.</li>
-<li>此pom包含常用maven插件<code>maven-compiler-plugin</code> <code>maven-source-plugin</code> <code>maven-eclipse-plugin</code> <code>findbugs-maven-plugin</code> <code>maven-pmd-plugin</code>方便大家日常使用</li>
-<li>此pom中的开源依赖,我会定期check是否有更新,是否有bug修复</li>
-</ul>
-<h3 id="2-开发com-yiji-maven-yiji-maven-plugin"><a href="#2-开发com-yiji-maven-yiji-maven-plugin" class="headerlink" title="2.开发com.yiji.maven.yiji-maven-plugin"></a>2.开发<code>com.yiji.maven.yiji-maven-plugin</code></h3><p>此插件已开发完毕,代码也很简单,可以发现一些类加载顺序不一致导致的潜在的问题.</p>
-<p>目前此插件只检查不同的jar包中是否有相同的类名.还可以增加对资源文件的检查,文件名相同还可以增加对内容的检查.这些需求如有必要,以后在加上.此插件也是SNAPSHOT的,以后我升级了,大家不用改动任何代码.</p>
-<h3 id="3-定制settings-xml"><a href="#3-定制settings-xml" class="headerlink" title="3.定制settings.xml"></a>3.定制<code>settings.xml</code></h3><ul>
-<li>此文件定义<code>snapshot</code>依赖为每次打包检查</li>
-<li>其他大多人不需要关心的东东</li>
-</ul>
-<h2 id="三-如何实施"><a href="#三-如何实施" class="headerlink" title="三.如何实施"></a>三.如何实施</h2><p>目前已完成cs项目的改造,使用上面的东东,cs的pom文件还廋身不少.</p>
-<p>由于传递依赖,不敢贸然大规模推广,先选择被依赖较少的项目使用.和<strong>@培根</strong>商量,先选择<strong>boss项目\易融通项目\易房保项目</strong>使用,使用过程中出现任何问题,请联系我(也可以顺带请我喝茶)</p>
-<p>如果这几个项目把雷踩完了,需要找一个统一的时间点,大家一起修改\测试\上线</p>
-<h2 id="四-如何搞"><a href="#四-如何搞" class="headerlink" title="四.如何搞"></a>四.如何搞</h2><h3 id="1-替换setting-xml"><a href="#1-替换setting-xml" class="headerlink" title="1.替换setting.xml"></a>1.替换<code>setting.xml</code></h3><p>下载<code>svn://192.168.45.206/common/yiji-parent/settings.xml</code>,替换maven安装目录中的<code>setting.xml</code></p>
-<h3 id="2-配置项目父pom"><a href="#2-配置项目父pom" class="headerlink" title="2.配置项目父pom"></a>2.配置项目父pom</h3><p>拿cs为例，在cs的父pom中加入</p>
-<pre><code>&lt;parent&gt;
-    &lt;groupId&gt;com.yiji&lt;/groupId&gt;
-    &lt;artifactId&gt;yiji-parent&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-&lt;/parent&gt;
-</code></pre><p>去掉dependencyManagement中的开源jar依赖(公司内部的依赖不要去掉， <code>com.yiji.yiji-parent</code>中没有定义这些东东)。检查项目中的开源依赖是否有版本号，如果有并且IDE提示重复的定义，去掉此版本号；如果没有提示，应该是在 <code>com.yiji.yiji-parent</code>里没有加入此依赖，请联系我。</p>
-<h3 id="3-测试打包"><a href="#3-测试打包" class="headerlink" title="3.测试打包"></a>3.测试打包</h3><p>执行<code>mvnp</code>试试，如果有传递依赖问题，打包会失败，请先联系我。如果打包成功，请检查<code>dependency-check.log</code>文件中有没有警告</p>
-<h3 id="4-测试项目"><a href="#4-测试项目" class="headerlink" title="4.测试项目"></a>4.测试项目</h3><p>运行单元测试用例，看会不会出现问题，最好找<strong>@翼德</strong>同学全量回归下。</p>
-<h2 id="五-FAQ"><a href="#五-FAQ" class="headerlink" title="五.FAQ"></a>五.FAQ</h2><h3 id="1-为什么不提供方便发布的东东"><a href="#1-为什么不提供方便发布的东东" class="headerlink" title="1.为什么不提供方便发布的东东"></a>1.为什么不提供方便发布的东东</h3><h5 id="原因有："><a href="#原因有：" class="headerlink" title="原因有："></a>原因有：</h5><ul>
-<li>容易出错，命令很简单，容易把发往生产的包发到测试环境，除非你很了解</li>
-<li>setting.xml里不支持定义<code>distributionManagement</code>，只能在pom里面定义。因为我们有多套nexus，需要通过profile来定义不同环境对应不同的nexus，但是profile不能继承(我测试是这样的)</li>
-<li>我们大多数项目，只能把facade发布到nexus，即便profile支持继承，我也不敢把这玩意儿加到<code>com.yiji.yiji-parent</code>中。万一某童鞋在项目根目录执行了mvn deploy，<strong>@培根</strong>会不开心的…😠</li>
-</ul>
-<h5 id="如何解决："><a href="#如何解决：" class="headerlink" title="如何解决："></a>如何解决：</h5><p>可以参考<code>com.yiji.yiji-parent</code>中的profiles部分，请在facade中定义这个玩意儿，然后执行命令</p>
-<h3 id="2-有哪些常用的mvn命令，可以方便大家使用"><a href="#2-有哪些常用的mvn命令，可以方便大家使用" class="headerlink" title="2.有哪些常用的mvn命令，可以方便大家使用"></a>2.有哪些常用的mvn命令，可以方便大家使用</h3><p>非window用户，请在~/.bash_profile中加入</p>
-<pre><code>alias mvni=&apos;mvn -T 1C clean install -Dmaven.test.skip=true&apos;
-alias mvnp=&apos;mvn -T 1C clean package -Dmaven.test.skip=true&apos;
-alias mvnv=&apos;mvn versions:set -DgenerateBackupPoms=false&apos;
-alias mvnd=&apos;mvn -T 1C clean deploy -Dmaven.test.skip=true&apos;
-alias mvndd=&apos;mvn -T 1C clean deploy -P dev  -Dmaven.test.skip=true&apos;
-alias mvndo=&apos;mvn -T 1C clean deploy -P online -Dmaven.test.skip=true&apos;
-alias mvnc=&apos;mvn -T 1C clean eclipse:clean idea:clean&apos;
-alias mvne=&apos;mvn -T 1C clean eclipse:clean eclipse:eclipse  -DdownloadSources=true&apos;
-</code></pre><p>不知道各命令啥意思的童鞋请google.</p>
-<p>window用户请把<code>svn://192.168.45.206/common/yiji-parent/script</code>中的脚本添加到PATH中，have a try.</p>
-<h3 id="3-为毛不加入自动生成doc文档插件"><a href="#3-为毛不加入自动生成doc文档插件" class="headerlink" title="3.为毛不加入自动生成doc文档插件"></a>3.为毛不加入自动生成doc文档插件</h3><p><code>yjf-common-util</code>里面用<code>maven-javadoc-plugin</code>来生成doc文档并在发布时上传到nexus。不过这很费时，而且我们以前使用的<code>codetemplates</code>里面有很多javadoc不认识的东东，警告一大堆，看着惨不忍睹。</p>
-<h3 id="4-IDE里面安装maven插件有什么好处"><a href="#4-IDE里面安装maven插件有什么好处" class="headerlink" title="4.IDE里面安装maven插件有什么好处"></a>4.IDE里面安装maven插件有什么好处</h3><p>好处很多，它可以检查一些pom编写错误，也可以方便看依赖树。eclipse对maven支持很牛，依赖树看着会很爽，简单的依赖问题，用它就可以搞定。IDEA的智能提示很牛，添加依赖快捷键就可以搞定。</p>
-<p>以后有依赖问题的童鞋，先用IDE提供的依赖树功能发现问题。找我也可以，但别让我给你安装maven插件，生命是短暂的啊。</p>
-<h3 id="5-maven我不熟怎么办"><a href="#5-maven我不熟怎么办" class="headerlink" title="5.maven我不熟怎么办"></a>5.maven我不熟怎么办</h3><p>肯定不是凉拌，可以先看看<code>http://www.infoq.com/cn/minibooks/maven-in-action</code> <code>http://www.juvenxu.com/category/maven/</code><br>后面我会给大家分享maven一些基本的东东。</p>
-<h3 id="6-依赖问题除了maven导致的-还有其他导致的-如何解决"><a href="#6-依赖问题除了maven导致的-还有其他导致的-如何解决" class="headerlink" title="6.依赖问题除了maven导致的,还有其他导致的,如何解决?"></a>6.依赖问题除了maven导致的,还有其他导致的,如何解决?</h3><p>主要是把场景找出来,然后分析这些问题,我们自己来添加些防御手段.比如今天<strong>@周洋</strong>同学遇到的两个spring bean id配置一样了,导致本地开发测试ok,199启动确不正常.我们可以给spring添加点东东来检查重复id的问题.</p>
-<h3 id="7-我依赖的某jar版本就是不一样"><a href="#7-我依赖的某jar版本就是不一样" class="headerlink" title="7.我依赖的某jar版本就是不一样"></a>7.我依赖的某jar版本就是不一样</h3><p>有这样的的需求,现在问题比较突出的应该是金融这块.金融依赖很多银行提供的jar包,这些包可能会冲突.比如金融某项目,既依赖<code>httpclient3</code>又依赖<code>httpclient4</code>.</p>
-<p>这种情况只能在项目里面指定版本了,使用<code>com.yiji.maven.yiji-maven-plugin</code>里提供的版本不是强制约束.但是建议大家都别这样做,除非没办法.</p>
-<h3 id="8-spring4-0都发布了-我们是不是该升级了"><a href="#8-spring4-0都发布了-我们是不是该升级了" class="headerlink" title="8.spring4.0都发布了,我们是不是该升级了."></a>8.spring4.0都发布了,我们是不是该升级了.</h3><p>我们现在用的是spring 3.1,可能有项目用的spring3.2.</p>
-<p><a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/#new-in-3.2" target="_blank" rel="noopener">spring3.2</a> 有很多新特性,比如test framework,此次升级也把spring升级到3.2.6.</p>
-<p><a href="http://docs.spring.io/spring/docs/4.0.0.RELEASE/spring-framework-reference/htmlsingle/#spring-whats-new" target="_blank" rel="noopener">spring 4.0</a>改动太大,暂时不考虑</p>
-<h3 id="9-在公共父pom中升级一个版本-风险怎么把控"><a href="#9-在公共父pom中升级一个版本-风险怎么把控" class="headerlink" title="9.在公共父pom中升级一个版本,风险怎么把控"></a>9.在公共父pom中升级一个版本,风险怎么把控</h3><p>以后大家都继承此父pom,升级一个版本意味着大家都升级了.风险确实很大.</p>
-<p>首先,我们会去分析此依赖的<code>release notes</code>,评估升级的必要性和影响面.</p>
-<p>然后,我们会找bops这样的大杂烩项目来做测试,测试相关特性是否受影响.  </p>
-<h3 id="10-为什么不把setting-xml的配置移到pom中"><a href="#10-为什么不把setting-xml的配置移到pom中" class="headerlink" title="10.为什么不把setting.xml的配置移到pom中"></a>10.为什么不把<code>setting.xml</code>的配置移到pom中</h3><p>这样做的目的是为了做到环境感知,不同环境的maven <code>setting.xml</code>会不一样,这是信息中心和我需要做的事情.对于大家,只需要使用svn repos中的<code>setting.xml</code>.放到pom中,这个pom需要定义不同的profile,还需要修改我们现有的各个环境的打包脚本.</p>
-<h3 id="11-常见踩雷问题"><a href="#11-常见踩雷问题" class="headerlink" title="11.常见踩雷问题"></a>11.常见踩雷问题</h3><h4 id="11-1-java-lang-NoClassDefFoundError-org-springframework-ui-velocity-VelocityEngineFactory"><a href="#11-1-java-lang-NoClassDefFoundError-org-springframework-ui-velocity-VelocityEngineFactory" class="headerlink" title="11.1 java.lang.NoClassDefFoundError: org/springframework/ui/velocity/VelocityEngineFactory"></a>11.1 java.lang.NoClassDefFoundError: org/springframework/ui/velocity/VelocityEngineFactory</h4><p>这个原因是spring把相关的类放到了spring-context-support里面.如果你用spring的声明式cache,也会遇到找不到类,都加入下面的依赖.</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-context-support&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre><h4 id="11-2-velocity报错"><a href="#11-2-velocity报错" class="headerlink" title="11.2 velocity报错"></a>11.2 velocity报错</h4><pre><code>java.lang.IllegalStateException: Cannot convert value of type     [org.springframework.web.servlet.view.velocity.VelocityConfigurer] to required type [org.apache.velocity.app.VelocityEngine] for property &apos;velocityEngine&apos;: no matching editors or conversion strategy found
-at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:267)
-</code></pre><p>报错是因为配置的bean <code>org.springframework.web.servlet.view.velocity.VelocityConfigurer</code> id为<code>velocityEngine</code>.此id覆盖了默认的velocityEngine,把这个id改为<code>velocityConfigurer</code>就ok</p>
-<h4 id="11-3-net-sf-ehcache-util-UpdateChecker-Update-check-failed"><a href="#11-3-net-sf-ehcache-util-UpdateChecker-Update-check-failed" class="headerlink" title="11.3  net.sf.ehcache.util.UpdateChecker - Update check failed:"></a>11.3  net.sf.ehcache.util.UpdateChecker - Update check failed:</h4><p>关闭ehcache启动时检查版本,在ehcache配置根元素上添加属性<code>updateCheck=&quot;false&quot;</code> </p>
-<h4 id="11-4-BeanCopier报错"><a href="#11-4-BeanCopier报错" class="headerlink" title="11.4 BeanCopier报错"></a>11.4 <code>BeanCopier</code>报错</h4><p>‘net.sf.cglib.core.TypeUtils.parseType(Ljava/lang/String;)Lorg/objectweb/asm/Type;’<br>这是以为spring 3.2对asm有改动<a href="http://docs.spring.io/spring/docs/3.2.6.RELEASE/spring-framework-reference/htmlsingle/#migration-3.2" target="_blank" rel="noopener">Migrating to Spring Framework 3.2</a>(D.3和D.4讲了这些东东),咱也得跟着改动,遇到这个错误,去掉cglib-nodep的依赖就ok</p>
-<p>加入下面的依赖:</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;cglib&lt;/groupId&gt;
-    &lt;artifactId&gt;cglib&lt;/artifactId&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.ow2.asm&lt;/groupId&gt;
-    &lt;artifactId&gt;asm-util&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre><h4 id="11-5-Spring-MVC-controller-处理ajax请求报错-406-Not-Acceptable"><a href="#11-5-Spring-MVC-controller-处理ajax请求报错-406-Not-Acceptable" class="headerlink" title="11.5 Spring MVC controller 处理ajax请求报错 406 Not Acceptable"></a>11.5 <code>Spring MVC controller</code> 处理ajax请求报错 <code>406 Not Acceptable</code></h4><p><code>spring 3.2</code>引入了内容协商的概念,此概念很REST,资源输出格式由客户端来定义.目前支持三种:</p>
-<ul>
-<li>请求后缀名<br>比如getUser.html getUser.xml  getUser.json 分别代表请求输出为html/xml/json</li>
-<li>参数<br>比如请求为getUser?type=xml getUser?type=json</li>
-<li>http header<br>在http请求中设置<code>Accept</code> header,由客户端编程定义接收什么格式的返回.</li>
-</ul>
-<p>这三种方式,我个人觉得第三种最优雅,很适合编程实现对资源的访问.第一种很直观,第二种有点破坏REST的味道了.参考<a href="http://spring.io/blog/2013/05/11/content-negotiation-using-spring-mvc" target="_blank" rel="noopener">Content Negotiation using Spring MVC</a></p>
-<p>遇到这个错误,很可能是因为我们在<code>Controller</code>中定义<code>@RequestMapping</code>的<code>value</code>带有html后缀,但是我们在方法上也加上了<code>@ResponseBody</code>,这让spring很困惑,你请求为html,返回输出又要去解析为json.</p>
-<h5 id="配置"><a href="#配置" class="headerlink" title="配置:"></a>配置:</h5><p>1.引入正确的schema<br>把schemaLocation中spring mvc schema版本去掉</p>
-<pre><code>http://www.springframework.org/schema/mvc
-  http://www.springframework.org/schema/mvc/spring-mvc.xsd
-</code></pre><p>2.配置<code>contentNegotiationManager</code></p>
-<pre><code>&lt;bean id=&quot;contentNegotiationManager&quot;
-      class=&quot;org.springframework.web.accept.ContentNegotiationManagerFactoryBean&quot;&gt;
-    &lt;property name=&quot;favorPathExtension&quot; value=&quot;false&quot;/&gt;
-    &lt;property name=&quot;favorParameter&quot; value=&quot;false&quot;/&gt;
-    &lt;property name=&quot;ignoreAcceptHeader&quot; value=&quot;true&quot;/&gt;
-    &lt;property name=&quot;useJaf&quot; value=&quot;false&quot;/&gt;
-    &lt;property name=&quot;defaultContentType&quot; value=&quot;application/json&quot;/&gt;
-&lt;/bean&gt;
-</code></pre><p>3.配置json转换器</p>
-<pre><code>&lt;mvc:annotation-driven
-         content-negotiation-manager=&quot;contentNegotiationManager&quot;&gt;
-    &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
-        &lt;bean id=&quot;fastJsonHttpMessageConverter&quot;
-              class=&quot;com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter&quot;&gt;
-            &lt;property name=&quot;supportedMediaTypes&quot;&gt;
-                &lt;list&gt;
-                    &lt;value&gt;application/json;charset=UTF-8&lt;/value&gt;
-                &lt;/list&gt;
-            &lt;/property&gt;
-            &lt;property name=&quot;features&quot; value=&quot;WriteDateUseDateFormat&quot;/&gt;
-        &lt;/bean&gt;
-    &lt;/mvc:message-converters&gt;
-&lt;/mvc:annotation-driven&gt;
-</code></pre><p>我们很多童鞋spring mvc用得很不地道,建议看看官方demo <a href="http://s3.springsource.org/MVC/mvc-showcase-screencast.mov" target="_blank" rel="noopener">mvc-showcase-screencast</a></p>
-<h4 id="11-6-使用com-yjf-common-web-CrossScriptingFilter报找不到ESAPI"><a href="#11-6-使用com-yjf-common-web-CrossScriptingFilter报找不到ESAPI" class="headerlink" title="11.6 使用com.yjf.common.web.CrossScriptingFilter报找不到ESAPI"></a>11.6 使用<code>com.yjf.common.web.CrossScriptingFilter</code>报找不到ESAPI</h4><p>添加依赖.</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.owasp.esapi&lt;/groupId&gt;
-    &lt;artifactId&gt;esapi&lt;/artifactId&gt;
-    &lt;exclusions&gt;
-        &lt;exclusion&gt;
-            &lt;artifactId&gt;log4j&lt;/artifactId&gt;
-            &lt;groupId&gt;log4j&lt;/groupId&gt;
-        &lt;/exclusion&gt;
-        &lt;exclusion&gt;
-            &lt;groupId&gt;xerces&lt;/groupId&gt;
-            &lt;artifactId&gt;xercesImpl&lt;/artifactId&gt;
-        &lt;/exclusion&gt;
-     &lt;/exclusions&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;xerces&lt;/groupId&gt;
-    &lt;artifactId&gt;xercesImpl&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2240,7 +2176,7 @@ at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConver
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

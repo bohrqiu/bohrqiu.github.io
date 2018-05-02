@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://bohr.me/zero-copy/figure3.gif">
 <meta property="og:image" content="http://bohr.me/zero-copy/figure4.gif">
 <meta property="og:image" content="http://bohr.me/zero-copy/figure5.gif">
-<meta property="og:updated_time" content="2018-04-01T16:53:17.083Z">
+<meta property="og:updated_time" content="2018-04-01T16:53:17.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用零拷贝提高数据传输效率">
 <meta name="twitter:description" content="本文讲了如何用zero copy技术来提高I/O性能. 静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力. java提供了transferTo方法来使用zero copy技术.他">
@@ -604,7 +604,7 @@ ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

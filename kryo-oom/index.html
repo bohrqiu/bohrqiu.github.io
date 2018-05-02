@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://bohr.me/kryo-oom/3.jpg">
 <meta property="og:image" content="http://bohr.me/kryo-oom/4.jpg">
 <meta property="og:image" content="http://bohr.me/kryo-oom/5.jpg">
-<meta property="og:updated_time" content="2018-04-01T16:53:17.083Z">
+<meta property="og:updated_time" content="2018-04-01T16:53:17.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kryo反序列化时版本不一致导致OOM">
 <meta name="twitter:description" content="生产环境某系统上线大概4-5个小时后，出现OOM(java.lang.OutOfMemoryError: Java heap space )异常。按照目前的压力来说出现OOM不应该，本次上线也没有对代码进行过多的修改。和相关开发人员沟通后，发现上线之前memcached缓存没有清空，memcached存储着kryo序列化后的二进制数据，涉及到的对象增加了属性，初步怀疑是kryo反序列话时出了问题。">
@@ -570,7 +570,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
