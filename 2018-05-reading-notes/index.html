@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 模块分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保证前端">
+<meta name="description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 前后端物理分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保">
 <meta name="keywords" content="READING NOTES,服务发现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2016年08月Reading Notes">
 <meta property="og:url" content="http://bohr.me/2018-05-reading-notes/index.html">
 <meta property="og:site_name" content="qiubo&#39;s life">
-<meta property="og:description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 模块分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保证前端">
+<meta property="og:description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 前后端物理分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-02T09:45:42.903Z">
+<meta property="og:updated_time" content="2018-05-08T10:24:32.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2016年08月Reading Notes">
-<meta name="twitter:description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 模块分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保证前端">
+<meta name="twitter:description" content="前后端分离https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/ 前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。 1. 前后端物理分离前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。 2. 构建方案2.1 前端环境首先保">
 
 
 
@@ -402,14 +402,104 @@
       
         <h2 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h2><p><a href="https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/" target="_blank" rel="noopener">https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/</a></p>
 <p>前后端分离实施比较简单，但是会引入额外的开发、部署成本，这篇文章思路值得借鉴。</p>
-<h3 id="1-模块分离"><a href="#1-模块分离" class="headerlink" title="1. 模块分离"></a>1. 模块分离</h3><p>前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。</p>
+<h3 id="1-前后端物理分离"><a href="#1-前后端物理分离" class="headerlink" title="1. 前后端物理分离"></a>1. 前后端物理分离</h3><p>前端项目和后端项目由不同的团队开发，并且要维持前端和后端代码的一致(单一仓库原则)。通过maven多模块工程划分前端子模块、后端子模块。</p>
 <h3 id="2-构建方案"><a href="#2-构建方案" class="headerlink" title="2. 构建方案"></a>2. 构建方案</h3><h4 id="2-1-前端环境"><a href="#2-1-前端环境" class="headerlink" title="2.1 前端环境"></a>2.1 前端环境</h4><p>首先保证前端构建环境一致，使用<code>frontend-maven-plugin</code>插件安装基础环境并在打包时执行前端构建命令。</p>
 <h4 id="2-2-all-in-one-jar"><a href="#2-2-all-in-one-jar" class="headerlink" title="2.2 all in one jar"></a>2.2 all in one jar</h4><p>部署时可以引入nginx来serve静态页面，动态请求反向代理到后端服务器。但是对于小型项目来说，这样的部署成本太大了，每次上线成本也比较大。理想的方式是用后端应用服务器提供静态页面输出能力，前端后端<code>all in one jar</code>.</p>
 <p>使用<code>maven-resources-plugin</code>插件把前端模块的打包输出物拷贝到后端项目中,最终打一个jar包。</p>
 <h4 id="2-3-打包"><a href="#2-3-打包" class="headerlink" title="2.3 打包"></a>2.3 打包</h4><p>通过以上的工作，使用<code>mvn clean install</code>即可以把项目打成一个jar包。</p>
 <h3 id="3-前端开发"><a href="#3-前端开发" class="headerlink" title="3. 前端开发"></a>3. 前端开发</h3><p>前后端开发过程中，前端访问后端服务面临js同源策略问题。可以使用<code>CORS</code>方案解决，文中给出了一个很好的解决方案，使用<code>http-proxy-middleware</code>，把某些路径的请求转发到后端服务器，优雅的避免了同源问题。</p>
 <p>前端开发过程中，需要mock掉后端服务器，可以使用<code>http://rapapi.org</code>,后端服务开发人员提供接口契约，前端开发前期使用mock数据。</p>
+<h3 id="4-工程实践"><a href="#4-工程实践" class="headerlink" title="4. 工程实践"></a>4. 工程实践</h3><h4 id="4-1-项目结构"><a href="#4-1-项目结构" class="headerlink" title="4.1 项目结构"></a>4.1 项目结构</h4><p>我们的工程结构大致如下：</p>
+<pre><code>xxx-assemble (项目打包)
+xxx-core (核心代码)
+xxx-frontend (前端代码)
+</code></pre><h4 id="4-2-配置"><a href="#4-2-配置" class="headerlink" title="4.2 配置"></a>4.2 配置</h4><h5 id="4-2-1-前端模块"><a href="#4-2-1-前端模块" class="headerlink" title="4.2.1. 前端模块"></a>4.2.1. 前端模块</h5><pre><code>&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;com.github.eirslett&lt;/groupId&gt;
+            &lt;artifactId&gt;frontend-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;1.6&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;!-- Install our node and npm version to run npm/node scripts--&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;install node and npm&lt;/id&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;install-node-and-npm&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;nodeVersion&gt;v9.11.1&lt;/nodeVersion&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+                &lt;!-- Install all project dependencies --&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;npm install&lt;/id&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;npm&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;!-- optional: default phase is &quot;generate-resources&quot; --&gt;
+                    &lt;phase&gt;generate-resources&lt;/phase&gt;
+                    &lt;!-- Optional configuration which provides for running any npm command --&gt;
+                    &lt;configuration&gt;
+                        &lt;arguments&gt;install&lt;/arguments&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+                &lt;!-- Build and minify static files --&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;npm run build&lt;/id&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;npm&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;arguments&gt;run build&lt;/arguments&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre><h5 id="4-2-2-打包模块"><a href="#4-2-2-打包模块" class="headerlink" title="4.2.2. 打包模块"></a>4.2.2. 打包模块</h5><pre><code>&lt;plugin&gt;
+        &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+        &lt;executions&gt;
+            &lt;execution&gt;
+                &lt;id&gt;copy frontend content&lt;/id&gt;
+                &lt;phase&gt;generate-resources&lt;/phase&gt;
+                &lt;goals&gt;
+                    &lt;goal&gt;copy-resources&lt;/goal&gt;
+                &lt;/goals&gt;
+                &lt;configuration&gt;
+                &lt;!-- copy all build frontend resouces to assemble module  --&gt;
+                    &lt;outputDirectory&gt;src/main/resources/public&lt;/outputDirectory&gt;
+                    &lt;overwrite&gt;true&lt;/overwrite&gt;
+                    &lt;resources&gt;
+                        &lt;resource&gt;
 
+                            &lt;directory&gt;${project.parent.basedir}/xxx-frontend/dist&lt;/directory&gt;
+                            &lt;filtering&gt;false&lt;/filtering&gt;
+                            &lt;includes&gt;
+                                &lt;include&gt;**&lt;/include&gt;
+                            &lt;/includes&gt;
+                        &lt;/resource&gt;
+                    &lt;/resources&gt;
+                &lt;/configuration&gt;
+            &lt;/execution&gt;
+        &lt;/executions&gt;
+    &lt;/plugin&gt;
+</code></pre><h5 id="4-2-3-git-ignore"><a href="#4-2-3-git-ignore" class="headerlink" title="4.2.3 git ignore"></a>4.2.3 git ignore</h5><p>在git ignore文件中添加</p>
+<pre><code>node_modules
+xxx-frontend/node
+xxx-frontend/dist
+xxx-assemble/src/main/resources/public
+</code></pre><h4 id="4-3-相关命令"><a href="#4-3-相关命令" class="headerlink" title="4.3 相关命令"></a>4.3 相关命令</h4><pre><code>#安装node/npm依赖
+mvn -T 1C clean install -Dmaven.test.skip=true
+#打包
+mvn -T 1C clean package -Dmaven.test.skip=true
+#线上运行
+java -jar xxx-assemble/target/xxx.jar
+#在打包模块通过maven运行
+mvn spring-boot:run
+#构建前端代码
+npm run build
+</code></pre>
       
     </div>
     
@@ -653,7 +743,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端分离"><span class="nav-number">1.</span> <span class="nav-text">前后端分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-模块分离"><span class="nav-number">1.1.</span> <span class="nav-text">1. 模块分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-构建方案"><span class="nav-number">1.2.</span> <span class="nav-text">2. 构建方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-前端环境"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 前端环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-all-in-one-jar"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 all in one jar</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-打包"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 打包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-前端开发"><span class="nav-number">1.3.</span> <span class="nav-text">3. 前端开发</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前后端分离"><span class="nav-number">1.</span> <span class="nav-text">前后端分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-前后端物理分离"><span class="nav-number">1.1.</span> <span class="nav-text">1. 前后端物理分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-构建方案"><span class="nav-number">1.2.</span> <span class="nav-text">2. 构建方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-前端环境"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 前端环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-all-in-one-jar"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 all in one jar</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-打包"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 打包</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-前端开发"><span class="nav-number">1.3.</span> <span class="nav-text">3. 前端开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-工程实践"><span class="nav-number">1.4.</span> <span class="nav-text">4. 工程实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-项目结构"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 项目结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-配置"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-1-前端模块"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">4.2.1. 前端模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-2-打包模块"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">4.2.2. 打包模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-3-git-ignore"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">4.2.3 git ignore</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-相关命令"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 相关命令</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
