@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://bohr.me/2018-05-reading-notes/</loc>
-    <lastmod>2018-05-08T10:24:32.662Z</lastmod>
+    <lastmod>2018-05-08T10:32:11.281Z</lastmod>
     <data>
         <display>
         <title>2016年08月Reading Notes</title>
@@ -13,7 +13,7 @@
         
         <tag>READING NOTES</tag>
          
-        <tag>服务发现</tag>
+        <tag>前后端分离</tag>
          
          
            
@@ -239,14 +239,14 @@
 
     
   <url>
-    <loc>http://bohr.me/google-java-style/</loc>
+    <loc>http://bohr.me/2015-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     <data>
         <display>
-        <title>Google Java编程风格指南</title>
-        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
+        <title>2015年02月Reading Notes</title>
+        <pubTime>2015-02-16T13:52:17.000Z</pubTime>
         
-        <tag>Google Java编程风格指南</tag>
+        <tag>READING NOTES</tag>
          
          
            
@@ -259,14 +259,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-02-reading-notes/</loc>
+    <loc>http://bohr.me/google-java-style/</loc>
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     <data>
         <display>
-        <title>2015年02月Reading Notes</title>
-        <pubTime>2015-02-16T13:52:17.000Z</pubTime>
+        <title>Google Java编程风格指南</title>
+        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
+        <tag>Google Java编程风格指南</tag>
          
          
            
@@ -299,16 +299,16 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-05-reading-notes/</loc>
+    <loc>http://bohr.me/2015-11-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     <data>
         <display>
-        <title>2015年05月Reading Notes</title>
-        <pubTime>2015-05-01T13:52:17.000Z</pubTime>
+        <title>2015年11月Reading Notes</title>
+        <pubTime>2015-11-01T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
-        <tag>springloaded</tag>
+        <tag>spring-session</tag>
          
          
            
@@ -321,16 +321,16 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-11-reading-notes/</loc>
+    <loc>http://bohr.me/2015-05-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     <data>
         <display>
-        <title>2015年11月Reading Notes</title>
-        <pubTime>2015-11-01T13:52:17.000Z</pubTime>
+        <title>2015年05月Reading Notes</title>
+        <pubTime>2015-05-01T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
-        <tag>spring-session</tag>
+        <tag>springloaded</tag>
          
          
            
@@ -425,26 +425,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-10-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    <data>
-        <display>
-        <title>2014年10月Reading Notes</title>
-        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2014-11-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
@@ -493,6 +473,26 @@
         <display>
         <title>2014年12月Reading Notes</title>
         <pubTime>2014-12-14T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/2014-10-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <data>
+        <display>
+        <title>2014年10月Reading Notes</title>
+        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -607,32 +607,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
-    <data>
-        <display>
-        <title>2014年06月Reading Notes</title>
-        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-        <tag>tengine</tag>
-         
-        <tag>web-starter-kit</tag>
-         
-        <tag>microservice</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2014-05-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
@@ -653,6 +627,32 @@
         <tag>tomcat</tag>
          
         <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <data>
+        <display>
+        <title>2014年06月Reading Notes</title>
+        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+        <tag>tengine</tag>
+         
+        <tag>web-starter-kit</tag>
+         
+        <tag>microservice</tag>
          
          
            
@@ -805,14 +805,14 @@
 
     
   <url>
-    <loc>http://bohr.me/env-aware/</loc>
+    <loc>http://bohr.me/dependency-management/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>打造环境感知的应用</title>
-        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
+        <title>依赖管理</title>
+        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
         
-        <tag>环境感知</tag>
+        <tag>依赖管理</tag>
          
          
            
@@ -851,14 +851,14 @@
 
     
   <url>
-    <loc>http://bohr.me/dependency-management/</loc>
+    <loc>http://bohr.me/env-aware/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>依赖管理</title>
-        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
+        <title>打造环境感知的应用</title>
+        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
         
-        <tag>依赖管理</tag>
+        <tag>环境感知</tag>
          
          
            

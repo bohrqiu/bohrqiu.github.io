@@ -4,7 +4,7 @@
   <url>
     <loc>http://bohr.me/2018-05-reading-notes/</loc>
     
-    <lastmod>2018-05-08T10:24:32.662Z</lastmod>
+    <lastmod>2018-05-08T10:32:11.281Z</lastmod>
     
   </url>
   
@@ -100,14 +100,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/google-java-style/</loc>
+    <loc>http://bohr.me/2015-02-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2015-02-reading-notes/</loc>
+    <loc>http://bohr.me/google-java-style/</loc>
     
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     
@@ -121,14 +121,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2015-05-reading-notes/</loc>
+    <loc>http://bohr.me/2015-11-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2015-11-reading-notes/</loc>
+    <loc>http://bohr.me/2015-05-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     
@@ -163,13 +163,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-10-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/2014-11-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
@@ -185,6 +178,13 @@
   
   <url>
     <loc>http://bohr.me/2014-12-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-10-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     
@@ -226,14 +226,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <loc>http://bohr.me/2014-05-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-05-reading-notes/</loc>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     
@@ -282,7 +282,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/env-aware/</loc>
+    <loc>http://bohr.me/dependency-management/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
@@ -296,7 +296,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/dependency-management/</loc>
+    <loc>http://bohr.me/env-aware/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
