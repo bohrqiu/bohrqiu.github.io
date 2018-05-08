@@ -4,7 +4,7 @@ date: 2018-05-02 14:24:17
 categories: java
 tags:
   - READING NOTES
-  - 服务发现
+  - 前后端分离
 ---
 	
 ## 前后端分离
@@ -152,3 +152,4 @@ https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 	mvn spring-boot:run
 	#构建前端代码
 	npm run build
+	
