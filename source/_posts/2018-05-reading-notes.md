@@ -32,7 +32,7 @@ https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
 #### 2.3 打包
 
-通过以上的工作，使用`mvn clean install`即可以把项目打成一个jar包。
+通过以上的工作，使用`mvn clean package`即可以把项目打成一个jar包。
 
 ### 3. 前端开发
 
@@ -47,7 +47,7 @@ https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 
 我们的工程结构大致如下：
 
-	xxx-assemble (项目打包)
+	xxx-assemble (项目打包,依赖core和frontend)
 	xxx-core (核心代码)
 	xxx-frontend (前端代码)
 
@@ -91,6 +91,7 @@ https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
 	                        <goals>
 	                            <goal>npm</goal>
 	                        </goals>
+	                        <phase>generate-resources</phase>
 	                        <configuration>
 	                            <arguments>run build</arguments>
 	                        </configuration>
@@ -117,7 +118,6 @@ https://blog.codecentric.de/en/2018/04/spring-boot-vuejs/
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                
                                     <directory>${project.parent.basedir}/xxx-frontend/dist</directory>
                                     <filtering>false</filtering>
                                     <includes>
