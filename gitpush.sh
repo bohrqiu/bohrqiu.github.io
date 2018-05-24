@@ -4,5 +4,5 @@ if [ "$commitMsg" = "" ]; then
   echo "new host name is empty, not set new hostname."
   exit 0
 fi
-git commit -m $commitMsg
+git commit -m "$commitMsg"
 git push origin hexo
