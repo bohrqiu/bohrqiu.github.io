@@ -310,6 +310,215 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-10-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014-10-reading-notes/" itemprop="url">2014年10月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-10-15T21:52:17+08:00">
+                2014-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Why-does-my-Java-process-consume-more-memory-than-Xmx"><a href="#Why-does-my-Java-process-consume-more-memory-than-Xmx" class="headerlink" title="Why does my Java process consume more memory than Xmx?"></a>Why does my Java process consume more memory than Xmx?</h2><p><a href="https://plumbr.eu/blog/why-does-my-java-process-consume-more-memory-than-xmx" target="_blank" rel="noopener">https://plumbr.eu/blog/why-does-my-java-process-consume-more-memory-than-xmx</a></p>
+<p>java进程内存消耗会大于我们在<code>-Xmx</code>中指定的值.<code>-Xmx</code>仅仅限制了应用程序使用的heap大小.java进的内存消耗主要包括下面的东东:</p>
+<pre><code>Max memory = [-Xmx] + [-XX:MaxPermSize] + number_of_threads * [-Xss]+Other
+</code></pre><p>Other:</p>
+<ul>
+<li>Garbage collection(GC自己需要消耗内存来记录数据)</li>
+<li>JIT optimization(JIT优化需要记录代码执行行为,Code cache-JIT编译完成后存放机器码)</li>
+<li>Off-heap allocations(NIO/DirectMemory之类的东东)</li>
+<li>JNI code(程序使用第三方JNI代码占用的内存)</li>
+<li>Metaspace(jdk8使用它取代了permgen)</li>
+</ul>
+<h2 id="Understanding-the-OutOfMemoryError"><a href="#Understanding-the-OutOfMemoryError" class="headerlink" title="Understanding the OutOfMemoryError"></a>Understanding the OutOfMemoryError</h2><p><a href="https://plumbr.eu/blog/understanding-java-lang-outofmemoryerror" target="_blank" rel="noopener">https://plumbr.eu/blog/understanding-java-lang-outofmemoryerror</a></p>
+<ul>
+<li><p>java.lang.OutOfMemoryError: Java heap space</p>
+<p>  heap空间不足.一般加大<code>-Xmx</code>.如果还不足就有可能是内存泄漏了.</p>
+</li>
+<li><p>java.lang.OutOfMemoryError: PermGen space</p>
+<p>  permgen空间不足,默认的jvm配置得比较小,需要通过<code>-XX:MaxPermSize</code>加大.动态代码生成技术和容器redeploy资源泄漏也会导致permgen不足</p>
+</li>
+<li><p>java.lang.OutOfMemoryError: GC overhead limit exceeded</p>
+<p>  jvm gc行为中超过98%以上的时间去释放小于2%的堆空间时会报这个错误</p>
+</li>
+<li><p>java.lang.OutOfMemoryError: unable to create new native thread</p>
+<p>  java没创建一个线程,会占用<code>-Xss</code>大小空间.这个异常有可能是系统内存不足导致.如果系统内存充足,往往是ulimit -u限制了一个用户创建最大线程数造成的.</p>
+</li>
+<li><p>java.lang.OutOfMemoryError: Requested array size exceeds VM limit</p>
+<p>  申请的数组大小超过jvm定义的阀值.</p>
+</li>
+<li><p>java.lang.OutOfMemoryError: request <size> bytes for <reason>. Out of swap space?</reason></size></p>
+</li>
+<li>java.lang.OutOfMemoryError: <reason> <stack trace=""> (Native method)</stack></reason></li>
+</ul>
+<h2 id="20-Obstacles-to-Scalability"><a href="#20-Obstacles-to-Scalability" class="headerlink" title="20 Obstacles to Scalability"></a>20 Obstacles to Scalability</h2><p>本文罗列了20个影响伸缩性的瓶颈</p>
+<h3 id="10-Obstacles-to-Scaling-Performance"><a href="#10-Obstacles-to-Scaling-Performance" class="headerlink" title="10 Obstacles to Scaling Performance"></a>10 Obstacles to Scaling Performance</h3><ol>
+<li><p>Two-Phase Commit</p>
+<p> 两阶段提交需要等待参与方确认,延时太大.所以我们基本上使用best-effort 1pc+业务上的重试.</p>
+</li>
+<li><p>Insufficient Caching</p>
+<p> 各个层次都需要引入缓存机制,现在我们对browser cache/page cache还做得比较少.</p>
+</li>
+<li><p>Slow Disk I/O, RAID 5, Multitenant Storage</p>
+<p> 数据库服务起I/O很关键.如果只做raid建议做raid10.当然加上fushion io之类的加速卡更好.</p>
+</li>
+<li><p>Serial Processing</p>
+<p>服务并行处理我们也还思考得比较少.比如对远程服务进行合理并行处理(可以考虑下java8中的CompletableFuture).对于缓存数据的获取,可以考虑批量获取.</p>
+</li>
+<li><p>Missing Feature Flags</p>
+<p> 特性开关,说大点就是服务降级,我们需要却分不同服务的重要等级,适当时候关闭某些服务,保证核心业务正常运行.</p>
+</li>
+<li><p>Single Copy of the Database</p>
+</li>
+<li>Using Your Database for Queuing</li>
+<li>Using a Database for Full-Text Searching</li>
+<li>Object Relational Models(orm很好用,但是缺少能hold住他的人)</li>
+<li>Missing Instrumentation(需要监控/profile工具)</li>
+</ol>
+<h3 id="10-Obstacles-to-Scaling-Beyond-Optimization-Speed"><a href="#10-Obstacles-to-Scaling-Beyond-Optimization-Speed" class="headerlink" title="10 Obstacles to Scaling Beyond Optimization Speed"></a>10 Obstacles to Scaling Beyond Optimization Speed</h3><ol>
+<li>Lack of a Code Repository and Version Control</li>
+<li>Single Points of Failure</li>
+<li>Lack of Browse-Only Mode(对于内容型的网站,此功能非常重要)</li>
+<li>Weak Communication</li>
+<li>Lack of Documentation</li>
+<li>Lack of Fire Drills(却分演练,特别是大的运维调整,此项非常必要)</li>
+<li>Insufficient Monitoring and Metrics</li>
+<li>Cowboy Operations</li>
+<li>Growing Technical Debt</li>
+<li>Insufficient Logging</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-09-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2255,163 +2464,6 @@ vagrant box list
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-06-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014-06-reading-notes/" itemprop="url">2014年06月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-06-28T21:52:17+08:00">
-                2014-06-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Awesome-Sysadmin"><a href="#Awesome-Sysadmin" class="headerlink" title="Awesome Sysadmin"></a>Awesome Sysadmin</h2><p><a href="https://github.com/kahun/awesome-sysadmin" target="_blank" rel="noopener">https://github.com/kahun/awesome-sysadmin</a></p>
-<p>系统管理员的开源资源,资源暴多,技术选型时参考.</p>
-<h2 id="Tengine"><a href="#Tengine" class="headerlink" title="Tengine"></a>Tengine</h2><p><a href="http://dmsimard.com/2014/06/21/a-use-case-of-tengine-a-drop-in-replacement-and-fork-of-nginx/" target="_blank" rel="noopener">http://dmsimard.com/2014/06/21/a-use-case-of-tengine-a-drop-in-replacement-and-fork-of-nginx/</a></p>
-<p>使用tengine来做LB,通过Tengine的<code>unbuffered requests</code>特性实现了上传性能提升.</p>
-<p>不过我自己装tengine启动就遇到了问题.</p>
-<pre><code>the configuration file //Users/bohr/software/tengine/conf/nginx.conf syntax is ok
-nginx: [emerg] mkdir() &quot;//Users/bohr/software/tengine/logs/access.log&quot; failed (21: Is a directory)
-configuration file //Users/bohr/software/tengine/conf/nginx.conf test failed
-</code></pre><h2 id="服务器操作系统应该选择-Debian-Ubuntu-还是-CentOS？"><a href="#服务器操作系统应该选择-Debian-Ubuntu-还是-CentOS？" class="headerlink" title="服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？"></a>服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？</h2><p><a href="http://www.zhihu.com/question/19599986" target="_blank" rel="noopener">http://www.zhihu.com/question/19599986</a></p>
-<p>生产环境选择操作系统还是要慎重.现在我厂在线上用ubuntu,遇到过几次诡异事件(服务器无缘无故挂了,没有任何日志,时间跳变),看了这篇文章,SA应该会把线上的linux服务器统一了吧.</p>
-<h2 id="web-starter-kit"><a href="#web-starter-kit" class="headerlink" title="web-starter-kit"></a>web-starter-kit</h2><p><a href="https://github.com/google/web-starter-kit" target="_blank" rel="noopener">https://github.com/google/web-starter-kit</a></p>
-<p>Web Starter Kit is a starting point for multi-screen web development. It encompasses opinionated recommendations on boilerplate and tooling for building an experience that works great across multiple devices.</p>
-<h2 id="微服务：分解应用以实现可部署性和可扩展性"><a href="#微服务：分解应用以实现可部署性和可扩展性" class="headerlink" title="微服务：分解应用以实现可部署性和可扩展性"></a>微服务：分解应用以实现可部署性和可扩展性</h2><p><a href="http://www.infoq.com/cn/articles/microservices-intro" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/microservices-intro</a><br><a href="http://microservices.io/index.html" target="_blank" rel="noopener">http://microservices.io/index.html</a></p>
-<p>文章讨论了整体架构和微服务构架的优缺点.对于大型应用而言,微服务架构当然是首选.</p>
-<p>API网关模式用于解耦应用客户端和微服务.我们可能没有考虑对不同的客户端提供不同粒度的服务(不同客户端的网络环境不一样).</p>
-<p>对于非强一致性数据要求的场景,<code>事件驱动的异步更新</code>(服务发布事件声明有些数据发生了变化，其他的服务订阅这些事件并更新它们的数据)解耦了事件的生产者和消费者,简化了开发也提升了可用性.某应用,很多配置数据都存在memcache中,一笔业务需要查询缓存&gt;5次,每次都要去查,感觉很不爽.还是使用本地缓存+事件驱动的异步更新来做比较好.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2466,7 +2518,7 @@ configuration file //Users/bohr/software/tengine/conf/nginx.conf test failed
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2488,7 +2540,7 @@ configuration file //Users/bohr/software/tengine/conf/nginx.conf test failed
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
