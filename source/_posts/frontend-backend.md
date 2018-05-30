@@ -3,7 +3,6 @@ title: spring-boot应用前后端分离工程实践
 date: 2018-05-02 14:24:17
 categories: java
 tags:
-  - READING NOTES
   - 前后端分离
 ---
 	
