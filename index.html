@@ -310,6 +310,175 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2018-06-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018-06-reading-notes/" itemprop="url">2018年06月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-01T21:52:17+08:00">
+                2018-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="spring-InjectionPoint"><a href="#spring-InjectionPoint" class="headerlink" title="spring InjectionPoint"></a>spring InjectionPoint</h2><p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/InjectionPoint.html" target="_blank" rel="noopener">InjectionPoint</a>是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。</p>
+<h3 id="1-获取被注入组件的类"><a href="#1-获取被注入组件的类" class="headerlink" title="1. 获取被注入组件的类"></a>1. 获取被注入组件的类</h3><pre><code>@Bean
+@Scope(&quot;prototype&quot;)
+Logger logger(InjectionPoint ip) {
+    return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+}
+
+@Component
+public static class LoggingComponent {
+    private final Logger logger ;
+    public LoggingComponent(Logger logger) {
+        this.logger = logger;
+    }
+}
+</code></pre><h3 id="2-获取被注入组件上的注解"><a href="#2-获取被注入组件上的注解" class="headerlink" title="2. 获取被注入组件上的注解"></a>2. 获取被注入组件上的注解</h3><pre><code>  @Bean
+  @Scope(&quot;prototype&quot;)
+  public String greeting(InjectionPoint ip) {
+    Greeting greeting = findAnnotation(ip.getAnnotatedElement(),
+                        Greeting.class);
+    return (Language.DA == greeting.language()) ? &quot;Hej Verden&quot; : &quot;Hello World&quot;;
+  }
+
+@Service
+public class GreeterService {
+  @Autowired @Greeting(language = Language.EN)
+  private String greeting;
+}
+</code></pre><h2 id="spring-jdbc"><a href="#spring-jdbc" class="headerlink" title="spring jdbc"></a>spring jdbc</h2><p>spring jdbc做了很多有意思的扩展，比如大家熟悉的<code>JdbcTemplate</code>,还有最近才推出的<a href="https://projects.spring.io/spring-data-jdbc/" target="_blank" rel="noopener">spring-data-jdbc</a>,参考<a href="https://github.com/spring-tips/jdbc/blob/master/src/main/java/com/example/jdbc/JdbcApplication.java" target="_blank" rel="noopener">spring-tips</a>，了解spring 对jdbc的能力支持。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/sync-log-to-dataware-house/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2045,172 +2214,6 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/why-react/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/why-react/" itemprop="url">Why react?</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-01T21:52:17+08:00">
-                2015-12-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>昨天给朋友推荐了<code>React</code>，但心里还真没有底，这里整理下资料，如果不考虑浏览器兼容性的问题，这东东真不错😄。</p>
-<h4 id="1-虚拟dom是什么？"><a href="#1-虚拟dom是什么？" class="headerlink" title="1. 虚拟dom是什么？"></a>1. 虚拟dom是什么？</h4><p>虚拟DOM是HTML DOM的抽象，它和浏览器的实现分离。</p>
-<h4 id="2-为什么虚拟dom快？"><a href="#2-为什么虚拟dom快？" class="headerlink" title="2. 为什么虚拟dom快？"></a>2. 为什么虚拟dom快？</h4><p>DOM拖慢JavaScript。所有的DOM操作都是同步的，会堵塞浏览器。JavaScript操作DOM时，必须等前一个操作结束，才能执行后一个操作。只要一个操作有卡顿，整个网页就会短暂失去响应。浏览器重绘网页的频率是60FPS（即16毫秒/帧），JavaScript做不到在16毫秒内完成DOM操作，因此产生了跳帧。虚拟dom的改变并不会引起浏览器dom的改变，而是由React在合适的时机比较差异并渲染，保证<code>FPS</code>。</p>
-<h4 id="3-Why-is-React’s-concept-of-Virtual-DOM-said-to-be-more-performant-than-dirty-model-checking"><a href="#3-Why-is-React’s-concept-of-Virtual-DOM-said-to-be-more-performant-than-dirty-model-checking" class="headerlink" title="3. Why is React’s concept of Virtual DOM said to be more performant than dirty model checking?"></a>3. Why is React’s concept of Virtual DOM said to be more performant than dirty model checking?</h4><p>React knows when to re-render the scene because it is able to <strong>observe when this data changes</strong>. Dirty checking is slower than observables because you must poll the data at a regular interval and check all of the values in the data structure recursively. By comparison, setting a value on the state will signal to a listener that some state has changed, so React can simply listen for change events on the state and queue up re-rendering.(这点随着es6的<code>Proxy</code>到来，<code>AngularJS</code>会越来越强大😄)</p>
-<h4 id="4-What-makes-React-fast"><a href="#4-What-makes-React-fast" class="headerlink" title="4. What makes React fast ?"></a>4. What makes React fast ?</h4><ul>
-<li>Batched DOM read/write operations.</li>
-<li>Efficient update of sub-tree only.</li>
-</ul>
-<p>Compared to dirty-check, the key differences IMO are:</p>
-<p>Model dirty-checking: React component is explicitly set as dirty whenever setState is called, so there’s no comparison (of the data) needed here. For dirty-checking, the comparison (of the models) always happen each digest loop.</p>
-<p>DOM updating: DOM operations are very expensive because modifying the DOM will also apply and calculate CSS styles, layouts. The saved time from unnecessary DOM modification can be longer than the time spent diffing the virtual DOM.</p>
-<h4 id="4-What’s-the-problem-of-template-engine？"><a href="#4-What’s-the-problem-of-template-engine？" class="headerlink" title="4. What’s the problem of template engine？"></a>4. What’s the problem of template engine？</h4><p>Template languages express the initial render of your application, and you’re responsible for manually mutating the state of the UI when your backing data changes and events occur.</p>
-<h4 id="5-how-to-run"><a href="#5-how-to-run" class="headerlink" title="5. how to run ?"></a>5. how to run ?</h4><p><img src="/why-react/reactjs.png" alt=""></p>
-<p>上面部分是用户触发的，下面部分是定时触发的。</p>
-<p>首先说上面部分：</p>
-<ol>
-<li>用户点击某dom</li>
-<li><p><code>top-level event handler</code>分发事件到指定的<code>event handler</code></p>
-<p> <code>top-level event handler</code>指的是<code>document</code>上的<code>event handler</code>,这种方式能够提高性能(因为在每个真实的dom上面绑定事件是非常慢的)并且跨浏览器(浏览器中的事件本身就没有统一)</p>
-</li>
-<li><p>用户代码调用setState()</p>
-<p> <code>AngularJS</code>双向绑定，不需要用户调用状态变更。所以，必须要去做大量的<code>dirty check</code>。虽然是一种倒退，但是为了性能忍了，等ES6吧。</p>
-</li>
-</ol>
-<p>下面部分的逻辑：<code>event loop</code>周期性的检查有状态组件是否<code>dirty</code>，然后通过<code>diff</code>算法批量更新浏览器dom树。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2265,7 +2268,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2287,7 +2290,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>2018年06月Reading Notes</title>
+      <link href="/2018-06-reading-notes/"/>
+      <url>/2018-06-reading-notes/</url>
+      <content type="html"><![CDATA[<h2 id="spring-InjectionPoint"><a href="#spring-InjectionPoint" class="headerlink" title="spring InjectionPoint"></a>spring InjectionPoint</h2><p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/InjectionPoint.html" target="_blank" rel="noopener">InjectionPoint</a>是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。</p><h3 id="1-获取被注入组件的类"><a href="#1-获取被注入组件的类" class="headerlink" title="1. 获取被注入组件的类"></a>1. 获取被注入组件的类</h3><pre><code>@Bean@Scope(&quot;prototype&quot;)Logger logger(InjectionPoint ip) {    return Logger.getLogger(ip.getMember().getDeclaringClass().getName());}@Componentpublic static class LoggingComponent {    private final Logger logger ;    public LoggingComponent(Logger logger) {        this.logger = logger;    }}</code></pre><h3 id="2-获取被注入组件上的注解"><a href="#2-获取被注入组件上的注解" class="headerlink" title="2. 获取被注入组件上的注解"></a>2. 获取被注入组件上的注解</h3><pre><code>  @Bean  @Scope(&quot;prototype&quot;)  public String greeting(InjectionPoint ip) {    Greeting greeting = findAnnotation(ip.getAnnotatedElement(),                        Greeting.class);    return (Language.DA == greeting.language()) ? &quot;Hej Verden&quot; : &quot;Hello World&quot;;  }@Servicepublic class GreeterService {  @Autowired @Greeting(language = Language.EN)  private String greeting;}</code></pre><h2 id="spring-jdbc"><a href="#spring-jdbc" class="headerlink" title="spring jdbc"></a>spring jdbc</h2><p>spring jdbc做了很多有意思的扩展，比如大家熟悉的<code>JdbcTemplate</code>,还有最近才推出的<a href="https://projects.spring.io/spring-data-jdbc/" target="_blank" rel="noopener">spring-data-jdbc</a>,参考<a href="https://github.com/spring-tips/jdbc/blob/master/src/main/java/com/example/jdbc/JdbcApplication.java" target="_blank" rel="noopener">spring-tips</a>，了解spring 对jdbc的能力支持。</p>]]></content>
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> READING NOTES </tag>
+            
+            <tag> InjectionPoint </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>准实时同步应用日志到数仓</title>
       <link href="/sync-log-to-dataware-house/"/>
       <url>/sync-log-to-dataware-house/</url>

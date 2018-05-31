@@ -310,6 +310,172 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/why-react/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/why-react/" itemprop="url">Why react?</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-01T21:52:17+08:00">
+                2015-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>昨天给朋友推荐了<code>React</code>，但心里还真没有底，这里整理下资料，如果不考虑浏览器兼容性的问题，这东东真不错😄。</p>
+<h4 id="1-虚拟dom是什么？"><a href="#1-虚拟dom是什么？" class="headerlink" title="1. 虚拟dom是什么？"></a>1. 虚拟dom是什么？</h4><p>虚拟DOM是HTML DOM的抽象，它和浏览器的实现分离。</p>
+<h4 id="2-为什么虚拟dom快？"><a href="#2-为什么虚拟dom快？" class="headerlink" title="2. 为什么虚拟dom快？"></a>2. 为什么虚拟dom快？</h4><p>DOM拖慢JavaScript。所有的DOM操作都是同步的，会堵塞浏览器。JavaScript操作DOM时，必须等前一个操作结束，才能执行后一个操作。只要一个操作有卡顿，整个网页就会短暂失去响应。浏览器重绘网页的频率是60FPS（即16毫秒/帧），JavaScript做不到在16毫秒内完成DOM操作，因此产生了跳帧。虚拟dom的改变并不会引起浏览器dom的改变，而是由React在合适的时机比较差异并渲染，保证<code>FPS</code>。</p>
+<h4 id="3-Why-is-React’s-concept-of-Virtual-DOM-said-to-be-more-performant-than-dirty-model-checking"><a href="#3-Why-is-React’s-concept-of-Virtual-DOM-said-to-be-more-performant-than-dirty-model-checking" class="headerlink" title="3. Why is React’s concept of Virtual DOM said to be more performant than dirty model checking?"></a>3. Why is React’s concept of Virtual DOM said to be more performant than dirty model checking?</h4><p>React knows when to re-render the scene because it is able to <strong>observe when this data changes</strong>. Dirty checking is slower than observables because you must poll the data at a regular interval and check all of the values in the data structure recursively. By comparison, setting a value on the state will signal to a listener that some state has changed, so React can simply listen for change events on the state and queue up re-rendering.(这点随着es6的<code>Proxy</code>到来，<code>AngularJS</code>会越来越强大😄)</p>
+<h4 id="4-What-makes-React-fast"><a href="#4-What-makes-React-fast" class="headerlink" title="4. What makes React fast ?"></a>4. What makes React fast ?</h4><ul>
+<li>Batched DOM read/write operations.</li>
+<li>Efficient update of sub-tree only.</li>
+</ul>
+<p>Compared to dirty-check, the key differences IMO are:</p>
+<p>Model dirty-checking: React component is explicitly set as dirty whenever setState is called, so there’s no comparison (of the data) needed here. For dirty-checking, the comparison (of the models) always happen each digest loop.</p>
+<p>DOM updating: DOM operations are very expensive because modifying the DOM will also apply and calculate CSS styles, layouts. The saved time from unnecessary DOM modification can be longer than the time spent diffing the virtual DOM.</p>
+<h4 id="4-What’s-the-problem-of-template-engine？"><a href="#4-What’s-the-problem-of-template-engine？" class="headerlink" title="4. What’s the problem of template engine？"></a>4. What’s the problem of template engine？</h4><p>Template languages express the initial render of your application, and you’re responsible for manually mutating the state of the UI when your backing data changes and events occur.</p>
+<h4 id="5-how-to-run"><a href="#5-how-to-run" class="headerlink" title="5. how to run ?"></a>5. how to run ?</h4><p><img src="/why-react/reactjs.png" alt=""></p>
+<p>上面部分是用户触发的，下面部分是定时触发的。</p>
+<p>首先说上面部分：</p>
+<ol>
+<li>用户点击某dom</li>
+<li><p><code>top-level event handler</code>分发事件到指定的<code>event handler</code></p>
+<p> <code>top-level event handler</code>指的是<code>document</code>上的<code>event handler</code>,这种方式能够提高性能(因为在每个真实的dom上面绑定事件是非常慢的)并且跨浏览器(浏览器中的事件本身就没有统一)</p>
+</li>
+<li><p>用户代码调用setState()</p>
+<p> <code>AngularJS</code>双向绑定，不需要用户调用状态变更。所以，必须要去做大量的<code>dirty check</code>。虽然是一种倒退，但是为了性能忍了，等ES6吧。</p>
+</li>
+</ol>
+<p>下面部分的逻辑：<code>event loop</code>周期性的检查有状态组件是否<code>dirty</code>，然后通过<code>diff</code>算法批量更新浏览器dom树。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/be-happy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2327,209 +2493,6 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-11-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014-11-reading-notes/" itemprop="url">2014年11月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-04T21:52:17+08:00">
-                2014-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Linux-Troubleshooting-Part-I-High-Load"><a href="#Linux-Troubleshooting-Part-I-High-Load" class="headerlink" title="Linux Troubleshooting, Part I: High Load"></a>Linux Troubleshooting, Part I: High Load</h2><p><a href="http://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load" target="_blank" rel="noopener">http://www.linuxjournal.com/magazine/hack-and-linux-troubleshooting-part-i-high-load</a></p>
-<p>10月25(This is my big day)日凌晨线上某系统出现<code>load</code>很高的问题,我当时排查问题的思路和这篇文章类似.简单总结下:</p>
-<p><code>load</code>,系统负载,可以理解为现在等待cpu处理的任务数.如何衡量<code>high</code>呢?这个和cpu核心数有关系,8核cpu,load为8,这个也不能称之为high.</p>
-<p>造成high load的原因一般有:</p>
-<ul>
-<li><p>CPU-bound load</p>
-<p>  某些任务太耗cpu了,导致high load.这个通过看top就能看出来.如果<code>top</code>命令中的<code>xx%wa</code>很高,说明这些任务都在等待去了.</p>
-</li>
-<li><p>load caused by out of memory issues</p>
-<p>  由于内存不足,linux在使用swap了,导致high load.这个通过<code>free</code>很容易看出来.</p>
-</li>
-<li><p>I/O-bound load</p>
-<p>  iostat/iotop(需安装)都很容易发现原因所在.</p>
-</li>
-</ul>
-<p>我偏向于使用<code>vmstat</code>,用了它,什么都可以看到了.很悲剧的是,这台线上服务器一切正常.服务器重启后,负载一直很低.服务器重启后,一切都正常了.</p>
-<h2 id="The-Best-Plugins-for-Sublime-Text"><a href="#The-Best-Plugins-for-Sublime-Text" class="headerlink" title="The Best Plugins for Sublime Text"></a>The Best Plugins for Sublime Text</h2><p><a href="http://ipestov.com/the-best-plugins-for-sublime-text/" target="_blank" rel="noopener">http://ipestov.com/the-best-plugins-for-sublime-text/</a></p>
-<p>可以把sublime武装成ide的插件.</p>
-<h2 id="ibatis和mybatis共存"><a href="#ibatis和mybatis共存" class="headerlink" title="ibatis和mybatis共存"></a>ibatis和mybatis共存</h2><p>如果先加载ibatis的jar,会遇到<code>java.lang.reflect.MalformedParameterizedTypeException</code>异常.需要让ibatis后加载.可以修改<code>ibatis</code>依赖的<code>artifactId</code>,比如改为<code>zibatis</code></p>
-<h2 id="MySQL-加锁处理分析"><a href="#MySQL-加锁处理分析" class="headerlink" title="MySQL 加锁处理分析"></a>MySQL 加锁处理分析</h2><p><a href="http://hedengcheng.com/?p=771" target="_blank" rel="noopener">http://hedengcheng.com/?p=771</a></p>
-<p>这篇文章从mysql数据库原理角度来分析锁,很透彻,很深刻.</p>
-<p>比如对于一条简单的sql语句:</p>
-<pre><code>delete from test where id = ?；
-</code></pre><p>如果id是主键/非空的唯一索引,不会出现gap锁.如果是非索引列,直接锁表(这个太恶心了,因为server和存储引擎分离导致的);如果是非唯一的索引,事务隔离级别是read commit,锁定选取的数据.如果是repeatable read,为了防止幻读,gap lock出现了)</p>
-<p>##面向程序员的数据库访问性能优化法则<br><a href="http://blog.csdn.net/yzsind/article/details/6059209" target="_blank" rel="noopener">http://blog.csdn.net/yzsind/article/details/6059209</a></p>
-<p>这篇文章很系统的介绍了程序员应该掌握的数据库优化知识.<br>首先根据硬件相关知识介绍各种硬件的访问延时/带宽指标:<br><img src="/2014-11-reading-notes/access_delay_bandwidth.gif" alt=""></p>
-<p>通过对上面的指标分析,自然得出优化的层次:</p>
-<ol>
-<li><p>减少数据访问（减少磁盘访问）</p>
-<ul>
-<li>正确创建/使用索引</li>
-<li>只通过索引访问数据(索引节点中存有数据,通过索引就能拿到数据最高效)</li>
-<li>根据查询计划优化索引</li>
-<li>一个表上的索引不能太多,会增加修改操作IO.</li>
-</ul>
-</li>
-<li><p>返回更少数据（减少网络传输或磁盘访问）</p>
-<ul>
-<li>分页(通过rowid分页的方式减少IO,前提是where/order子句都要在索引上)</li>
-<li>只返回需要的字段(别使用select *,带来各种问题,对于我们来说,最头痛的是sql版本兼容性问题.)</li>
-</ul>
-</li>
-</ol>
-<ol>
-<li><p>减少交互次数（减少网络传输）</p>
-<ul>
-<li>batch DML(批量操作走jdbc批量接口)</li>
-<li>In List(多操作合并,依稀记得mysql驱动里也有这样的做法)</li>
-<li>设置Fetch Size(默认fetch size可能不是最优的,需要根据实际情况调整,比如分页查询,一次查询100条,在不OOM的前提下增大此值,减少网络io)</li>
-<li>使用存储过程(这个得看场景)</li>
-<li>使用ResultSet游标处理记录(这一点往往被忽略掉,使用mybatis的RowHandler来解决问题)</li>
-</ul>
-</li>
-<li><p>减少服务器CPU开销（减少CPU及内存开销）</p>
-<ul>
-<li>使用绑定变量(mysql仅仅支持硬解析,<a href="http://www.cnblogs.com/justfortaste/p/3920140.html" target="_blank" rel="noopener">参考</a>)</li>
-<li>合理使用排序</li>
-</ul>
-</li>
-<li><p>利用更多资源（增加资源）</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2584,7 +2547,7 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2606,7 +2569,7 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

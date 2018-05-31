@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://bohr.me/2018-06-reading-notes/</loc>
+    <lastmod>2018-05-31T08:26:56.334Z</lastmod>
+    <data>
+        <display>
+        <title>2018年06月Reading Notes</title>
+        <pubTime>2018-06-01T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+        <tag>InjectionPoint</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/sync-log-to-dataware-house/</loc>
     <lastmod>2018-05-30T12:44:28.900Z</lastmod>
     <data>
@@ -108,7 +130,6 @@
     </url>
 
     
-    
   <url>
     <loc>http://bohr.me/2016-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
@@ -128,6 +149,7 @@
     </data>
     </url>
 
+    
     
   <url>
     <loc>http://bohr.me/2016-08-reading-notes/</loc>
@@ -256,6 +278,26 @@
 
     
   <url>
+    <loc>http://bohr.me/google-java-style/</loc>
+    <lastmod>2018-04-01T16:53:17.082Z</lastmod>
+    <data>
+        <display>
+        <title>Google Java编程风格指南</title>
+        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
+        
+        <tag>Google Java编程风格指南</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/2015-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     <data>
@@ -284,26 +326,6 @@
         <pubTime>2014-09-23T13:52:17.000Z</pubTime>
         
         <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/google-java-style/</loc>
-    <lastmod>2018-04-01T16:53:17.082Z</lastmod>
-    <data>
-        <display>
-        <title>Google Java编程风格指南</title>
-        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
-        
-        <tag>Google Java编程风格指南</tag>
          
          
            
@@ -442,12 +464,52 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-12-reading-notes/</loc>
+    <loc>http://bohr.me/2014-10-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>2014年12月Reading Notes</title>
-        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
+        <title>2014年10月Reading Notes</title>
+        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/serialization-framework/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <data>
+        <display>
+        <title>序列化框架选型</title>
+        <pubTime>2014-01-26T13:52:17.000Z</pubTime>
+        
+        <tag>序列化</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <data>
+        <display>
+        <title>2014年11月Reading Notes</title>
+        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -484,52 +546,12 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    <loc>http://bohr.me/2014-12-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>2014年11月Reading Notes</title>
-        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/serialization-framework/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    <data>
-        <display>
-        <title>序列化框架选型</title>
-        <pubTime>2014-01-26T13:52:17.000Z</pubTime>
-        
-        <tag>序列化</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/2014-10-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    <data>
-        <display>
-        <title>2014年10月Reading Notes</title>
-        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
+        <title>2014年12月Reading Notes</title>
+        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -604,20 +626,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
         <display>
-        <title>2014年06月Reading Notes</title>
-        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
+        <title>hibernate应用报could not initialize proxy - no Session分析</title>
+        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
-         
-        <tag>tengine</tag>
-         
-        <tag>web-starter-kit</tag>
-         
-        <tag>microservice</tag>
+        <tag>hibernate</tag>
          
          
            
@@ -682,14 +698,40 @@
 
     
   <url>
-    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
         <display>
-        <title>hibernate应用报could not initialize proxy - no Session分析</title>
-        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
+        <title>2014年06月Reading Notes</title>
+        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
         
-        <tag>hibernate</tag>
+        <tag>READING NOTES</tag>
+         
+        <tag>tengine</tag>
+         
+        <tag>web-starter-kit</tag>
+         
+        <tag>microservice</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/cxf-unexpected-element/</loc>
+    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
+    <data>
+        <display>
+        <title>烦人的cxf unexpected element 异常</title>
+        <pubTime>2014-05-15T13:52:17.000Z</pubTime>
+        
+        <tag>cxf</tag>
          
          
            
@@ -780,14 +822,14 @@
 
     
   <url>
-    <loc>http://bohr.me/cxf-unexpected-element/</loc>
-    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
+    <loc>http://bohr.me/dependency-management/</loc>
+    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>烦人的cxf unexpected element 异常</title>
-        <pubTime>2014-05-15T13:52:17.000Z</pubTime>
+        <title>依赖管理</title>
+        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
         
-        <tag>cxf</tag>
+        <tag>依赖管理</tag>
          
          
            
@@ -800,14 +842,16 @@
 
     
   <url>
-    <loc>http://bohr.me/env-aware/</loc>
+    <loc>http://bohr.me/2014-01-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>打造环境感知的应用</title>
-        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
+        <title>2014年01月Reading Notes</title>
+        <pubTime>2014-01-16T13:52:17.000Z</pubTime>
         
-        <tag>环境感知</tag>
+        <tag>READING NOTES</tag>
+         
+        <tag>linux mysql tunning</tag>
          
          
            
@@ -846,16 +890,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-01-reading-notes/</loc>
+    <loc>http://bohr.me/env-aware/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>2014年01月Reading Notes</title>
-        <pubTime>2014-01-16T13:52:17.000Z</pubTime>
+        <title>打造环境感知的应用</title>
+        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
-         
-        <tag>linux mysql tunning</tag>
+        <tag>环境感知</tag>
          
          
            
@@ -868,14 +910,14 @@
 
     
   <url>
-    <loc>http://bohr.me/dependency-management/</loc>
-    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
+    <loc>http://bohr.me/monitor-tools/</loc>
+    <lastmod>2018-04-01T16:53:17.074Z</lastmod>
     <data>
         <display>
-        <title>依赖管理</title>
-        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
+        <title>java开发工程师可以了解的常用命令</title>
+        <pubTime>2014-08-06T13:52:17.000Z</pubTime>
         
-        <tag>依赖管理</tag>
+        <tag>常用命令</tag>
          
          
            
@@ -932,26 +974,6 @@
 
     
   <url>
-    <loc>http://bohr.me/monitor-tools/</loc>
-    <lastmod>2018-04-01T16:53:17.074Z</lastmod>
-    <data>
-        <display>
-        <title>java开发工程师可以了解的常用命令</title>
-        <pubTime>2014-08-06T13:52:17.000Z</pubTime>
-        
-        <tag>常用命令</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/thinking-clearly-about-performance/</loc>
     <lastmod>2018-04-01T16:53:17.073Z</lastmod>
     <data>
@@ -972,14 +994,14 @@
 
     
   <url>
-    <loc>http://bohr.me/cxf-trans-filed-null/</loc>
+    <loc>http://bohr.me/jdk7-exception/</loc>
     <lastmod>2018-04-01T16:53:17.061Z</lastmod>
     <data>
         <display>
-        <title>cxf如何传字段为null</title>
-        <pubTime>2013-11-29T13:52:17.000Z</pubTime>
+        <title>使用jdk7新增异常构造器提高异常性能</title>
+        <pubTime>2013-05-09T13:52:17.000Z</pubTime>
         
-        <tag>cxf</tag>
+        <tag>EXCEPTION</tag>
          
          
            
@@ -992,14 +1014,14 @@
 
     
   <url>
-    <loc>http://bohr.me/jdk7-exception/</loc>
+    <loc>http://bohr.me/cxf-trans-filed-null/</loc>
     <lastmod>2018-04-01T16:53:17.061Z</lastmod>
     <data>
         <display>
-        <title>使用jdk7新增异常构造器提高异常性能</title>
-        <pubTime>2013-05-09T13:52:17.000Z</pubTime>
+        <title>cxf如何传字段为null</title>
+        <pubTime>2013-11-29T13:52:17.000Z</pubTime>
         
-        <tag>EXCEPTION</tag>
+        <tag>cxf</tag>
          
          
            
