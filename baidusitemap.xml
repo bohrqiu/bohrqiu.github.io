@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://bohr.me/2018-06-reading-notes/</loc>
-    <lastmod>2018-05-31T08:26:56.334Z</lastmod>
+    <lastmod>2018-05-31T17:42:32.939Z</lastmod>
     <data>
         <display>
         <title>2018年06月Reading Notes</title>
@@ -14,6 +14,10 @@
         <tag>READING NOTES</tag>
          
         <tag>InjectionPoint</tag>
+         
+        <tag>spring jdbc</tag>
+         
+        <tag>Asynchronous Database Access API</tag>
          
          
            
@@ -111,26 +115,6 @@
     
     
   <url>
-    <loc>http://bohr.me/%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E9%97%AE%E7%AD%94/</loc>
-    <lastmod>2018-04-01T16:53:17.088Z</lastmod>
-    <data>
-        <display>
-        <title>一次技术问答</title>
-        <pubTime>2017-07-28T13:52:17.000Z</pubTime>
-        
-        <tag>share</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2016-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     <data>
@@ -152,16 +136,14 @@
     
     
   <url>
-    <loc>http://bohr.me/2016-08-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.087Z</lastmod>
+    <loc>http://bohr.me/%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E9%97%AE%E7%AD%94/</loc>
+    <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     <data>
         <display>
-        <title>2016年08月Reading Notes</title>
-        <pubTime>2016-08-10T13:52:17.000Z</pubTime>
+        <title>一次技术问答</title>
+        <pubTime>2017-07-28T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
-         
-        <tag>服务发现</tag>
+        <tag>share</tag>
          
          
            
@@ -196,6 +178,28 @@
 
     
   <url>
+    <loc>http://bohr.me/2016-08-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.087Z</lastmod>
+    <data>
+        <display>
+        <title>2016年08月Reading Notes</title>
+        <pubTime>2016-08-10T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+        <tag>服务发现</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/</loc>
     <lastmod>2018-04-01T16:53:17.085Z</lastmod>
     <data>
@@ -218,14 +222,14 @@
 
     
   <url>
-    <loc>http://bohr.me/kryo-oom/</loc>
+    <loc>http://bohr.me/zero-copy/</loc>
     <lastmod>2018-04-01T16:53:17.084Z</lastmod>
     <data>
         <display>
-        <title>Kryo反序列化时版本不一致导致OOM</title>
-        <pubTime>2013-11-03T13:52:17.000Z</pubTime>
+        <title>使用零拷贝提高数据传输效率</title>
+        <pubTime>2014-08-16T13:52:17.000Z</pubTime>
         
-        <tag>KRYO</tag>
+        <tag>zero copy</tag>
          
          
            
@@ -238,14 +242,14 @@
 
     
   <url>
-    <loc>http://bohr.me/zero-copy/</loc>
+    <loc>http://bohr.me/kryo-oom/</loc>
     <lastmod>2018-04-01T16:53:17.084Z</lastmod>
     <data>
         <display>
-        <title>使用零拷贝提高数据传输效率</title>
-        <pubTime>2014-08-16T13:52:17.000Z</pubTime>
+        <title>Kryo反序列化时版本不一致导致OOM</title>
+        <pubTime>2013-11-03T13:52:17.000Z</pubTime>
         
-        <tag>zero copy</tag>
+        <tag>KRYO</tag>
          
          
            
@@ -382,6 +386,26 @@
 
     
   <url>
+    <loc>http://bohr.me/2016-04-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
+    <data>
+        <display>
+        <title>2016年04月Reading Notes</title>
+        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/be-happy/</loc>
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     <data>
@@ -444,32 +468,12 @@
 
     
   <url>
-    <loc>http://bohr.me/2016-04-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
-    <data>
-        <display>
-        <title>2016年04月Reading Notes</title>
-        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/2014-10-reading-notes/</loc>
+    <loc>http://bohr.me/2014-12-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>2014年10月Reading Notes</title>
-        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
+        <title>2014年12月Reading Notes</title>
+        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -504,26 +508,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-11-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    <data>
-        <display>
-        <title>2014年11月Reading Notes</title>
-        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2016-05-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
@@ -546,12 +530,12 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-12-reading-notes/</loc>
+    <loc>http://bohr.me/2014-10-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>2014年12月Reading Notes</title>
-        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
+        <title>2014年10月Reading Notes</title>
+        <pubTime>2014-10-15T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -566,14 +550,14 @@
 
     
   <url>
-    <loc>http://bohr.me/database-version/</loc>
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>如何跟踪数据库结构变动</title>
-        <pubTime>2014-08-15T13:52:17.000Z</pubTime>
+        <title>2014年11月Reading Notes</title>
+        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
         
-        <tag>数据库版本</tag>
+        <tag>READING NOTES</tag>
          
          
            
@@ -626,6 +610,26 @@
 
     
   <url>
+    <loc>http://bohr.me/database-version/</loc>
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <data>
+        <display>
+        <title>如何跟踪数据库结构变动</title>
+        <pubTime>2014-08-15T13:52:17.000Z</pubTime>
+        
+        <tag>数据库版本</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
@@ -646,14 +650,20 @@
 
     
   <url>
-    <loc>http://bohr.me/vagrant/</loc>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
         <display>
-        <title>使用vagrant</title>
-        <pubTime>2014-07-07T13:52:17.000Z</pubTime>
+        <title>2014年06月Reading Notes</title>
+        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
         
-        <tag>vagrant</tag>
+        <tag>READING NOTES</tag>
+         
+        <tag>tengine</tag>
+         
+        <tag>web-starter-kit</tag>
+         
+        <tag>microservice</tag>
          
          
            
@@ -698,20 +708,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <loc>http://bohr.me/vagrant/</loc>
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     <data>
         <display>
-        <title>2014年06月Reading Notes</title>
-        <pubTime>2014-06-28T13:52:17.000Z</pubTime>
+        <title>使用vagrant</title>
+        <pubTime>2014-07-07T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
-         
-        <tag>tengine</tag>
-         
-        <tag>web-starter-kit</tag>
-         
-        <tag>microservice</tag>
+        <tag>vagrant</tag>
          
          
            
@@ -842,28 +846,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-01-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
-    <data>
-        <display>
-        <title>2014年01月Reading Notes</title>
-        <pubTime>2014-01-16T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-        <tag>linux mysql tunning</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2014-04-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
@@ -890,14 +872,16 @@
 
     
   <url>
-    <loc>http://bohr.me/env-aware/</loc>
+    <loc>http://bohr.me/2014-01-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>打造环境感知的应用</title>
-        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
+        <title>2014年01月Reading Notes</title>
+        <pubTime>2014-01-16T13:52:17.000Z</pubTime>
         
-        <tag>环境感知</tag>
+        <tag>READING NOTES</tag>
+         
+        <tag>linux mysql tunning</tag>
          
          
            
@@ -910,14 +894,14 @@
 
     
   <url>
-    <loc>http://bohr.me/monitor-tools/</loc>
-    <lastmod>2018-04-01T16:53:17.074Z</lastmod>
+    <loc>http://bohr.me/env-aware/</loc>
+    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
         <display>
-        <title>java开发工程师可以了解的常用命令</title>
-        <pubTime>2014-08-06T13:52:17.000Z</pubTime>
+        <title>打造环境感知的应用</title>
+        <pubTime>2014-01-15T13:52:17.000Z</pubTime>
         
-        <tag>常用命令</tag>
+        <tag>环境感知</tag>
          
          
            
@@ -962,6 +946,26 @@
         <pubTime>2015-01-11T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/monitor-tools/</loc>
+    <lastmod>2018-04-01T16:53:17.074Z</lastmod>
+    <data>
+        <display>
+        <title>java开发工程师可以了解的常用命令</title>
+        <pubTime>2014-08-06T13:52:17.000Z</pubTime>
+        
+        <tag>常用命令</tag>
          
          
            
@@ -1074,6 +1078,26 @@
 
     
   <url>
+    <loc>http://bohr.me/hessian-java-serialization/</loc>
+    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
+    <data>
+        <display>
+        <title>hessian反序列化field值丢失bug</title>
+        <pubTime>2013-11-29T13:52:17.000Z</pubTime>
+        
+        <tag>hessian</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/2013-11-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.055Z</lastmod>
     <data>
@@ -1130,26 +1154,6 @@
         <pubTime>2013-12-02T13:52:17.000Z</pubTime>
         
         <tag>jsr303</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/hessian-java-serialization/</loc>
-    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
-    <data>
-        <display>
-        <title>hessian反序列化field值丢失bug</title>
-        <pubTime>2013-11-29T13:52:17.000Z</pubTime>
-        
-        <tag>hessian</tag>
          
          
            

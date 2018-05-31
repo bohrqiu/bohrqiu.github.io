@@ -431,6 +431,8 @@ public class GreeterService {
   private String greeting;
 }
 </code></pre><h2 id="spring-jdbc"><a href="#spring-jdbc" class="headerlink" title="spring jdbc"></a>spring jdbc</h2><p>spring jdbc做了很多有意思的扩展，比如大家熟悉的<code>JdbcTemplate</code>,还有最近才推出的<a href="https://projects.spring.io/spring-data-jdbc/" target="_blank" rel="noopener">spring-data-jdbc</a>,参考<a href="https://github.com/spring-tips/jdbc/blob/master/src/main/java/com/example/jdbc/JdbcApplication.java" target="_blank" rel="noopener">spring-tips</a>，了解spring 对jdbc的能力支持。</p>
+<h2 id="Asynchronous-Database-Access-API"><a href="#Asynchronous-Database-Access-API" class="headerlink" title="Asynchronous Database Access API"></a>Asynchronous Database Access API</h2><p><a href="https://blogs.oracle.com/java/jdbc-next:-a-new-asynchronous-api-for-connecting-to-a-database" target="_blank" rel="noopener">ADBA</a>访问数据库的异步api，让io线程的事件机制去等待数据库响应，把这块填补上，java程序中基本上都可以完全异步了。<a href="https://github.com/scalikejdbc/scalikejdbc-async" target="_blank" rel="noopener">scalikejdbc-async</a>的做法实现了jdbc api，但是由于异步编程模型的改变，使用起来会有点别扭。(比如基于请求的结果做后续操作)</p>
+<p>目前就oracle数据库驱动实现了ADBA，它通过nio实现了完全的异步。</p>
 
           
         
@@ -2290,7 +2292,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">72</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

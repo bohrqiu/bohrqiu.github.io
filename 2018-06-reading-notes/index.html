@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="READING NOTES,InjectionPoint," />
+  <meta name="keywords" content="READING NOTES,InjectionPoint,spring jdbc,Asynchronous Database Access API," />
 
 
 
@@ -84,14 +84,14 @@
 
 
 <meta name="description" content="spring InjectionPointInjectionPoint是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。 1. 获取被注入组件的类@Bean @Scope(&amp;quot;prototype&amp;quot;) Logger logger(InjectionPoint ip) {     return Logger.getL">
-<meta name="keywords" content="READING NOTES,InjectionPoint">
+<meta name="keywords" content="READING NOTES,InjectionPoint,spring jdbc,Asynchronous Database Access API">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018年06月Reading Notes">
 <meta property="og:url" content="http://bohr.me/2018-06-reading-notes/index.html">
 <meta property="og:site_name" content="qiubo&#39;s life">
 <meta property="og:description" content="spring InjectionPointInjectionPoint是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。 1. 获取被注入组件的类@Bean @Scope(&amp;quot;prototype&amp;quot;) Logger logger(InjectionPoint ip) {     return Logger.getL">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T08:26:56.334Z">
+<meta property="og:updated_time" content="2018-05-31T17:42:32.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018年06月Reading Notes">
 <meta name="twitter:description" content="spring InjectionPointInjectionPoint是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。 1. 获取被注入组件的类@Bean @Scope(&amp;quot;prototype&amp;quot;) Logger logger(InjectionPoint ip) {     return Logger.getL">
@@ -428,6 +428,8 @@ public class GreeterService {
   private String greeting;
 }
 </code></pre><h2 id="spring-jdbc"><a href="#spring-jdbc" class="headerlink" title="spring jdbc"></a>spring jdbc</h2><p>spring jdbc做了很多有意思的扩展，比如大家熟悉的<code>JdbcTemplate</code>,还有最近才推出的<a href="https://projects.spring.io/spring-data-jdbc/" target="_blank" rel="noopener">spring-data-jdbc</a>,参考<a href="https://github.com/spring-tips/jdbc/blob/master/src/main/java/com/example/jdbc/JdbcApplication.java" target="_blank" rel="noopener">spring-tips</a>，了解spring 对jdbc的能力支持。</p>
+<h2 id="Asynchronous-Database-Access-API"><a href="#Asynchronous-Database-Access-API" class="headerlink" title="Asynchronous Database Access API"></a>Asynchronous Database Access API</h2><p><a href="https://blogs.oracle.com/java/jdbc-next:-a-new-asynchronous-api-for-connecting-to-a-database" target="_blank" rel="noopener">ADBA</a>访问数据库的异步api，让io线程的事件机制去等待数据库响应，把这块填补上，java程序中基本上都可以完全异步了。<a href="https://github.com/scalikejdbc/scalikejdbc-async" target="_blank" rel="noopener">scalikejdbc-async</a>的做法实现了jdbc api，但是由于异步编程模型的改变，使用起来会有点别扭。(比如基于请求的结果做后续操作)</p>
+<p>目前就oracle数据库驱动实现了ADBA，它通过nio实现了完全的异步。</p>
 
       
     </div>
@@ -477,6 +479,10 @@ public class GreeterService {
             <a href="/tags/READING-NOTES/" rel="tag"><i class="fa fa-tag"></i> READING NOTES</a>
           
             <a href="/tags/InjectionPoint/" rel="tag"><i class="fa fa-tag"></i> InjectionPoint</a>
+          
+            <a href="/tags/spring-jdbc/" rel="tag"><i class="fa fa-tag"></i> spring jdbc</a>
+          
+            <a href="/tags/Asynchronous-Database-Access-API/" rel="tag"><i class="fa fa-tag"></i> Asynchronous Database Access API</a>
           
         </div>
       
@@ -605,7 +611,7 @@ public class GreeterService {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">72</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -672,7 +678,7 @@ public class GreeterService {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-InjectionPoint"><span class="nav-number">1.</span> <span class="nav-text">spring InjectionPoint</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取被注入组件的类"><span class="nav-number">1.1.</span> <span class="nav-text">1. 获取被注入组件的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取被注入组件上的注解"><span class="nav-number">1.2.</span> <span class="nav-text">2. 获取被注入组件上的注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-jdbc"><span class="nav-number">2.</span> <span class="nav-text">spring jdbc</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-InjectionPoint"><span class="nav-number">1.</span> <span class="nav-text">spring InjectionPoint</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-获取被注入组件的类"><span class="nav-number">1.1.</span> <span class="nav-text">1. 获取被注入组件的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取被注入组件上的注解"><span class="nav-number">1.2.</span> <span class="nav-text">2. 获取被注入组件上的注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-jdbc"><span class="nav-number">2.</span> <span class="nav-text">spring jdbc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Asynchronous-Database-Access-API"><span class="nav-number">3.</span> <span class="nav-text">Asynchronous Database Access API</span></a></li></ol></div>
             
 
           </div>
