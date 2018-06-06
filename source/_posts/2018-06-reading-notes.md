@@ -7,6 +7,7 @@ tags:
   - InjectionPoint
   - spring jdbc
   - Asynchronous Database Access API
+  - 对象存储
 ---
 	
 ## spring InjectionPoint
@@ -56,3 +57,12 @@ spring jdbc做了很多有意思的扩展，比如大家熟悉的`JdbcTemplate`,
 
 目前就oracle数据库驱动实现了ADBA，它通过nio实现了完全的异步。
 
+## Minio
+
+Minio是GlusterFS创始人之一Anand Babu Periasamy发布的兼容Amason S3分布式对象存储项目，可以做为对象存储的解决方案用来保存海量的图片，视频，文档.
+
+分布式minio，有以下特性：
+
+* 数据保护:采用[erasure code](https://github.com/minio/minio/blob/master/docs/zh_CN/erasure/README.md)来防范多个节点宕机和位衰减bit rot
+* 高可用:如果是一个N节点的分布式Minio,只要有N/2节点在线，你的数据就是安全的
+* 一致性:Minio在分布式和单机模式下，所有读写操作都严格遵守read-after-write一致性模型。
