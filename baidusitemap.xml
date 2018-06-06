@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://bohr.me/2018-06-reading-notes/</loc>
-    <lastmod>2018-05-31T17:42:32.939Z</lastmod>
+    <lastmod>2018-06-01T03:43:55.793Z</lastmod>
     <data>
         <display>
         <title>2018年06月Reading Notes</title>
@@ -114,15 +114,16 @@
     
     
     
+    
   <url>
-    <loc>http://bohr.me/2016-02-reading-notes/</loc>
+    <loc>http://bohr.me/%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E9%97%AE%E7%AD%94/</loc>
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     <data>
         <display>
-        <title>2016年02月Reading Notes</title>
-        <pubTime>2016-02-01T13:52:17.000Z</pubTime>
+        <title>一次技术问答</title>
+        <pubTime>2017-07-28T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
+        <tag>share</tag>
          
          
            
@@ -134,16 +135,15 @@
     </url>
 
     
-    
   <url>
-    <loc>http://bohr.me/%E4%B8%80%E6%AC%A1%E6%8A%80%E6%9C%AF%E9%97%AE%E7%AD%94/</loc>
+    <loc>http://bohr.me/2016-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     <data>
         <display>
-        <title>一次技术问答</title>
-        <pubTime>2017-07-28T13:52:17.000Z</pubTime>
+        <title>2016年02月Reading Notes</title>
+        <pubTime>2016-02-01T13:52:17.000Z</pubTime>
         
-        <tag>share</tag>
+        <tag>READING NOTES</tag>
          
          
            
@@ -282,14 +282,14 @@
 
     
   <url>
-    <loc>http://bohr.me/google-java-style/</loc>
+    <loc>http://bohr.me/2015-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     <data>
         <display>
-        <title>Google Java编程风格指南</title>
-        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
+        <title>2015年02月Reading Notes</title>
+        <pubTime>2015-02-16T13:52:17.000Z</pubTime>
         
-        <tag>Google Java编程风格指南</tag>
+        <tag>READING NOTES</tag>
          
          
            
@@ -302,14 +302,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-02-reading-notes/</loc>
+    <loc>http://bohr.me/google-java-style/</loc>
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     <data>
         <display>
-        <title>2015年02月Reading Notes</title>
-        <pubTime>2015-02-16T13:52:17.000Z</pubTime>
+        <title>Google Java编程风格指南</title>
+        <pubTime>2015-02-02T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
+        <tag>Google Java编程风格指南</tag>
          
          
            
@@ -386,26 +386,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2016-04-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
-    <data>
-        <display>
-        <title>2016年04月Reading Notes</title>
-        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/be-happy/</loc>
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     <data>
@@ -468,34 +448,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-12-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <loc>http://bohr.me/2016-04-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     <data>
         <display>
-        <title>2014年12月Reading Notes</title>
-        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
+        <title>2016年04月Reading Notes</title>
+        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/serialization-framework/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    <data>
-        <display>
-        <title>序列化框架选型</title>
-        <pubTime>2014-01-26T13:52:17.000Z</pubTime>
-        
-        <tag>序列化</tag>
          
          
            
@@ -570,14 +530,14 @@
 
     
   <url>
-    <loc>http://bohr.me/cxf-tuning/</loc>
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <loc>http://bohr.me/serialization-framework/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>webservice优化</title>
-        <pubTime>2014-08-14T13:52:17.000Z</pubTime>
+        <title>序列化框架选型</title>
+        <pubTime>2014-01-26T13:52:17.000Z</pubTime>
         
-        <tag>webservice</tag>
+        <tag>序列化</tag>
          
          
            
@@ -590,12 +550,12 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-09-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <loc>http://bohr.me/2014-12-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     <data>
         <display>
-        <title>2014年09月Reading Notes</title>
-        <pubTime>2014-09-28T13:52:17.000Z</pubTime>
+        <title>2014年12月Reading Notes</title>
+        <pubTime>2014-12-14T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -630,14 +590,34 @@
 
     
   <url>
-    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <loc>http://bohr.me/cxf-tuning/</loc>
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     <data>
         <display>
-        <title>hibernate应用报could not initialize proxy - no Session分析</title>
-        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
+        <title>webservice优化</title>
+        <pubTime>2014-08-14T13:52:17.000Z</pubTime>
         
-        <tag>hibernate</tag>
+        <tag>webservice</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/2014-09-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <data>
+        <display>
+        <title>2014年09月Reading Notes</title>
+        <pubTime>2014-09-28T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
          
          
            
@@ -696,6 +676,26 @@
         <tag>tomcat</tag>
          
         <tag>maven</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <data>
+        <display>
+        <title>hibernate应用报could not initialize proxy - no Session分析</title>
+        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
+        
+        <tag>hibernate</tag>
          
          
            
@@ -826,26 +826,6 @@
 
     
   <url>
-    <loc>http://bohr.me/dependency-management/</loc>
-    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
-    <data>
-        <display>
-        <title>依赖管理</title>
-        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
-        
-        <tag>依赖管理</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/2014-04-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     <data>
@@ -860,6 +840,26 @@
         <tag>javadoc</tag>
          
         <tag>NoClassDefFoundError</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/dependency-management/</loc>
+    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
+    <data>
+        <display>
+        <title>依赖管理</title>
+        <pubTime>2014-01-14T13:52:17.000Z</pubTime>
+        
+        <tag>依赖管理</tag>
          
          
            
@@ -914,18 +914,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-08-reading-notes/</loc>
+    <loc>http://bohr.me/2015-01-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.074Z</lastmod>
     <data>
         <display>
-        <title>2014年08月Reading Notes</title>
-        <pubTime>2014-08-03T13:52:17.000Z</pubTime>
+        <title>2015年01月Reading Notes</title>
+        <pubTime>2015-01-11T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
-         
-        <tag>docker</tag>
-         
-        <tag>java</tag>
          
          
            
@@ -938,14 +934,18 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-01-reading-notes/</loc>
+    <loc>http://bohr.me/2014-08-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.074Z</lastmod>
     <data>
         <display>
-        <title>2015年01月Reading Notes</title>
-        <pubTime>2015-01-11T13:52:17.000Z</pubTime>
+        <title>2014年08月Reading Notes</title>
+        <pubTime>2014-08-03T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
+         
+        <tag>docker</tag>
+         
+        <tag>java</tag>
          
          
            
@@ -1078,14 +1078,34 @@
 
     
   <url>
-    <loc>http://bohr.me/hessian-java-serialization/</loc>
+    <loc>http://bohr.me/jsr303/</loc>
     <lastmod>2018-04-01T16:53:17.055Z</lastmod>
     <data>
         <display>
-        <title>hessian反序列化field值丢失bug</title>
+        <title>JSR303</title>
+        <pubTime>2013-12-02T13:52:17.000Z</pubTime>
+        
+        <tag>jsr303</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/zookeeper-dev-ops/</loc>
+    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
+    <data>
+        <display>
+        <title>zookeeper</title>
         <pubTime>2013-11-29T13:52:17.000Z</pubTime>
         
-        <tag>hessian</tag>
+        <tag>ZOOKEEPER</tag>
          
          
            
@@ -1126,34 +1146,14 @@
 
     
   <url>
-    <loc>http://bohr.me/zookeeper-dev-ops/</loc>
+    <loc>http://bohr.me/hessian-java-serialization/</loc>
     <lastmod>2018-04-01T16:53:17.055Z</lastmod>
     <data>
         <display>
-        <title>zookeeper</title>
+        <title>hessian反序列化field值丢失bug</title>
         <pubTime>2013-11-29T13:52:17.000Z</pubTime>
         
-        <tag>ZOOKEEPER</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/jsr303/</loc>
-    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
-    <data>
-        <display>
-        <title>JSR303</title>
-        <pubTime>2013-12-02T13:52:17.000Z</pubTime>
-        
-        <tag>jsr303</tag>
+        <tag>hessian</tag>
          
          
            
