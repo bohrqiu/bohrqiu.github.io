@@ -1,1 +1,1 @@
-hexo server
+hexo server 
