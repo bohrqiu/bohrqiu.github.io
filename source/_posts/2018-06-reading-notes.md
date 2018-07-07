@@ -66,3 +66,5 @@ Minio是GlusterFS创始人之一Anand Babu Periasamy发布的兼容Amason S3分�
 * 数据保护:采用[erasure code](https://github.com/minio/minio/blob/master/docs/zh_CN/erasure/README.md)来防范多个节点宕机和位衰减bit rot
 * 高可用:如果是一个N节点的分布式Minio,只要有N/2节点在线，你的数据就是安全的
 * 一致性:Minio在分布式和单机模式下，所有读写操作都严格遵守read-after-write一致性模型。
+
+
