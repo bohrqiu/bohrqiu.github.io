@@ -6,8 +6,9 @@ tags:
   - dubbo
 ---
 
+# 关于dubbo的一些分析和优化
 
-## 1. dubbo
+## 1. dubbo内线程分析
 
 ### 1.1 dubbo-remoting-client-heartbeat-thread
 
@@ -172,11 +173,13 @@ jdk默认线程池实现策略如下：
 		}
 	}
 
-## 5. 关于缓存扩展
+## 5. 缓存扩展
 
 下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。
 
-### 5.1 使用`com.yiji.boot.dubbo.cache.DubboCache`
+源代码见[dubbo-cache](https://github.com/bohrqiu/dubbo-cache)
+
+### 5.1 使用`com.github.bohrqiu.dubbo.cache.DubboCache`
 
 ### 5.2 使用`@DubboCache`
 
@@ -194,28 +197,18 @@ jdk默认线程池实现策略如下：
 
 如上所示，`cacheName=test`,`key`为第一个参数的playload字段，缓存有效期默认5分钟。可以通过设置`expire`属性修改缓存有效期。
 
-上面的注解和`@org.springframework.cache.annotation.Cacheable(value = CACHE_NAME, key = "order.playload")`等价。
+上面的注解和`@org.springframework.cache.annotation.Cacheable(value = CACHE_NAME, key = "order.playload")`生成的key一致。
 
 对于dubbo服务消费者，只需要跟新jar包即可。
 
 #### 5.2.2 控制缓存
 
-`@DubboCache`提供了消费者可优先使用缓存，**缓存的一致性由服务提供方负责**，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。
+@DubboCache`提供了消费者可优先使用缓存，**缓存的一致性由服务提供方负责**，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。
 
 控制缓存分为两种情况：
 
 1. 缓存一致性要求不高，可以通过`DubboCache#expire`设置过期时间，默认为5分钟。
 2. 缓存一致性要求高，服务提供方通过`redisTemplate`或者`org.springframework.cache.annotation.CacheEvict`控制缓存。
-	
-	如上面的例子，如果是会员系统(系统名为`customer`)提供此服务，请求参数中`playload=Bohr`，在redis中缓存`key=cache_customer:test:Bohr`,此`redis key`由三部分组成：namespace(默认为`YedisProperties#namespace`，此由yedis提供)、cacheName,key. 
-	
-	在会员系统中通过如下代码清除缓存：
-	
-		redisTemplate.delete("test:Bohr");
-	
-	或者在修改模型的方法上加：
-	
-		@CacheEvict(value = CACHE_NAME, key = "order.playload")
 	
 ## 5. 关于dubbo mock
 
