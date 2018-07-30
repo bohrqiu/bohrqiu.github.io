@@ -24,25 +24,21 @@ tags:
 
 ### 在服务接口模块中依赖`dubbo-cache-common`
 
-```xml
-<dependency>
-	<groupId>com.github.bohrqiu.dubbo</groupId>
-	<artifactId>dubbo-cache-common</artifactId>
-	<version>1.2</version>
-</dependency>
-```
+	<dependency>
+		<groupId>com.github.bohrqiu.dubbo</groupId>
+		<artifactId>dubbo-cache-common</artifactId>
+		<version>1.2</version>
+	</dependency>
 
 此依赖仅定义了`@DubboCache`注解。
 
-### 在服务消费者模块中依赖`dubbo-cache-core`
+### 在服务实现模块中依赖`dubbo-cache-core`
 
-```xml
-<dependency>
-	<groupId>com.github.bohrqiu.dubbo</groupId>
-	<artifactId>dubbo-cache-core</artifactId>
-	<version>1.2</version>
-</dependency>
-```  
+	<dependency>
+		<groupId>com.github.bohrqiu.dubbo</groupId>
+		<artifactId>dubbo-cache-core</artifactId>
+		<version>1.2</version>
+	</dependency>
 
 ### 在服务接口上添加`@DubboCache`注解
 
@@ -121,3 +117,7 @@ public class TestCacheKeyValidator implements CacheKeyValidator {
 ### 扩展`CacheKeyValidator`
 
 扩展方式和上面的类似，更多参考dubbo扩展机制。	默认策略为：value不为null可以缓存。
+
+## github源代码
+
+https://github.com/bohrqiu/dubbo-cache
