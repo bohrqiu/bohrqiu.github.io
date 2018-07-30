@@ -310,6 +310,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-12-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014-12-reading-notes/" itemprop="url">2014年12月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-12-14T21:52:17+08:00">
+                2014-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="CPU-Flame-Graphs"><a href="#CPU-Flame-Graphs" class="headerlink" title="CPU Flame Graphs"></a>CPU Flame Graphs</h2><p><a href="http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html" target="_blank" rel="noopener">http://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html</a></p>
+<p>java里可以很方便的通过<code>jvisualvm</code>来采样性能数据,然后分析每个线程栈中比较费时的cpu操作.java以外的程序,通过cpu火焰图来分析性能问题,很直观(比较起来,jvisualvm的cpu sample report没有cpu火焰图直观).</p>
+<p>生成的<code>svg</code>报告中,<code>y轴</code>可以理解为调用栈层次,越大调用层次越深.<code>x轴</code>中的长度是调用占用时间比.</p>
+<p><code>CPU Flame Graphs</code>生成过程需要三步:</p>
+<ol>
+<li>采样性能数据(<a href="https://perf.wiki.kernel.org/index.php/Tutorial#Counting_with_perf_stat" target="_blank" rel="noopener">perf</a>, DTrace, SystemTap, and ktap) </li>
+<li>转换性能数据  </li>
+<li>利用性能数据生成<code>svg</code>报告</li>
+</ol>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p><a href="http://niusmallnan.github.io/_build/html/_templates/openstack/coroutine_usage.html" target="_blank" rel="noopener">http://niusmallnan.github.io/_build/html/_templates/openstack/coroutine_usage.html</a><br><a href="http://www.dongliu.net/post/5906310176440320" target="_blank" rel="noopener">http://www.dongliu.net/post/5906310176440320</a></p>
+<p>协程是纯软件实现的多任务调度,在软件层面实现任务的保持和恢复.传统的用多线程的方式来实现任务调度,在高并发场景下,CPU创建开销和CPU上下文切换的开销太大.使用协程,任务调度有程序来调度,不涉及到cpu线程切换和cpu大量创建线程,性能会快不少.</p>
+<p>在使用协程时,所有的I/O都需要使用异步I/O,不然性能会大打折扣.</p>
+<p>在协程中,不同的执行单元之间通信可以采用共享内存或者消息机制.由于共享内存又会引入共享资源的同步,推荐采用消息机制.</p>
+<h2 id="基于线程与基于事件的并发编程之争"><a href="#基于线程与基于事件的并发编程之争" class="headerlink" title="基于线程与基于事件的并发编程之争"></a>基于线程与基于事件的并发编程之争</h2><p><a href="http://www.jdon.com/46921" target="_blank" rel="noopener">http://www.jdon.com/46921</a></p>
+<p>基于线程的并发变成带来了很多问题，很难写出高性能的程序。协程和Actor模型也许可以考虑用来降低CS的开销。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-11-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2196,167 +2352,6 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/hibernate-no-session-in-dubbo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/hibernate-no-session-in-dubbo/" itemprop="url">hibernate应用报could not initialize proxy - no Session分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-07-17T21:52:17+08:00">
-                2014-07-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="1-场景描述"><a href="#1-场景描述" class="headerlink" title="1.场景描述:"></a>1.场景描述:</h3><p>某项目使用hibernate,在切换到dubbo后,在构造结果对象时从延迟加载对象中获取数据时,报<code>org.hibernate.LazyInitializationException: could not initialize proxy - no Session</code></p>
-<p>构造结果对象的操作没有在事务环境下执行.</p>
-<h3 id="2-原因分析"><a href="#2-原因分析" class="headerlink" title="2.原因分析:"></a>2.原因分析:</h3><p>cxf不报错是因为在web.xml中配置了<code>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</code>,在请求到达web filter后,创建了<code>EntityManager</code>,请求结束后关闭<code>EntityManager</code>.在请求线程处理过程中,都可以拿到<code>EntityManager</code>,所以不会报错(至少可以从ThreadLocal中拿到).</p>
-<p>切换为dubbo后,请求不会经过web filter,在事务模版代码中执行业务操作,可以正确的拿到<code>EntityManager</code>,不会报错.但是执行到构造结果对象时,就悲剧了.</p>
-<h3 id="3-解决办法"><a href="#3-解决办法" class="headerlink" title="3.解决办法:"></a>3.解决办法:</h3><p>1.修改模版方法,把构造结果对象部分的代码也放到事务中执行.</p>
-<p>2.编写支持dubbo的OpenEntityManagerInViewFilter</p>
-<p>  可以通过<code>TransactionSynchronizationManager</code>做到如果<code>EntityManagerFactory</code>在线程变量中不存在则创建<code>EntityManager</code>,服务处理结束时,关闭<code>EntityManager</code>.</p>
-<h3 id="4-优劣分析"><a href="#4-优劣分析" class="headerlink" title="4.优劣分析"></a>4.优劣分析</h3><ol>
-<li><p>性能考虑</p>
-<p> <code>open session in veiw</code>模式还是不怎么优雅,事务执行链路太长了,会影响性能.而且对于我们提供的服务接口来说,构造结果对象已经是最后一步了,后面再也不需要延迟加载对象,不需要在filter里面来做此操作.</p>
-<p> web应用有在渲染模版时读取延迟加载对象的场景,这种场景使用还有意义.</p>
-</li>
-<li><p>功能角度</p>
-<p> 如果遇到应用内的两个dubbo服务调用,dubbo会走injvm协议.此时请求不会经过io栈,但是会执行所有的dubbo filter.</p>
-<p> 比如外部请求调用服务A,服务A调用内部服务B.</p>
-<p> 外部请求调A时,filter创建<code>EntityManager</code>,然后调用服务B时,filter不创建<code>EntityManager</code>,但是在请求B结束时,filter关闭了<code>EntityManager</code>.在请求A中处理剩下的业务逻辑,如果遇到要操作数据库,就只有哭了.</p>
-<p> 为什么web请求就不怕这种filter重入呢?web请求在forward时,你必须把request对象带进去,所以可以在request对象的attribute里面记录是否进过了这个filter.可以参考<code>org.springframework.web.filter.OncePerRequestFilter</code>.但是调用dubbo时,你只需要拿到服务代理对象就ok了,没有办法来知道整个请求链的情况.</p>
-</li>
-</ol>
-<h3 id="5-最后结论"><a href="#5-最后结论" class="headerlink" title="5.最后结论"></a>5.最后结论</h3><p>还是修改下我们自己的代码,把构造结果对象部分的代码也放到事务中执行.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2411,7 +2406,7 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2433,7 +2428,7 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

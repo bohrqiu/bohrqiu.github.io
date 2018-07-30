@@ -3,6 +3,27 @@
   
     
     <entry>
+      <title>DubboCache</title>
+      <link href="/dubbo-cache/"/>
+      <url>/dubbo-cache/</url>
+      <content type="html"><![CDATA[<h1 id="DubboCache"><a href="#DubboCache" class="headerlink" title="@DubboCache"></a><a href="https://github.com/bohrqiu/dubbo-cache" target="_blank" rel="noopener">@DubboCache</a></h1><p>提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。</p><p>相对于dubbo默认的缓存机制，此项目具有如下优点：</p><ol><li>原生dubbo cache机制只能缓存结果到消费者jvm中，并且cache key不能选择。</li><li>缓存key生成灵活，和spring 声明式缓存一致，采用spring el表达式</li><li>可以扩展<code>CacheKeyValidator</code>接口，实现键缓存策略</li><li>可以扩展<code>CacheValueValidator</code>接口，实现值缓存策略</li><li>由于采用分布式缓存，服务提供端可以灵活控制缓存</li></ol><p>目前仅提供redis实现，依赖<code>spring-data-redis</code>.</p><h2 id="使用-DubboCache"><a href="#使用-DubboCache" class="headerlink" title="使用@DubboCache"></a>使用<code>@DubboCache</code></h2><h3 id="在服务接口模块中依赖dubbo-cache-common"><a href="#在服务接口模块中依赖dubbo-cache-common" class="headerlink" title="在服务接口模块中依赖dubbo-cache-common"></a>在服务接口模块中依赖<code>dubbo-cache-common</code></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.bohrqiu.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-cache-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure><p>此依赖仅定义了<code>@DubboCache</code>注解。</p><h3 id="在服务消费者模块中依赖dubbo-cache-core"><a href="#在服务消费者模块中依赖dubbo-cache-core" class="headerlink" title="在服务消费者模块中依赖dubbo-cache-core"></a>在服务消费者模块中依赖<code>dubbo-cache-core</code></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.bohrqiu.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-cache-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">### 在服务接口上添加`@DubboCache`注解</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public interface CacheableService &#123;</span><br><span class="line">@DubboCache(cacheName = "test",key = "#order.playload")</span><br><span class="line">SingleValueResult<span class="tag">&lt;<span class="name">String</span>&gt;</span> echo(SingleValueOrder<span class="tag">&lt;<span class="name">String</span>&gt;</span> order);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>如上所示:<code>cacheName=test</code>,<code>key</code>为第一个参数的playload字段，缓存有效期默认5分钟。</p><p>上面的注解和<a href="mailto:`@org.springframework.cache.annotation.Cacheable" target="_blank" rel="noopener">`@org.springframework.cache.annotation.Cacheable</a>(value = “test”, key = “#order.playload”)`生成的key一致。</p><p>对于dubbo服务消费者，只需要更新jar包即可，由服务提供者来觉得接口是否需要缓存，和缓存的控制。</p><p><strong>注意:</strong> 参数名读取依赖java8编译参数<code>-parameters</code>,上面的例子也可以通过<code>p0</code>来引用第一个接口入参。</p><h2 id="key生成"><a href="#key生成" class="headerlink" title="key生成"></a>key生成</h2><p>key生成策略和<code>Cacheable</code>一致，上面的例子中cache key由两部分组成:cacheName,spring el表达式结果，用<code>:</code>分隔.</p><p>如果请求参数order中<code>playload</code>属性值为dubbo，最终key为：<code>test:dubbo</code></p><p>如果服务有多个版本或者group，需要对多个版本和group分别设置缓存，可以设置参数：</p><pre><code>cachePrefixContainGroup=truecachePrefixContainVersion=true</code></pre><p>如果两个参数都设置，key由四部分组成：cacheName,group,version,spring el表达式结果,用<code>:</code>分隔，建议在provider端设置此配置。</p><h2 id="控制缓存"><a href="#控制缓存" class="headerlink" title="控制缓存"></a>控制缓存</h2><p><code>@DubboCache</code>提供了消费者可优先使用缓存，<strong>缓存的一致性由服务提供方负责</strong>，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。</p><p>控制缓存分为两种情况：</p><ol><li>缓存一致性要求不高，可以通过<code>DubboCache#expire</code>设置过期时间，默认为5分钟。</li><li>缓存一致性要求高，服务提供方通过<code>redisTemplate</code>或者<code>org.springframework.cache.annotation.CacheEvict</code>控制缓存。</li></ol><h2 id="如何扩展"><a href="#如何扩展" class="headerlink" title="如何扩展"></a>如何扩展</h2><h3 id="扩展CacheKeyValidator"><a href="#扩展CacheKeyValidator" class="headerlink" title="扩展CacheKeyValidator"></a>扩展<code>CacheKeyValidator</code></h3><p><code>CacheKeyValidator</code>可以实现对特定的key、url缓存或者不缓存。默认策略为：key不为null可以缓存。</p><h4 id="实现CacheKeyValidator"><a href="#实现CacheKeyValidator" class="headerlink" title="实现CacheKeyValidator"></a>实现<code>CacheKeyValidator</code></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.bohrqiu.dubbo.cache.validator;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCacheKeyValidator</span> <span class="keyword">implements</span> <span class="title">CacheKeyValidator</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isValid</span><span class="params">(URL url, Invocation invocation, CacheMeta cacheMeta, Object elEvaluatedKey)</span> </span>&#123;</span><br><span class="line">System.out.println(<span class="string">"in TestCacheKeyValidator"</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="配置扩展文件"><a href="#配置扩展文件" class="headerlink" title="配置扩展文件"></a>配置扩展文件</h4><p>在classpath下创建<code>META-INF/dubbo/com.github.bohrqiu.dubbo.cache.CacheKeyValidator</code>文件,内容为：</p><pre><code>test=com.github.bohrqiu.dubbo.cache.validator.TestCacheValueValidator</code></pre><h4 id="设置服务url使自定义扩展生效"><a href="#设置服务url使自定义扩展生效" class="headerlink" title="设置服务url使自定义扩展生效"></a>设置服务url使自定义扩展生效</h4><p>可以通过在provider配置application时指定(更多配置方式，参考dubbo相关文档).</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">"dubbo-cache-test"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dubbo:parameter</span> <span class="attr">key</span>=<span class="string">"cacheKeyValidator"</span> <span class="attr">value</span>=<span class="string">"test"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:application</span>&gt;</span></span><br></pre></td></tr></table></figure><h3 id="扩展CacheKeyValidator-1"><a href="#扩展CacheKeyValidator-1" class="headerlink" title="扩展CacheKeyValidator"></a>扩展<code>CacheKeyValidator</code></h3><p>扩展方式和上面的类似，更多参考dubbo扩展机制。    默认策略为：value不为null可以缓存。</p>]]></content>
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> DubboCache </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>2018年06月Reading Notes</title>
       <link href="/2018-06-reading-notes/"/>
       <url>/2018-06-reading-notes/</url>
@@ -1026,27 +1047,6 @@
     </entry>
     
     <entry>
-      <title>cxf如何传字段为null</title>
-      <link href="/cxf-trans-filed-null/"/>
-      <url>/cxf-trans-filed-null/</url>
-      <content type="html"><![CDATA[<p>传输对象如下：</p><pre><code>public class EmailSenderOrder {private String clientName=&quot;test&quot;;//clientName默认值为test}</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p><pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); emailSenderOrder.setClientName(null); </code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br><a id="more"></a><br>默认情况下，如果field为null，cxf client生成的报文中没有这个field的报文，这就导致在反序列化时，初始化对象时用了默认值。</p><p>可以如下解决：</p><pre><code>//通过字段序列化@XmlAccessorType(XmlAccessType.FIELD) public class EmailSenderOrder {//如果clientName为null，生成报文&lt;clientName xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:nil=&quot;true&quot;/&gt;@XmlElement(name = &quot;clientName&quot;, nillable = true) private String clientName=&quot;test&quot;;}</code></pre>]]></content>
-      
-      <categories>
-          
-          <category> java </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> cxf </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
       <title>hessian反序列化field值丢失bug</title>
       <link href="/hessian-java-serialization/"/>
       <url>/hessian-java-serialization/</url>
@@ -1062,6 +1062,27 @@
         <tags>
             
             <tag> hessian </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>cxf如何传字段为null</title>
+      <link href="/cxf-trans-filed-null/"/>
+      <url>/cxf-trans-filed-null/</url>
+      <content type="html"><![CDATA[<p>传输对象如下：</p><pre><code>public class EmailSenderOrder {private String clientName=&quot;test&quot;;//clientName默认值为test}</code></pre><p>应用场景需要传输的<code>clientName</code>为null，我们在使用client时，会有如下代码：</p><pre><code>EmailSenderOrder emailSenderOrder = new EmailSenderOrder(); emailSenderOrder.setClientName(null); </code></pre><p>服务端在接受到对象后，clientName结果等于了test。<br><a id="more"></a><br>默认情况下，如果field为null，cxf client生成的报文中没有这个field的报文，这就导致在反序列化时，初始化对象时用了默认值。</p><p>可以如下解决：</p><pre><code>//通过字段序列化@XmlAccessorType(XmlAccessType.FIELD) public class EmailSenderOrder {//如果clientName为null，生成报文&lt;clientName xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:nil=&quot;true&quot;/&gt;@XmlElement(name = &quot;clientName&quot;, nillable = true) private String clientName=&quot;test&quot;;}</code></pre>]]></content>
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> cxf </tag>
             
         </tags>
       

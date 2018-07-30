@@ -310,6 +310,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/dubbo-cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/dubbo-cache/" itemprop="url">DubboCache</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-23T21:52:17+08:00">
+                2018-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="DubboCache"><a href="#DubboCache" class="headerlink" title="@DubboCache"></a><a href="https://github.com/bohrqiu/dubbo-cache" target="_blank" rel="noopener">@DubboCache</a></h1><p>提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。</p>
+<p>相对于dubbo默认的缓存机制，此项目具有如下优点：</p>
+<ol>
+<li>原生dubbo cache机制只能缓存结果到消费者jvm中，并且cache key不能选择。</li>
+<li>缓存key生成灵活，和spring 声明式缓存一致，采用spring el表达式</li>
+<li>可以扩展<code>CacheKeyValidator</code>接口，实现键缓存策略</li>
+<li>可以扩展<code>CacheValueValidator</code>接口，实现值缓存策略</li>
+<li>由于采用分布式缓存，服务提供端可以灵活控制缓存</li>
+</ol>
+<p>目前仅提供redis实现，依赖<code>spring-data-redis</code>.</p>
+<h2 id="使用-DubboCache"><a href="#使用-DubboCache" class="headerlink" title="使用@DubboCache"></a>使用<code>@DubboCache</code></h2><h3 id="在服务接口模块中依赖dubbo-cache-common"><a href="#在服务接口模块中依赖dubbo-cache-common" class="headerlink" title="在服务接口模块中依赖dubbo-cache-common"></a>在服务接口模块中依赖<code>dubbo-cache-common</code></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.bohrqiu.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-cache-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>此依赖仅定义了<code>@DubboCache</code>注解。</p>
+<h3 id="在服务消费者模块中依赖dubbo-cache-core"><a href="#在服务消费者模块中依赖dubbo-cache-core" class="headerlink" title="在服务消费者模块中依赖dubbo-cache-core"></a>在服务消费者模块中依赖<code>dubbo-cache-core</code></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.bohrqiu.dubbo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-cache-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">### 在服务接口上添加`@DubboCache`注解</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public interface CacheableService &#123;</span><br><span class="line">	@DubboCache(cacheName = "test",key = "#order.playload")</span><br><span class="line">	SingleValueResult<span class="tag">&lt;<span class="name">String</span>&gt;</span> echo(SingleValueOrder<span class="tag">&lt;<span class="name">String</span>&gt;</span> order);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如上所示:<code>cacheName=test</code>,<code>key</code>为第一个参数的playload字段，缓存有效期默认5分钟。</p>
+<p>上面的注解和<a href="mailto:`@org.springframework.cache.annotation.Cacheable" target="_blank" rel="noopener">`@org.springframework.cache.annotation.Cacheable</a>(value = “test”, key = “#order.playload”)`生成的key一致。</p>
+<p>对于dubbo服务消费者，只需要更新jar包即可，由服务提供者来觉得接口是否需要缓存，和缓存的控制。</p>
+<p><strong>注意:</strong> 参数名读取依赖java8编译参数<code>-parameters</code>,上面的例子也可以通过<code>p0</code>来引用第一个接口入参。</p>
+<h2 id="key生成"><a href="#key生成" class="headerlink" title="key生成"></a>key生成</h2><p>key生成策略和<code>Cacheable</code>一致，上面的例子中cache key由两部分组成:cacheName,spring el表达式结果，用<code>:</code>分隔.</p>
+<p>如果请求参数order中<code>playload</code>属性值为dubbo，最终key为：<code>test:dubbo</code></p>
+<p>如果服务有多个版本或者group，需要对多个版本和group分别设置缓存，可以设置参数：</p>
+<pre><code>cachePrefixContainGroup=true
+cachePrefixContainVersion=true
+</code></pre><p>如果两个参数都设置，key由四部分组成：cacheName,group,version,spring el表达式结果,用<code>:</code>分隔，建议在provider端设置此配置。</p>
+<h2 id="控制缓存"><a href="#控制缓存" class="headerlink" title="控制缓存"></a>控制缓存</h2><p><code>@DubboCache</code>提供了消费者可优先使用缓存，<strong>缓存的一致性由服务提供方负责</strong>，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。</p>
+<p>控制缓存分为两种情况：</p>
+<ol>
+<li>缓存一致性要求不高，可以通过<code>DubboCache#expire</code>设置过期时间，默认为5分钟。</li>
+<li>缓存一致性要求高，服务提供方通过<code>redisTemplate</code>或者<code>org.springframework.cache.annotation.CacheEvict</code>控制缓存。</li>
+</ol>
+<h2 id="如何扩展"><a href="#如何扩展" class="headerlink" title="如何扩展"></a>如何扩展</h2><h3 id="扩展CacheKeyValidator"><a href="#扩展CacheKeyValidator" class="headerlink" title="扩展CacheKeyValidator"></a>扩展<code>CacheKeyValidator</code></h3><p><code>CacheKeyValidator</code>可以实现对特定的key、url缓存或者不缓存。默认策略为：key不为null可以缓存。</p>
+<h4 id="实现CacheKeyValidator"><a href="#实现CacheKeyValidator" class="headerlink" title="实现CacheKeyValidator"></a>实现<code>CacheKeyValidator</code></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.bohrqiu.dubbo.cache.validator;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCacheKeyValidator</span> <span class="keyword">implements</span> <span class="title">CacheKeyValidator</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isValid</span><span class="params">(URL url, Invocation invocation, CacheMeta cacheMeta, Object elEvaluatedKey)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"in TestCacheKeyValidator"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="配置扩展文件"><a href="#配置扩展文件" class="headerlink" title="配置扩展文件"></a>配置扩展文件</h4><p>在classpath下创建<code>META-INF/dubbo/com.github.bohrqiu.dubbo.cache.CacheKeyValidator</code>文件,内容为：</p>
+<pre><code>test=com.github.bohrqiu.dubbo.cache.validator.TestCacheValueValidator
+</code></pre><h4 id="设置服务url使自定义扩展生效"><a href="#设置服务url使自定义扩展生效" class="headerlink" title="设置服务url使自定义扩展生效"></a>设置服务url使自定义扩展生效</h4><p>可以通过在provider配置application时指定(更多配置方式，参考dubbo相关文档).</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:application</span> <span class="attr">name</span>=<span class="string">"dubbo-cache-test"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dubbo:parameter</span> <span class="attr">key</span>=<span class="string">"cacheKeyValidator"</span> <span class="attr">value</span>=<span class="string">"test"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:application</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="扩展CacheKeyValidator-1"><a href="#扩展CacheKeyValidator-1" class="headerlink" title="扩展CacheKeyValidator"></a>扩展<code>CacheKeyValidator</code></h3><p>扩展方式和上面的类似，更多参考dubbo扩展机制。    默认策略为：value不为null可以缓存。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2018-06-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1905,324 +2082,6 @@ Updating @Contended version 1B times Took: 7.387646696sec
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/docker/" itemprop="url">docker</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-01T21:52:17+08:00">
-                2016-01-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="1-docker配置"><a href="#1-docker配置" class="headerlink" title="1. docker配置"></a>1. docker配置</h3><p>在mac osx中，docker deamon运行在virtualbox虚拟机中，docker client和虚拟机中的docker deamon交互。</p>
-<h4 id="1-1-环境配置"><a href="#1-1-环境配置" class="headerlink" title="1.1 环境配置"></a>1.1 环境配置</h4><pre><code>#配置docker环境变量
-eval &quot;$(docker-machine env default)&quot;
-#配置docker启动alias    
-alias docker-start=&apos;docker-machine start default&apos;
-#配置docker关闭alias
-alias docker-stop=&quot;docker-machine stop default&quot;
-</code></pre><p>启动命令如下：</p>
-<pre><code>docker-start
-docker-stop
-</code></pre><h4 id="1-2-配置镜像私服"><a href="#1-2-配置镜像私服" class="headerlink" title="1.2 配置镜像私服"></a>1.2 配置镜像私服</h4><p>测试环境中私服提供服务如下：</p>
-<pre><code>#docker registry ui
-http://192.168.46.21:10005/
-#docker registry restful api
-http://192.168.46.21:5000/v2/_catalog
-</code></pre><p>下面配置docker registry私服为192.168.46.21：</p>
-<pre><code>#登陆到server
-docker-machine ssh default
-
-#修改/var/lib/boot2docker/profile
---insecure-registry 192.168.46.21:5000
---registry-mirror http://192.168.46.21:5000
-</code></pre><p>国内docker mirror：</p>
-<pre><code>https://lug.ustc.edu.cn/wiki/mirrors/help/docker
-http://0b929cdf.m.daocloud.io
-</code></pre><h3 id="2-docker-常用命令"><a href="#2-docker-常用命令" class="headerlink" title="2. docker 常用命令"></a>2. docker 常用命令</h3><p><img src="/docker/docker-command.jpg" alt=""></p>
-<pre><code>#拉取镜像
-docker pull yiji/java8:1.0
-
-#查看镜像历史,能看到docker镜像层的细节
-docker history  yiji/java8:1.0
-
-#删除镜像
-docker rmi -f yiji/centos7:latest
-
-#删除容器
-docker rm
-
-#执行命令    
-docker run yiji/centos7 /bin/echo &apos;hello world&apos;
-
-#交互运行：
-docker run -it yiji/centos7 /bin/bash
-
-#查看容器运行状态
-docker ps -a
-
-#查看指定容器状态
-docker inspect f46935242662
-
-#查看端口隐射，通过inspect结果过滤
-docker inspect --format=&apos;{{.NetworkSettings.Ports}}&apos; 8f4a179a0647
-
-#查看容器资源占用
-docker stats 92202cc1c3f0
-
-#查看docker deamon运行ip
-echo $DOCKER_HOST
-
-#清理后台停止的容器
-docker rm $( docker ps -a -q)
-
-#查看镜像的环境变量
-docker run  yiji/java8:2.0  env
-</code></pre><h3 id="3-F-A-Q"><a href="#3-F-A-Q" class="headerlink" title="3. F.A.Q"></a>3. F.A.Q</h3><h4 id="3-1-docker文件系统"><a href="#3-1-docker文件系统" class="headerlink" title="3.1. docker文件系统"></a>3.1. docker文件系统</h4><p>docker镜像的文件系统采用多层存储，镜像中全是只读层，便于分发和共享(pull镜像时，会在本地拉已经存在的层)。运行时建立读写层，对于应用来说，需要把文件系统mount到docker中(这样性能最好)，device mapper对性能有影响。</p>
-<blockquote>
-<blockquote>
-<p>Data volumes provide the best and most predictable performance. This is because they bypass the storage driver and do not incur any of the potential overheads introduced by thin provisioning and copy-on-write. For this reason, you may want to place heavy write workloads on data volumes.</p>
-</blockquote>
-</blockquote>
-<h4 id="3-2-关于基础镜像"><a href="#3-2-关于基础镜像" class="headerlink" title="3.2. 关于基础镜像"></a>3.2. 关于基础镜像</h4><p>制作基础镜像时权衡镜像大小(虽然可以在主机上缓存基础镜像，也需要考虑首次分发的大小)。我们最开始使用centos7来制作基础镜像，发现镜像300多M，如果在加上java8，基础镜像有600多M了。</p>
-<p>可以参考<a href="https://hub.docker.com/r/frolvlad/alpine-oraclejdk8/" target="_blank" rel="noopener">frolvlad/alpine-oraclejdk8</a>来制作基础镜像。</p>
-<pre><code>REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
-yiji/java8          2.0                 1d58b31d19a0        4 days ago          166.5 MB
-</code></pre><p>java8的基础镜像只有不到200m。</p>
-<h4 id="3-3-制作docker镜像并运行"><a href="#3-3-制作docker镜像并运行" class="headerlink" title="3.3. 制作docker镜像并运行"></a>3.3. 制作docker镜像并运行</h4><ol>
-<li><p>编写Dockerfile</p>
-<pre><code>FROM yiji/java8:2.0
-COPY  yiji-boot-test-1.1-SNAPSHOT.jar /opt/yiji-boot-test-1.1-SNAPSHOT.jar
-WORKDIR /opt
-ENTRYPOINT java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4004 -jar /opt/yiji-boot-test-1.1-SNAPSHOT.jar
-</code></pre></li>
-<li><p>build   </p>
-<pre><code>docker build -t  yiji-boot-test:1.0 .
-</code></pre></li>
-<li><p>run</p>
-<pre><code>docker run -p 8081:8081 -p 4004:4004  yiji-boot-test:1.0
-</code></pre><p> 其中8081是应用web端口，4004端口是远程调试端口</p>
-</li>
-<li><p>在容器内执行命令</p>
-<p> 在容器运行起来后，我们需要去容器内check下情况。</p>
-<pre><code>docker exec -it 92202cc1c3f0  sh
-</code></pre></li>
-</ol>
-<h4 id="3-4-docker本地存储"><a href="#3-4-docker本地存储" class="headerlink" title="3.4 docker本地存储"></a>3.4 docker本地存储</h4><p>docker 容器运行的文件存储在本地。下面来看看这些文件：</p>
-<p>查看docker container id</p>
-<pre><code>CONTAINER ID        IMAGE                COMMAND                  CREATED             STATUS                   PORTS                                            NAMES
-8f4a179a0647        yiji-boot-test:1.0   &quot;/bin/sh -c &apos;java -ag&quot;   2 hours ago         Up 2 hours               0.0.0.0:4004-&gt;4004/tcp, 0.0.0.0:8081-&gt;8081/tcp   silly_northcutt
-</code></pre><p>登陆到虚拟机，在mac和windows下，docker在虚拟机中运行</p>
-<pre><code>docker-machine ssh default
-</code></pre><p>切换到docker运行目录</p>
-<pre><code>sudo su -
-cd /var/lib/docker/aufs/mnt/
-</code></pre><p><code>ls |grep 8f4a179a0647</code>发现两个目录</p>
-<pre><code>8f4a179a064737658b4055fb785c432c843f473a9d5fc40fba445017bd5b7e2e
-8f4a179a064737658b4055fb785c432c843f473a9d5fc40fba445017bd5b7e2e-init
-</code></pre><p>进入到第一个目录的opt子目录下，会找到我们打包的jar文件(chroot的魔力所在)</p>
-<pre><code>root@default:/mnt/sda1/var/lib/docker/aufs/mnt/8f4a179a064737658b4055fb785c432c843f473a9d5fc40fba445017bd5b7e2e/opt# ls -l
-total 67168
--rw-r--r--    1 root     root      68777433 Dec 28 08:26 yiji-boot-test-1.1-SNAPSHOT.jar
-</code></pre><h4 id="3-5-关于docker的安全"><a href="#3-5-关于docker的安全" class="headerlink" title="3.5 关于docker的安全"></a>3.5 <a name="docker-security">关于docker的安全</a></h4><p><iframe src="//www.slideshare.net/slideshow/embed_code/key/vhMhelcV6Z9rXr" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/jpetazzo/docker-linux-containers-lxc-and-security" title="Docker, Linux Containers (LXC), and security" target="_blank">Docker, Linux Containers (LXC), and security</a> </strong> from <strong><a href="//www.slideshare.net/jpetazzo" target="_blank">Jérôme Petazzoni</a></strong> </div></p>
-<p>我们需要做两件事情，</p>
-<ol>
-<li><p>不要使用root in docker</p>
-<p> 参考<a href="http://stackoverflow.com/questions/24308760/running-app-inside-docker-as-non-root-user" target="_blank" rel="noopener">Running app inside Docker as non-root user</a></p>
-</li>
-<li><p>经常升级内核</p>
-</li>
-</ol>
-<p>做安全的同学可以看看更多关于docker 安全的文章:</p>
-<p><a href="https://github.com/docker/docker-bench-security" target="_blank" rel="noopener">docker-bench-security</a></p>
-<p><a href="https://github.com/konstruktoid/Docker/blob/master/Security/CheatSheet.md" target="_blank" rel="noopener">Security CheatSheet</a></p>
-<p><a href="https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.6_Benchmark_v1.0.0.pdf" target="_blank" rel="noopener">CIS Docker 1.6 Benchmark</a></p>
-<p>最后引用<a href="https://twitter.com/mortman" target="_blank" rel="noopener">David Mortman</a>在2015年<a href="https://www.defcon.org/" target="_blank" rel="noopener">Defcon</a>的一句话：</p>
-<blockquote>
-<blockquote>
-<p>a year ago, [docker and security] was pretty horrible,six months ago it wasn’t so bad, and now it’s pretty usable.</p>
-</blockquote>
-</blockquote>
-<h4 id="3-6-docker-run-vm"><a href="#3-6-docker-run-vm" class="headerlink" title="3.6 docker run vm?"></a>3.6 docker run vm?</h4><p>一些观点：</p>
-<p><a href="http://dockone.io/article/935" target="_blank" rel="noopener">2016年六大OpenStack &amp; Docker发展趋势预测</a></p>
-<blockquote>
-<blockquote>
-<p>由原本的虚拟机管理程序为核心转变为容器加裸机组合模式</p>
-</blockquote>
-</blockquote>
-<p><a href="http://www.infoq.com/cn/news/2015/12/hypernetes-caas" target="_blank" rel="noopener">Hypernetes实现多租户CaaS，且无需客户操作系统</a></p>
-<blockquote>
-<blockquote>
-<p>OpenStack是一个用于构建和管理云的IaaS框架，Hypernetes使用了它的部分组件。它使用OpenStack的身份和服务目录提供程序Keystone进行身份验证和授权。它还使用了其他的OpenStack组件，如用于存储的Cinder和Ceph，用于网络管理的Neutron。对于OpenStack而言，这是一个独特的用法，因为其组件通常都不在OpenStack部署之外使用。</p>
-</blockquote>
-</blockquote>
-<h4 id="3-7-docker-api"><a href="#3-7-docker-api" class="headerlink" title="3.7 docker api"></a>3.7 docker api</h4><h5 id="3-7-1-unix-socket-api"><a href="#3-7-1-unix-socket-api" class="headerlink" title="3.7.1 unix-socket api"></a>3.7.1 unix-socket api</h5><p>查看docker信息:</p>
-<pre><code>curl --unix-socket /var/run/docker.sock http:/info |jq
-</code></pre><p>api文档:</p>
-<pre><code>https://docs.docker.com/engine/reference/api/docker_remote_api/
-</code></pre><h5 id="3-7-2-java-api"><a href="#3-7-2-java-api" class="headerlink" title="3.7.2 java api"></a>3.7.2 java api</h5><p>依赖：</p>
-<pre><code>&lt;dependency&gt;
-        &lt;groupId&gt;com.github.docker-java&lt;/groupId&gt;
-        &lt;artifactId&gt;docker-java&lt;/artifactId&gt;
-        &lt;version&gt;3.0.1&lt;/version&gt;
-        &lt;exclusions&gt;
-            &lt;exclusion&gt;
-                &lt;groupId&gt;de.gesellix&lt;/groupId&gt;
-                &lt;artifactId&gt;unix-socket-factory&lt;/artifactId&gt;
-            &lt;/exclusion&gt;
-        &lt;/exclusions&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.kohlschutter.junixsocket&lt;/groupId&gt;
-        &lt;artifactId&gt;junixsocket-common&lt;/artifactId&gt;
-        &lt;version&gt;2.0.4&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.kohlschutter.junixsocket&lt;/groupId&gt;
-        &lt;artifactId&gt;junixsocket-native-common&lt;/artifactId&gt;
-        &lt;version&gt;2.0.4&lt;/version&gt;
-    &lt;/dependency&gt;
-</code></pre><p> 使用：</p>
-<pre><code> DockerClient dockerClient = DockerClientBuilder.getInstance(&quot;unix:///var/run/docker.sock&quot;).build();
-Info info = dockerClient.infoCmd().exec();
-System.out.print(info);
-</code></pre><p>api文档:</p>
-<pre><code>https://github.com/docker-java/docker-java/
-</code></pre><h4 id="3-8-docker-on-centos7配置"><a href="#3-8-docker-on-centos7配置" class="headerlink" title="3.8 docker on centos7配置"></a>3.8 docker on centos7配置</h4><p>centos7使用systemd来管理服务，docker配置文件<code>/lib/systemd/system/docker.service</code>。比如增加tcp api端口，修改</p>
-<pre><code>ExecStart=/usr/bin/dockerd
-ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --insecure-registry catalog.shurenyun.com
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2277,7 +2136,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2299,7 +2158,7 @@ ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock 
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

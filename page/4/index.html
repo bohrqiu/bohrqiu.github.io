@@ -310,6 +310,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/hibernate-no-session-in-dubbo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/hibernate-no-session-in-dubbo/" itemprop="url">hibernate应用报could not initialize proxy - no Session分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-07-17T21:52:17+08:00">
+                2014-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-场景描述"><a href="#1-场景描述" class="headerlink" title="1.场景描述:"></a>1.场景描述:</h3><p>某项目使用hibernate,在切换到dubbo后,在构造结果对象时从延迟加载对象中获取数据时,报<code>org.hibernate.LazyInitializationException: could not initialize proxy - no Session</code></p>
+<p>构造结果对象的操作没有在事务环境下执行.</p>
+<h3 id="2-原因分析"><a href="#2-原因分析" class="headerlink" title="2.原因分析:"></a>2.原因分析:</h3><p>cxf不报错是因为在web.xml中配置了<code>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</code>,在请求到达web filter后,创建了<code>EntityManager</code>,请求结束后关闭<code>EntityManager</code>.在请求线程处理过程中,都可以拿到<code>EntityManager</code>,所以不会报错(至少可以从ThreadLocal中拿到).</p>
+<p>切换为dubbo后,请求不会经过web filter,在事务模版代码中执行业务操作,可以正确的拿到<code>EntityManager</code>,不会报错.但是执行到构造结果对象时,就悲剧了.</p>
+<h3 id="3-解决办法"><a href="#3-解决办法" class="headerlink" title="3.解决办法:"></a>3.解决办法:</h3><p>1.修改模版方法,把构造结果对象部分的代码也放到事务中执行.</p>
+<p>2.编写支持dubbo的OpenEntityManagerInViewFilter</p>
+<p>  可以通过<code>TransactionSynchronizationManager</code>做到如果<code>EntityManagerFactory</code>在线程变量中不存在则创建<code>EntityManager</code>,服务处理结束时,关闭<code>EntityManager</code>.</p>
+<h3 id="4-优劣分析"><a href="#4-优劣分析" class="headerlink" title="4.优劣分析"></a>4.优劣分析</h3><ol>
+<li><p>性能考虑</p>
+<p> <code>open session in veiw</code>模式还是不怎么优雅,事务执行链路太长了,会影响性能.而且对于我们提供的服务接口来说,构造结果对象已经是最后一步了,后面再也不需要延迟加载对象,不需要在filter里面来做此操作.</p>
+<p> web应用有在渲染模版时读取延迟加载对象的场景,这种场景使用还有意义.</p>
+</li>
+<li><p>功能角度</p>
+<p> 如果遇到应用内的两个dubbo服务调用,dubbo会走injvm协议.此时请求不会经过io栈,但是会执行所有的dubbo filter.</p>
+<p> 比如外部请求调用服务A,服务A调用内部服务B.</p>
+<p> 外部请求调A时,filter创建<code>EntityManager</code>,然后调用服务B时,filter不创建<code>EntityManager</code>,但是在请求B结束时,filter关闭了<code>EntityManager</code>.在请求A中处理剩下的业务逻辑,如果遇到要操作数据库,就只有哭了.</p>
+<p> 为什么web请求就不怕这种filter重入呢?web请求在forward时,你必须把request对象带进去,所以可以在request对象的attribute里面记录是否进过了这个filter.可以参考<code>org.springframework.web.filter.OncePerRequestFilter</code>.但是调用dubbo时,你只需要拿到服务代理对象就ok了,没有办法来知道整个请求链的情况.</p>
+</li>
+</ol>
+<h3 id="5-最后结论"><a href="#5-最后结论" class="headerlink" title="5.最后结论"></a>5.最后结论</h3><p>还是修改下我们自己的代码,把构造结果对象部分的代码也放到事务中执行.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/vagrant/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2057,190 +2218,6 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/serialization-framework/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/serialization-framework/" itemprop="url">序列化框架选型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-26T21:52:17+08:00">
-                2014-01-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="序列化框架选型"><a href="#序列化框架选型" class="headerlink" title="序列化框架选型"></a>序列化框架选型</h3><p>分布式应用中,序列化很关键,选择一个合适的序列化框架能给分布式应用带来性能红利,还能减少不必要的麻烦.本文仅仅从我遇到的一些实际问题来说明序列化的选型.更深入部分也可以参考<a href="http://bohr.me/2012/04/02/java-serialization.html">java序列化</a></p>
-<p>序列化框架的性能可以参考<a href="https://github.com/eishay/jvm-serializers/wiki" target="_blank" rel="noopener">jvm-serializers</a>,<code>Kryo</code>的性能还是很牛叉的.</p>
-<p>除了性能,还要考虑兼容性/序列化后的大小.如果仅仅考虑性能,我们选择<code>Kryo</code>就足够了.但是Kryo有些用着不爽的地方,比如不是线程安全的/兼容性.</p>
-<h4 id="1-兼容性"><a href="#1-兼容性" class="headerlink" title="1.兼容性"></a>1.兼容性</h4><p>字段增删不兼容,这个问题有时候很麻烦.比如用memache做缓存,把对象序列化后存入memcache,如果出现字段增删的情况,必须在服务重启的时候把缓存清空,不然就会导致<a href="http://bohr.me/2013/11/03/kryo-oom.html">灰常严重的BUG</a>.但是如果应用服务器有多台,这个问题还是避免不了.总会有个时间窗口会出现不同服务器上的同一个应用有不同的类版本,仍然可能会出现灰常严重的BUG.</p>
-<p>现在的<code>Kryo</code>提供了兼容性的支持,使用<code>CompatibleFieldSerializer.class</code>,在<code>kryo.writeClassAndObject</code>写入的信息如下:</p>
-<pre><code>class name|field lenght|field1 name|field2 name|field1 value| filed2 value
-</code></pre><p>读入<code>kryo.readClassAndObject</code>时,会先读入<code>field names</code>.然后匹配当前反序列化类的field和顺序,构造结果.</p>
-<p>子类和父类中有同名的字段时，kryo反序列化会丢失字段值,出现问题的原因和<a href="http://bohr.me/2013/11/29/hessian-java-serialization.html">hessian</a>出问题一样.</p>
-<p>给kryo提交了一个<a href="https://github.com/EsotericSoftware/kryo/pull/187" target="_blank" rel="noopener">improvement</a>,在初始化类型信息时,去掉父类中重复名称的field.</p>
-<h4 id="2-线程安全"><a href="#2-线程安全" class="headerlink" title="2.线程安全"></a>2.线程安全</h4><p>非线程安全也很好处理,每次都new对象出来,当然这样不是最佳的使用方式.通过线程变量来解决会比较合理,保证了性能还能提供很方便使用的工具类.</p>
-<h4 id="3-如何生成对象"><a href="#3-如何生成对象" class="headerlink" title="3.如何生成对象"></a>3.如何生成对象</h4><p>对于没有无参构造器的类来说，生成新对象是个问题，可以使用java内部的机制来new一个对象。<br>可以参考下<a href="https://github.com/magro/kryo-serializers/blob/master/src/main/java/de/javakaffee/kryoserializers/KryoReflectionFactorySupport.java" target="_blank" rel="noopener">KryoReflectionFactorySupport</a>的实现方式</p>
-<h4 id="4-性能"><a href="#4-性能" class="headerlink" title="4.性能"></a>4.性能</h4><p>下面测试了java下的各种序列化实现方式的性能</p>
-<pre><code>0 Serialisation    write=4,206ns read=16,945ns total=21,151ns
- 1 Serialisation    write=3,626ns read=18,205ns total=21,831ns
-0 MemoryByteBuffer write=270ns read=324ns total=594ns
- 1 MemoryByteBuffer write=270ns read=330ns total=600ns
- 0 MemoryByteBufferWithNativeOrder  write=357ns read=360ns total=717ns
- 1 MemoryByteBufferWithNativeOrder  write=323ns read=359ns total=682ns
- 0 DirectByteBuffer write=236ns read=325ns total=561ns
- 1 DirectByteBuffer write=231ns read=301ns total=532ns
- 0 DirectByteBufferWithNativeOrder  write=261ns read=310ns total=571ns
- 1 DirectByteBufferWithNativeOrder  write=243ns read=290ns total=533ns
- 0 UnsafeMemory write=28ns read=82ns total=110ns
- 1 UnsafeMemory write=24ns read=75ns total=99ns
- 0 kryo write=373ns read=348ns total=721ns
- 1 kryo write=390ns read=386ns total=776ns
- 0 kryoWithCompatibleFields write=1,037ns read=1,625ns total=2,662ns
- 1 kryoWithCompatibleFields write=1,038ns read=1,657ns total=2,695ns
- 0 kryoWithCompatibleFieldsAndDuplicateFieldAccept  write=1,077ns read=1,560ns total=2,637ns
- 1 kryoWithCompatibleFieldsAndDuplicateFieldAccept  write=1,064ns read=1,583ns total=2,647ns
- 0 kryoWithUnsafe   write=164ns read=204ns total=368ns
- 1 kryoWithUnsafe   write=168ns read=210ns total=378ns
- 0 fastjson write=1,942ns read=5,834ns total=7,776ns
- 1 fastjson write=1,873ns read=5,879ns total=7,752ns
-</code></pre><p>每种序列化执行1000000次,并且有预热. 各组数据相对比较,可以得出一些结论:</p>
-<ul>
-<li>直接调用unsafe,最快,但是最麻烦</li>
-<li>java自带的序列化很慢,最好不要用</li>
-<li>kryo2.22提供的unsafe支持,性能非常卓越</li>
-<li>kryo兼容性序列化器,开销挺大.写需要写入字段名,读的时候还需要做匹配撮合,读比写慢</li>
-<li>fastjson也挺快的,兼容性\跨语言互操性俱佳.</li>
-</ul>
-<p>序列化后的字节大小可以参考<a href="https://github.com/eishay/jvm-serializers/wiki" target="_blank" rel="noopener">jvm-serializers</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2295,7 +2272,7 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2317,7 +2294,7 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
