@@ -1,9 +1,9 @@
 ---
-title: @DubboCache
+title: DubboCache
 date: 2018-07-23 21:52:17
 categories: java
 tags:
-  - @DubboCache
+  - DubboCache
 ---
 
 # [@DubboCache](https://github.com/bohrqiu/dubbo-cache)
