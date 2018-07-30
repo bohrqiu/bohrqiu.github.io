@@ -959,7 +959,7 @@
       
         
           
-            <h2 id="1-dubbo"><a href="#1-dubbo" class="headerlink" title="1. dubbo"></a>1. dubbo</h2><h3 id="1-1-dubbo-remoting-client-heartbeat-thread"><a href="#1-1-dubbo-remoting-client-heartbeat-thread" class="headerlink" title="1.1 dubbo-remoting-client-heartbeat-thread"></a>1.1 dubbo-remoting-client-heartbeat-thread</h3><p>dubbo客户端心跳线程</p>
+            <h1 id="关于dubbo的一些分析和优化"><a href="#关于dubbo的一些分析和优化" class="headerlink" title="关于dubbo的一些分析和优化"></a>关于dubbo的一些分析和优化</h1><h2 id="1-dubbo内线程分析"><a href="#1-dubbo内线程分析" class="headerlink" title="1. dubbo内线程分析"></a>1. dubbo内线程分析</h2><h3 id="1-1-dubbo-remoting-client-heartbeat-thread"><a href="#1-1-dubbo-remoting-client-heartbeat-thread" class="headerlink" title="1.1 dubbo-remoting-client-heartbeat-thread"></a>1.1 dubbo-remoting-client-heartbeat-thread</h3><p>dubbo客户端心跳线程</p>
 <p>线程启动类：<code>HeaderExchangeClient</code></p>
 <p>任务执行类：<code>HeartBeatTask</code></p>
 <p>此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此<code>Channel</code>是否在心跳周期类有读写，如果没有，给服务端发送心跳信号.</p>
@@ -1050,8 +1050,9 @@
         }
     }
 }
-</code></pre><h2 id="5-关于缓存扩展"><a href="#5-关于缓存扩展" class="headerlink" title="5. 关于缓存扩展"></a>5. 关于缓存扩展</h2><p>下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。</p>
-<h3 id="5-1-使用com-yiji-boot-dubbo-cache-DubboCache"><a href="#5-1-使用com-yiji-boot-dubbo-cache-DubboCache" class="headerlink" title="5.1 使用com.yiji.boot.dubbo.cache.DubboCache"></a>5.1 使用<code>com.yiji.boot.dubbo.cache.DubboCache</code></h3><h3 id="5-2-使用-DubboCache"><a href="#5-2-使用-DubboCache" class="headerlink" title="5.2 使用@DubboCache"></a>5.2 使用<code>@DubboCache</code></h3><p><code>@DubboCache</code>提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。</p>
+</code></pre><h2 id="5-缓存扩展"><a href="#5-缓存扩展" class="headerlink" title="5. 缓存扩展"></a>5. 缓存扩展</h2><p>下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。</p>
+<p>源代码见<a href="https://github.com/bohrqiu/dubbo-cache" target="_blank" rel="noopener">dubbo-cache</a></p>
+<h3 id="5-1-使用com-github-bohrqiu-dubbo-cache-DubboCache"><a href="#5-1-使用com-github-bohrqiu-dubbo-cache-DubboCache" class="headerlink" title="5.1 使用com.github.bohrqiu.dubbo.cache.DubboCache"></a>5.1 使用<code>com.github.bohrqiu.dubbo.cache.DubboCache</code></h3><h3 id="5-2-使用-DubboCache"><a href="#5-2-使用-DubboCache" class="headerlink" title="5.2 使用@DubboCache"></a>5.2 使用<code>@DubboCache</code></h3><p><code>@DubboCache</code>提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。</p>
 <h4 id="5-2-1-如何使用"><a href="#5-2-1-如何使用" class="headerlink" title="5.2.1 如何使用"></a>5.2.1 如何使用</h4><p>对于dubbo服务提供者，只需要在dubbo接口上增加此注解。</p>
 <pre><code>public interface CacheableService {
     String CACHE_NAME=&quot;test&quot;;
@@ -1059,19 +1060,13 @@
     SingleValueResult&lt;String&gt; echo(SingleValueOrder&lt;String&gt; order);
 }
 </code></pre><p>如上所示，<code>cacheName=test</code>,<code>key</code>为第一个参数的playload字段，缓存有效期默认5分钟。可以通过设置<code>expire</code>属性修改缓存有效期。</p>
-<p>上面的注解和<a href="mailto:`@org.springframework.cache.annotation.Cacheable" target="_blank" rel="noopener">`@org.springframework.cache.annotation.Cacheable</a>(value = CACHE_NAME, key = “order.playload”)`等价。</p>
+<p>上面的注解和<a href="mailto:`@org.springframework.cache.annotation.Cacheable" target="_blank" rel="noopener">`@org.springframework.cache.annotation.Cacheable</a>(value = CACHE_NAME, key = “order.playload”)`生成的key一致。</p>
 <p>对于dubbo服务消费者，只需要跟新jar包即可。</p>
-<h4 id="5-2-2-控制缓存"><a href="#5-2-2-控制缓存" class="headerlink" title="5.2.2 控制缓存"></a>5.2.2 控制缓存</h4><p><code>@DubboCache</code>提供了消费者可优先使用缓存，<strong>缓存的一致性由服务提供方负责</strong>，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。</p>
+<h4 id="5-2-2-控制缓存"><a href="#5-2-2-控制缓存" class="headerlink" title="5.2.2 控制缓存"></a>5.2.2 控制缓存</h4><p>@DubboCache`提供了消费者可优先使用缓存，<strong>缓存的一致性由服务提供方负责</strong>，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。</p>
 <p>控制缓存分为两种情况：</p>
 <ol>
 <li>缓存一致性要求不高，可以通过<code>DubboCache#expire</code>设置过期时间，默认为5分钟。</li>
-<li><p>缓存一致性要求高，服务提供方通过<code>redisTemplate</code>或者<code>org.springframework.cache.annotation.CacheEvict</code>控制缓存。</p>
-<p> 如上面的例子，如果是会员系统(系统名为<code>customer</code>)提供此服务，请求参数中<code>playload=Bohr</code>，在redis中缓存<code>key=cache_customer:test:Bohr</code>,此<code>redis key</code>由三部分组成：namespace(默认为<code>YedisProperties#namespace</code>，此由yedis提供)、cacheName,key. </p>
-<p> 在会员系统中通过如下代码清除缓存：</p>
-<pre><code>redisTemplate.delete(&quot;test:Bohr&quot;);
-</code></pre><p> 或者在修改模型的方法上加：</p>
-<pre><code>@CacheEvict(value = CACHE_NAME, key = &quot;order.playload&quot;)
-</code></pre></li>
+<li>缓存一致性要求高，服务提供方通过<code>redisTemplate</code>或者<code>org.springframework.cache.annotation.CacheEvict</code>控制缓存。</li>
 </ol>
 <h2 id="5-关于dubbo-mock"><a href="#5-关于dubbo-mock" class="headerlink" title="5. 关于dubbo mock"></a>5. 关于dubbo mock</h2><p>mock最好是有mock server。由于懒，把mock server的client实现了(拦截请求，转换为http+json调用到mock server)，后面就没时间做mock server了。前段时间有个项目紧急需要，做了个简单的mock。</p>
 <p>原理如下：</p>
