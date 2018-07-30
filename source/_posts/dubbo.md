@@ -179,13 +179,11 @@ jdk默认线程池实现策略如下：
 
 源代码见[dubbo-cache](https://github.com/bohrqiu/dubbo-cache)
 
-### 5.1 使用`com.github.bohrqiu.dubbo.cache.DubboCache`
-
-### 5.2 使用`@DubboCache`
+### 5.1 使用`@DubboCache`
 
 `@DubboCache`提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。
 
-#### 5.2.1 如何使用
+#### 5.1.1 如何使用
 
 对于dubbo服务提供者，只需要在dubbo接口上增加此注解。
 
@@ -201,7 +199,7 @@ jdk默认线程池实现策略如下：
 
 对于dubbo服务消费者，只需要跟新jar包即可。
 
-#### 5.2.2 控制缓存
+#### 5.1.2 控制缓存
 
 @DubboCache`提供了消费者可优先使用缓存，**缓存的一致性由服务提供方负责**，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。
 
@@ -210,13 +208,13 @@ jdk默认线程池实现策略如下：
 1. 缓存一致性要求不高，可以通过`DubboCache#expire`设置过期时间，默认为5分钟。
 2. 缓存一致性要求高，服务提供方通过`redisTemplate`或者`org.springframework.cache.annotation.CacheEvict`控制缓存。
 	
-## 5. 关于dubbo mock
+## 6. dubbo mock
 
 mock最好是有mock server。由于懒，把mock server的client实现了(拦截请求，转换为http+json调用到mock server)，后面就没时间做mock server了。前段时间有个项目紧急需要，做了个简单的mock。
 
 原理如下：
 
-### 5.1 对于使用者：
+### 6.1 对于使用者：
 
 1. 用户配置需要mock的dubbo服务。
 
@@ -232,11 +230,11 @@ mock最好是有mock server。由于懒，把mock server的client实现了(拦�
 		    }
 		}
 
-### 5.2 组件提供的能力	
+### 6.2 组件提供的能力	
 	
 1. 自定义实现`BeanPostProcessor`,扫描所有标注`@Reference`注解的属性，如果被配置了要mock掉，设置属性为mock实现。
 
-## 6. 最后
+## 7. 最后
 
 最后附带一个在易极付写的dubbo分享。
 
