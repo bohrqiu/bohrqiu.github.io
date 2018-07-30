@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="关于dubbo的一些分析和优化1. dubbo内线程分析1.1 dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，">
+<meta name="description" content="dubbo的一些分析和优化dubbo应用线程分析dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，给服务端发送心跳">
 <meta name="keywords" content="dubbo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dubbo">
 <meta property="og:url" content="http://bohr.me/dubbo/index.html">
 <meta property="og:site_name" content="qiubo&#39;s life">
-<meta property="og:description" content="关于dubbo的一些分析和优化1. dubbo内线程分析1.1 dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，">
+<meta property="og:description" content="dubbo的一些分析和优化dubbo应用线程分析dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，给服务端发送心跳">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-30T08:50:06.512Z">
+<meta property="og:updated_time" content="2018-07-30T09:03:56.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dubbo">
-<meta name="twitter:description" content="关于dubbo的一些分析和优化1. dubbo内线程分析1.1 dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，">
+<meta name="twitter:description" content="dubbo的一些分析和优化dubbo应用线程分析dubbo-remoting-client-heartbeat-threaddubbo客户端心跳线程 线程启动类：HeaderExchangeClient 任务执行类：HeartBeatTask 此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此Channel是否在心跳周期类有读写，如果没有，给服务端发送心跳">
 
 
 
@@ -400,42 +400,42 @@
       
 
       
-        <h1 id="关于dubbo的一些分析和优化"><a href="#关于dubbo的一些分析和优化" class="headerlink" title="关于dubbo的一些分析和优化"></a>关于dubbo的一些分析和优化</h1><h2 id="1-dubbo内线程分析"><a href="#1-dubbo内线程分析" class="headerlink" title="1. dubbo内线程分析"></a>1. dubbo内线程分析</h2><h3 id="1-1-dubbo-remoting-client-heartbeat-thread"><a href="#1-1-dubbo-remoting-client-heartbeat-thread" class="headerlink" title="1.1 dubbo-remoting-client-heartbeat-thread"></a>1.1 dubbo-remoting-client-heartbeat-thread</h3><p>dubbo客户端心跳线程</p>
+        <h1 id="dubbo的一些分析和优化"><a href="#dubbo的一些分析和优化" class="headerlink" title="dubbo的一些分析和优化"></a>dubbo的一些分析和优化</h1><h2 id="dubbo应用线程分析"><a href="#dubbo应用线程分析" class="headerlink" title="dubbo应用线程分析"></a>dubbo应用线程分析</h2><h3 id="dubbo-remoting-client-heartbeat-thread"><a href="#dubbo-remoting-client-heartbeat-thread" class="headerlink" title="dubbo-remoting-client-heartbeat-thread"></a>dubbo-remoting-client-heartbeat-thread</h3><p>dubbo客户端心跳线程</p>
 <p>线程启动类：<code>HeaderExchangeClient</code></p>
 <p>任务执行类：<code>HeartBeatTask</code></p>
 <p>此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此<code>Channel</code>是否在心跳周期类有读写，如果没有，给服务端发送心跳信号.</p>
 <p>改进措施：可以给执行线程合理命名。</p>
-<h3 id="1-2-xxxx-EventThread"><a href="#1-2-xxxx-EventThread" class="headerlink" title="1.2 xxxx-EventThread"></a>1.2 xxxx-EventThread</h3><p>zookeeper事件处理线程</p>
+<h3 id="xxxx-EventThread"><a href="#xxxx-EventThread" class="headerlink" title="xxxx-EventThread"></a>xxxx-EventThread</h3><p>zookeeper事件处理线程</p>
 <p>线程启动类：<code>org.apache.zookeeper.ClientCnxn</code></p>
 <p>任务执行类：<code>org.apache.zookeeper.ClientCnxn.EventThread</code></p>
 <p>此线程的命名格式为<code>启动线程名+EventThread</code>，其中的<code>localhost-startStop-1</code>tomcat启动线程名。</p>
 <p>在<code>CuratorFrameworkImpl</code>启动时，会向zookeeper服务器建立连接，此时会创建此线程。</p>
 <p>我们必须保证一个应用只有一个<code>CuratorFrameworkImpl</code>实例。</p>
-<h3 id="1-3-localhost-startStop-1-SendThread"><a href="#1-3-localhost-startStop-1-SendThread" class="headerlink" title="1.3 localhost-startStop-1-SendThread"></a>1.3 localhost-startStop-1-SendThread</h3><p>zookeeper 心跳、发送请求线程</p>
+<h3 id="localhost-startStop-1-SendThread"><a href="#localhost-startStop-1-SendThread" class="headerlink" title="localhost-startStop-1-SendThread"></a>localhost-startStop-1-SendThread</h3><p>zookeeper 心跳、发送请求线程</p>
 <p>线程启动类：<code>org.apache.zookeeper.ClientCnxn</code></p>
 <p>任务执行类：<code>org.apache.zookeeper.ClientCnxn.SendThread</code></p>
-<h3 id="1-4-DubboClientReconnectTimer-thread"><a href="#1-4-DubboClientReconnectTimer-thread" class="headerlink" title="1.4 DubboClientReconnectTimer-thread"></a>1.4 DubboClientReconnectTimer-thread</h3><p>消费者连接服务提供者的定时重连任务，默认执行周期2s，检查是否连接，没有连接重新连接。</p>
+<h3 id="DubboClientReconnectTimer-thread"><a href="#DubboClientReconnectTimer-thread" class="headerlink" title="DubboClientReconnectTimer-thread"></a>DubboClientReconnectTimer-thread</h3><p>消费者连接服务提供者的定时重连任务，默认执行周期2s，检查是否连接，没有连接重新连接。</p>
 <p>线程启动类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient</code></p>
 <p>任务执行类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient$1</code></p>
-<h3 id="1-5-DubboServerHandler"><a href="#1-5-DubboServerHandler" class="headerlink" title="1.5 DubboServerHandler-"></a>1.5 DubboServerHandler-</h3><p>dubbo服务端，任务处理线程,处理客户端请求</p>
+<h3 id="DubboServerHandler"><a href="#DubboServerHandler" class="headerlink" title="DubboServerHandler-"></a>DubboServerHandler-</h3><p>dubbo服务端，任务处理线程,处理客户端请求</p>
 <p>线程池启动类:<code>AllChannelHandler</code>的构造器中初始化线程池</p>
 <p>线程池实际创建类：<code>FixedThreadPool</code></p>
 <p>任务处理类：<code>com.alibaba.dubbo.remoting.transport.DecodeHandler</code></p>
-<h3 id="1-6-DubboClientHandler"><a href="#1-6-DubboClientHandler" class="headerlink" title="1.6 DubboClientHandler-"></a>1.6 DubboClientHandler-</h3><p>此线程主要用于dubbo客户端处理服务端的响应/连接相关事件，netty在接受到消息后，交给此线程池来处理。</p>
+<h3 id="DubboClientHandler"><a href="#DubboClientHandler" class="headerlink" title="DubboClientHandler-"></a>DubboClientHandler-</h3><p>此线程主要用于dubbo客户端处理服务端的响应/连接相关事件，netty在接受到消息后，交给此线程池来处理。</p>
 <p>线程启动类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient#wrapChannelHandler</code></p>
 <p>线程池实际创建类：<code>CachedThreadPool</code></p>
 <p>任务处理类：<code>com.alibaba.dubbo.remoting.transport.DecodeHandler</code></p>
-<h3 id="1-7-DubboRegistryFailedRetryTimer"><a href="#1-7-DubboRegistryFailedRetryTimer" class="headerlink" title="1.7 DubboRegistryFailedRetryTimer"></a>1.7 DubboRegistryFailedRetryTimer</h3><p>当dubbo和注册中心的相关请求(注册、取消注册、订阅、取消订阅)处理失败时，会暂时放在缓存中，此定时任务会周期性的来处理这些失败的请求</p>
+<h3 id="DubboRegistryFailedRetryTimer"><a href="#DubboRegistryFailedRetryTimer" class="headerlink" title="DubboRegistryFailedRetryTimer"></a>DubboRegistryFailedRetryTimer</h3><p>当dubbo和注册中心的相关请求(注册、取消注册、订阅、取消订阅)处理失败时，会暂时放在缓存中，此定时任务会周期性的来处理这些失败的请求</p>
 <p>线程启动类：<code>com.alibaba.dubbo.registry.support.FailbackRegistry</code></p>
 <p>处理任务：<code>com.alibaba.dubbo.registry.support.FailbackRegistry#retry</code></p>
-<h3 id="1-8-DubboSaveRegistryCache"><a href="#1-8-DubboSaveRegistryCache" class="headerlink" title="1.8 DubboSaveRegistryCache"></a>1.8 DubboSaveRegistryCache</h3><p>异步保存服务提供者地址</p>
+<h3 id="DubboSaveRegistryCache"><a href="#DubboSaveRegistryCache" class="headerlink" title="DubboSaveRegistryCache"></a>DubboSaveRegistryCache</h3><p>异步保存服务提供者地址</p>
 <p>线程启动类：<code>com.alibaba.dubbo.registry.support.AbstractRegistry</code></p>
 <p>任务执行类：<code>com.alibaba.dubbo.registry.support.AbstractRegistry.SaveProperties</code></p>
-<h3 id="1-9-DubboResponseTimeoutScanTimer"><a href="#1-9-DubboResponseTimeoutScanTimer" class="headerlink" title="1.9 DubboResponseTimeoutScanTimer"></a>1.9 DubboResponseTimeoutScanTimer</h3><p>扫描等待返回的<code>DefaultFuture</code>对象，如果<code>DefaultFuture</code>超时，则抛出超时异常。</p>
+<h3 id="DubboResponseTimeoutScanTimer"><a href="#DubboResponseTimeoutScanTimer" class="headerlink" title="DubboResponseTimeoutScanTimer"></a>DubboResponseTimeoutScanTimer</h3><p>扫描等待返回的<code>DefaultFuture</code>对象，如果<code>DefaultFuture</code>超时，则抛出超时异常。</p>
 <p>任务类:<code>DefaultFuture.RemotingInvocationTimeoutScan</code></p>
 <p>优化意见：目前的方式是间隔30ms就去扫描一次，建议重写<code>ConcurrentHashMap</code>缓存，加入队列等待机制。</p>
-<h2 id="2-telnet"><a href="#2-telnet" class="headerlink" title="2. telnet"></a>2. telnet</h2><p><code>com.alibaba.dubbo.remoting.transport.dispatcher.ChannelEventRunnable</code>处理netty的事件，他会把telnet请求(decode后为文本)代理给<code>com.alibaba.dubbo.remoting.telnet.support.TelnetHandlerAdapter</code>来处理。</p>
-<h2 id="3-dubbo线程池任务不均衡问题分析"><a href="#3-dubbo线程池任务不均衡问题分析" class="headerlink" title="3. dubbo线程池任务不均衡问题分析"></a>3. dubbo线程池任务不均衡问题分析</h2><p>dubbo应用使用的线程池为<code>com.alibaba.dubbo.common.threadpool.support.fixed.FixedThreadPool</code>,如果当queue设置为0时,会使用<code>SynchronousQueue</code>,这个东东导致了任务线程执行”不均衡”(满足了大家的心理预期,其实这种不均衡方式减少了上下文切换,但是<code>SynchronousQueue</code>没有大小,不能起到任务缓冲的作用).</p>
+<h2 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h2><p><code>com.alibaba.dubbo.remoting.transport.dispatcher.ChannelEventRunnable</code>处理netty的事件，他会把telnet请求(decode后为文本)代理给<code>com.alibaba.dubbo.remoting.telnet.support.TelnetHandlerAdapter</code>来处理。</p>
+<h2 id="dubbo线程池任务不均衡问题分析"><a href="#dubbo线程池任务不均衡问题分析" class="headerlink" title="dubbo线程池任务不均衡问题分析"></a>dubbo线程池任务不均衡问题分析</h2><p>dubbo应用使用的线程池为<code>com.alibaba.dubbo.common.threadpool.support.fixed.FixedThreadPool</code>,如果当queue设置为0时,会使用<code>SynchronousQueue</code>,这个东东导致了任务线程执行”不均衡”(满足了大家的心理预期,其实这种不均衡方式减少了上下文切换,但是<code>SynchronousQueue</code>没有大小,不能起到任务缓冲的作用).</p>
 <p>请在dubbo:protocol上加上queues大小(参考tomcat默认配置).</p>
 <pre><code>&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;${dubbo.provider.port}&quot; threads=&quot;200&quot; queues=&quot;100&quot;/&gt;
 </code></pre><p>测试:</p>
@@ -458,7 +458,7 @@
  ...
 493 199
 489 200
-</code></pre><h2 id="4-线程池优化"><a href="#4-线程池优化" class="headerlink" title="4. 线程池优化"></a>4. 线程池优化</h2><p>jdk默认线程池实现策略如下：</p>
+</code></pre><h2 id="线程池优化"><a href="#线程池优化" class="headerlink" title="线程池优化"></a>线程池优化</h2><p>jdk默认线程池实现策略如下：</p>
 <ol>
 <li>当线程数少于corePoolSize，总是新建线程</li>
 <li>当线程数=corePoolSize时，所有线程都忙，就会把线程放入队列；当队列满时，才会继续创建线程</li>
@@ -472,63 +472,24 @@
 </ol>
 <p>对于1，2，可以参考tomcat内部的线程池实现<code>org.apache.tomcat.util.threads.ThreadPoolExecutor</code>和<code>org.apache.tomcat.util.threads.TaskQueue</code>来改造。</p>
 <p>对于3，wrap原任务即可，大致代码如下：</p>
-<pre><code>private static class MDCGidCallable&lt;T&gt; implements Callable&lt;T&gt; {
-    private final Callable&lt;T&gt; task;
-    private final String gid;
-
-    public MDCGidCallable(Callable&lt;T&gt; task, String gid) {
-        this.task = task;
-        this.gid = gid;
-    }
-
-    @Override
-    public T call() throws Exception {
-        try {
-            MDC.put(GID_KEY, gid);
-            return task.call();
-        } finally {
-            MDC.remove(GID_KEY);
-        }
-    }
-}
-</code></pre><h2 id="5-缓存扩展"><a href="#5-缓存扩展" class="headerlink" title="5. 缓存扩展"></a>5. 缓存扩展</h2><p>下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MDCGidCallable</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Callable&lt;T&gt; task;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String gid;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MDCGidCallable</span><span class="params">(Callable&lt;T&gt; task, String gid)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.task = task;</span><br><span class="line">		<span class="keyword">this</span>.gid = gid;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			MDC.put(GID_KEY, gid);</span><br><span class="line">			<span class="keyword">return</span> task.call();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			MDC.remove(GID_KEY);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="缓存扩展"><a href="#缓存扩展" class="headerlink" title="缓存扩展"></a>缓存扩展</h2><p>下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。</p>
 <p>源代码见<a href="https://github.com/bohrqiu/dubbo-cache" target="_blank" rel="noopener">dubbo-cache</a></p>
-<h3 id="5-1-使用-DubboCache"><a href="#5-1-使用-DubboCache" class="headerlink" title="5.1 使用@DubboCache"></a>5.1 使用<code>@DubboCache</code></h3><p><code>@DubboCache</code>提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。</p>
-<h4 id="5-1-1-如何使用"><a href="#5-1-1-如何使用" class="headerlink" title="5.1.1 如何使用"></a>5.1.1 如何使用</h4><p>对于dubbo服务提供者，只需要在dubbo接口上增加此注解。</p>
-<pre><code>public interface CacheableService {
-    String CACHE_NAME=&quot;test&quot;;
-    @DubboCache(cacheName = CACHE_NAME,key = &quot;order.playload&quot;)
-    SingleValueResult&lt;String&gt; echo(SingleValueOrder&lt;String&gt; order);
-}
-</code></pre><p>如上所示，<code>cacheName=test</code>,<code>key</code>为第一个参数的playload字段，缓存有效期默认5分钟。可以通过设置<code>expire</code>属性修改缓存有效期。</p>
-<p>上面的注解和<a href="mailto:`@org.springframework.cache.annotation.Cacheable" target="_blank" rel="noopener">`@org.springframework.cache.annotation.Cacheable</a>(value = CACHE_NAME, key = “order.playload”)`生成的key一致。</p>
-<p>对于dubbo服务消费者，只需要跟新jar包即可。</p>
-<h4 id="5-1-2-控制缓存"><a href="#5-1-2-控制缓存" class="headerlink" title="5.1.2 控制缓存"></a>5.1.2 控制缓存</h4><p>@DubboCache`提供了消费者可优先使用缓存，<strong>缓存的一致性由服务提供方负责</strong>，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。</p>
-<p>控制缓存分为两种情况：</p>
-<ol>
-<li>缓存一致性要求不高，可以通过<code>DubboCache#expire</code>设置过期时间，默认为5分钟。</li>
-<li>缓存一致性要求高，服务提供方通过<code>redisTemplate</code>或者<code>org.springframework.cache.annotation.CacheEvict</code>控制缓存。</li>
-</ol>
-<h2 id="6-dubbo-mock"><a href="#6-dubbo-mock" class="headerlink" title="6. dubbo mock"></a>6. dubbo mock</h2><p>mock最好是有mock server。由于懒，把mock server的client实现了(拦截请求，转换为http+json调用到mock server)，后面就没时间做mock server了。前段时间有个项目紧急需要，做了个简单的mock。</p>
+<p>blog 参考<a href="http://bohr.me/dubbo-cache/">@DubboCache</a></p>
+<h2 id="dubbo-mock"><a href="#dubbo-mock" class="headerlink" title="dubbo mock"></a>dubbo mock</h2><p>mock最好是有mock server。由于懒，把mock server的client实现了(拦截请求，转换为http+json调用到mock server)，后面就没时间做mock server了。前段时间有个项目紧急需要，做了个简单的mock。</p>
 <p>原理如下：</p>
-<h3 id="6-1-对于使用者："><a href="#6-1-对于使用者：" class="headerlink" title="6.1 对于使用者："></a>6.1 对于使用者：</h3><ol>
+<h3 id="对于使用者："><a href="#对于使用者：" class="headerlink" title="对于使用者："></a>对于使用者：</h3><ol>
 <li><p>用户配置需要mock的dubbo服务。</p>
 <p> 比如： <code>dubbo.consumer.mockInterfaces[0]=com.acooly.core.test.dubbo.mock.XXFacade</code></p>
 </li>
 <li><p>增加mock实现。</p>
-<pre><code>@Service
-public class XXFacadeMock implements XXFacade {
-    @Override
-    public SingleResult&lt;String&gt; echo(SingleOrder&lt;String&gt; msg) {
-        return SingleResult.from(&quot;mocked&quot;);
-    }
-}
-</code></pre></li>
+</li>
 </ol>
-<h3 id="6-2-组件提供的能力"><a href="#6-2-组件提供的能力" class="headerlink" title="6.2 组件提供的能力"></a>6.2 组件提供的能力</h3><ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XXFacadeMock</span> <span class="keyword">implements</span> <span class="title">XXFacade</span> </span>&#123;</span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> SingleResult&lt;String&gt; <span class="title">echo</span><span class="params">(SingleOrder&lt;String&gt; msg)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> SingleResult.from(<span class="string">"mocked"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="组件提供的能力"><a href="#组件提供的能力" class="headerlink" title="组件提供的能力"></a>组件提供的能力</h3><ol>
 <li>自定义实现<code>BeanPostProcessor</code>,扫描所有标注<code>@Reference</code>注解的属性，如果被配置了要mock掉，设置属性为mock实现。</li>
 </ol>
-<h2 id="7-最后"><a href="#7-最后" class="headerlink" title="7. 最后"></a>7. 最后</h2><p>最后附带一个在易极付写的dubbo分享。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>最后附带一个在易极付写的dubbo分享。</p>
 
 
 	<div class="row">
@@ -783,7 +744,7 @@ public class XXFacadeMock implements XXFacade {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于dubbo的一些分析和优化"><span class="nav-number">1.</span> <span class="nav-text">关于dubbo的一些分析和优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-dubbo内线程分析"><span class="nav-number">1.1.</span> <span class="nav-text">1. dubbo内线程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-dubbo-remoting-client-heartbeat-thread"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 dubbo-remoting-client-heartbeat-thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-xxxx-EventThread"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 xxxx-EventThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-localhost-startStop-1-SendThread"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 localhost-startStop-1-SendThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-DubboClientReconnectTimer-thread"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 DubboClientReconnectTimer-thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-DubboServerHandler"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.5 DubboServerHandler-</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-DubboClientHandler"><span class="nav-number">1.1.6.</span> <span class="nav-text">1.6 DubboClientHandler-</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-DubboRegistryFailedRetryTimer"><span class="nav-number">1.1.7.</span> <span class="nav-text">1.7 DubboRegistryFailedRetryTimer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-DubboSaveRegistryCache"><span class="nav-number">1.1.8.</span> <span class="nav-text">1.8 DubboSaveRegistryCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-DubboResponseTimeoutScanTimer"><span class="nav-number">1.1.9.</span> <span class="nav-text">1.9 DubboResponseTimeoutScanTimer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-telnet"><span class="nav-number">1.2.</span> <span class="nav-text">2. telnet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-dubbo线程池任务不均衡问题分析"><span class="nav-number">1.3.</span> <span class="nav-text">3. dubbo线程池任务不均衡问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-线程池优化"><span class="nav-number">1.4.</span> <span class="nav-text">4. 线程池优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-缓存扩展"><span class="nav-number">1.5.</span> <span class="nav-text">5. 缓存扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-使用-DubboCache"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 使用@DubboCache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-1-如何使用"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">5.1.1 如何使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-2-控制缓存"><span class="nav-number">1.5.1.2.</span> <span class="nav-text">5.1.2 控制缓存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-dubbo-mock"><span class="nav-number">1.6.</span> <span class="nav-text">6. dubbo mock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-对于使用者："><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1 对于使用者：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-组件提供的能力"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 组件提供的能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-最后"><span class="nav-number">1.7.</span> <span class="nav-text">7. 最后</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dubbo的一些分析和优化"><span class="nav-number">1.</span> <span class="nav-text">dubbo的一些分析和优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo应用线程分析"><span class="nav-number">1.1.</span> <span class="nav-text">dubbo应用线程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo-remoting-client-heartbeat-thread"><span class="nav-number">1.1.1.</span> <span class="nav-text">dubbo-remoting-client-heartbeat-thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xxxx-EventThread"><span class="nav-number">1.1.2.</span> <span class="nav-text">xxxx-EventThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#localhost-startStop-1-SendThread"><span class="nav-number">1.1.3.</span> <span class="nav-text">localhost-startStop-1-SendThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboClientReconnectTimer-thread"><span class="nav-number">1.1.4.</span> <span class="nav-text">DubboClientReconnectTimer-thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboServerHandler"><span class="nav-number">1.1.5.</span> <span class="nav-text">DubboServerHandler-</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboClientHandler"><span class="nav-number">1.1.6.</span> <span class="nav-text">DubboClientHandler-</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboRegistryFailedRetryTimer"><span class="nav-number">1.1.7.</span> <span class="nav-text">DubboRegistryFailedRetryTimer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboSaveRegistryCache"><span class="nav-number">1.1.8.</span> <span class="nav-text">DubboSaveRegistryCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DubboResponseTimeoutScanTimer"><span class="nav-number">1.1.9.</span> <span class="nav-text">DubboResponseTimeoutScanTimer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#telnet"><span class="nav-number">1.2.</span> <span class="nav-text">telnet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo线程池任务不均衡问题分析"><span class="nav-number">1.3.</span> <span class="nav-text">dubbo线程池任务不均衡问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池优化"><span class="nav-number">1.4.</span> <span class="nav-text">线程池优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存扩展"><span class="nav-number">1.5.</span> <span class="nav-text">缓存扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo-mock"><span class="nav-number">1.6.</span> <span class="nav-text">dubbo mock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对于使用者："><span class="nav-number">1.6.1.</span> <span class="nav-text">对于使用者：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件提供的能力"><span class="nav-number">1.6.2.</span> <span class="nav-text">组件提供的能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">1.7.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></div>
             
 
           </div>
