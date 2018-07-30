@@ -23,7 +23,7 @@ tags:
 ## 使用`@DubboCache`
 
 ### 在服务接口模块中依赖`dubbo-cache-common`
-	
+
 ```xml
 <dependency>
 	<groupId>com.github.bohrqiu.dubbo</groupId>
@@ -31,8 +31,9 @@ tags:
 	<version>1.2</version>
 </dependency>
 ```
+
 此依赖仅定义了`@DubboCache`注解。
-      
+
 ### 在服务消费者模块中依赖`dubbo-cache-core`
 
 ```xml
