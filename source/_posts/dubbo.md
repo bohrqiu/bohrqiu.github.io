@@ -180,32 +180,7 @@ private static class MDCGidCallable<T> implements Callable<T> {
 
 源代码见[dubbo-cache](https://github.com/bohrqiu/dubbo-cache)
 
-### 使用`@DubboCache`
-
-`@DubboCache`提供dubbo消费者直接使用缓存的能力，当缓存不存在时，再访问远程dubbo服务。
-
-对于dubbo服务提供者，只需要在dubbo接口上增加此注解。
-
-```java
-public interface CacheableService {
-	@DubboCache(cacheName = "test",key = "order.playload")
-	SingleValueResult<String> echo(SingleValueOrder<String> order);
-}
-```
-如上所示，`cacheName=test`,`key`为第一个参数的playload字段，缓存有效期默认5分钟。可以通过设置`expire`属性修改缓存有效期。
-
-上面的注解和`@org.springframework.cache.annotation.Cacheable(value = "test", key = "order.playload")`生成的key一致。
-
-对于dubbo服务消费者，只需要跟新jar包即可。
-
-### 控制缓存
-
-@DubboCache`提供了消费者可优先使用缓存，**缓存的一致性由服务提供方负责**，当服务提供方使用此注解后，所有的服务消费者都会使用此缓存。
-
-控制缓存分为两种情况：
-
-1. 缓存一致性要求不高，可以通过`DubboCache#expire`设置过期时间，默认为5分钟。
-2. 缓存一致性要求高，服务提供方通过`redisTemplate`或者`org.springframework.cache.annotation.CacheEvict`控制缓存。
+blog 参考[@DubboCache](http://bohr.me/dubbo-cache/)
 	
 ## dubbo mock
 
