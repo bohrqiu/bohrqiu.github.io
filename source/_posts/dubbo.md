@@ -154,25 +154,25 @@ jdk默认线程池实现策略如下：
 对于3，wrap原任务即可，大致代码如下：
 
 ``` java
-	private static class MDCGidCallable<T> implements Callable<T> {
-		private final Callable<T> task;
-		private final String gid;
-		
-		public MDCGidCallable(Callable<T> task, String gid) {
-			this.task = task;
-			this.gid = gid;
-		}
-		
-		@Override
-		public T call() throws Exception {
-			try {
-				MDC.put(GID_KEY, gid);
-				return task.call();
-			} finally {
-				MDC.remove(GID_KEY);
-			}
+private static class MDCGidCallable<T> implements Callable<T> {
+	private final Callable<T> task;
+	private final String gid;
+	
+	public MDCGidCallable(Callable<T> task, String gid) {
+		this.task = task;
+		this.gid = gid;
+	}
+	
+	@Override
+	public T call() throws Exception {
+		try {
+			MDC.put(GID_KEY, gid);
+			return task.call();
+		} finally {
+			MDC.remove(GID_KEY);
 		}
 	}
+}
 ```
 ## 缓存扩展
 
@@ -221,13 +221,15 @@ mock最好是有mock server。由于懒，把mock server的client实现了(拦�
 
 2. 增加mock实现。
 
-		@Service
-		public class XXFacadeMock implements XXFacade {
-		    @Override
-		    public SingleResult<String> echo(SingleOrder<String> msg) {
-		        return SingleResult.from("mocked");
-		    }
-		}
+```java
+@Service
+public class XXFacadeMock implements XXFacade {
+	 @Override
+	public SingleResult<String> echo(SingleOrder<String> msg) {
+		return SingleResult.from("mocked");
+	}
+}
+```
 
 ### 组件提供的能力	
 	
