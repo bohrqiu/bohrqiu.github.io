@@ -67,4 +67,8 @@ Minio是GlusterFS创始人之一Anand Babu Periasamy发布的兼容Amason S3分�
 * 高可用:如果是一个N节点的分布式Minio,只要有N/2节点在线，你的数据就是安全的
 * 一致性:Minio在分布式和单机模式下，所有读写操作都严格遵守read-after-write一致性模型。
 
+以下几点需要注意：
+
+* minio不支持动态扩容，如果要扩容只能停机迁移
+* 按照默认的[storage class in erasure coding mode](https://github.com/minio/minio/tree/master/docs/erasure/storage-class)策略，比如8个节点，4个数据块，4个校验块，最大允许4个节点挂掉，最大磁盘利用率50%
 

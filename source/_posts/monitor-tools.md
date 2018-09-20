@@ -177,4 +177,7 @@ tags:
 		jcmd 23385 JFR.check
 		#执行180sJFR收集
 		jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
-			
+
+* vjtools
+
+	https://github.com/vipshop/vjtools 主要工具vjtop非常有用，打印JVM概况及繁忙线程
