@@ -1,0 +1,203 @@
+<hr>
+<p>title: 开发规范-日志<br>date: 2018-09-20 21:52:17<br>categories: java<br>tags:</p>
+<ul>
+<li>spec</li>
+</ul>
+<hr>
+<blockquote>
+<blockquote>
+<p>几年前写的东西，已经离职，留作纪念</p>
+</blockquote>
+</blockquote>
+<h1 id="易极付日志命名格式标准"><a href="#易极付日志命名格式标准" class="headerlink" title="易极付日志命名格式标准"></a>易极付日志命名格式标准</h1><blockquote>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>时间</th>
+<th>作者</th>
+<th>修订章节</th>
+<th>修订内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>2013-08-10</td>
+<td>培根</td>
+<td>全部</td>
+<td>init</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>2015-07-27</td>
+<td>秋波</td>
+<td>全部</td>
+<td>修改摘要日志规范</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>2015-07-27</td>
+<td>秋波</td>
+<td>全部</td>
+<td>修改格式和完善内容</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="1-日志文件存放地址"><a href="#1-日志文件存放地址" class="headerlink" title="1.日志文件存放地址"></a>1.日志文件存放地址</h2><p> 由运维指定,目前统一放到<code>/var/log/webapps/${appName}</code>下</p>
+<p> <code>${appName}</code>为应用名 如:账务(accounttrans)、易生活（elife）</p>
+<h2 id="2-格式构成"><a href="#2-格式构成" class="headerlink" title="2. 格式构成"></a>2. 格式构成</h2><h3 id="2-1-日志文件名称格式"><a href="#2-1-日志文件名称格式" class="headerlink" title="2.1 日志文件名称格式"></a>2.1 日志文件名称格式</h3><p>日志全名由小写字母构成,连接线使用”-“</p>
+<h3 id="2-2-日志级别"><a href="#2-2-日志级别" class="headerlink" title="2.2  日志级别"></a>2.2  日志级别</h3><p>日志类别主要有<code>debug</code>、<code>info</code>、<code>warn</code>、<code>error</code></p>
+<h4 id="2-2-1-debug"><a href="#2-2-1-debug" class="headerlink" title="2.2.1 debug"></a>2.2.1 debug</h4><p><code>debug</code>日志主要是用于调试、运行轨迹跟踪。默认我们的日志级别为<code>info</code>，当我们在测试环境想输出更多轨迹信息时，日志日志级别为<code>debug</code>,输出此日志。</p>
+<h4 id="2-2-2-info"><a href="#2-2-2-info" class="headerlink" title="2.2.2 info"></a>2.2.2 info</h4><p><code>info</code>日志为打印基本业务完整性日志,比如对外服务入口，出口，关键业务流程等。</p>
+<h4 id="2-2-3-warn"><a href="#2-2-3-warn" class="headerlink" title="2.2.3 warn"></a>2.2.3 warn</h4><p><code>warn</code>日志为可能存在的潜在问题的提示，以及重要的提示信息。</p>
+<h4 id="2-2-4-error"><a href="#2-2-4-error" class="headerlink" title="2.2.4 error"></a>2.2.4 error</h4><p><code>error</code>为业务处理出错或<strong>致命</strong>错误。</p>
+<h3 id="2-3-日志类型"><a href="#2-3-日志类型" class="headerlink" title="2.3  日志类型"></a>2.3  日志类型</h3><p>可以把某些类型的操作记录到单独的日志文件中。</p>
+<h4 id="2-3-1-查询日志-非必须"><a href="#2-3-1-查询日志-非必须" class="headerlink" title="2.3.1 查询日志(非必须)"></a>2.3.1 查询日志(非必须)</h4><p>业务性能日志,日志名前缀为 <code>{appName}-query</code></p>
+<p>可以把查询相关的请求日志写入到一个文件中，方便日志定位。</p>
+<h4 id="2-2-2-摘要日志-必须"><a href="#2-2-2-摘要日志-必须" class="headerlink" title="2.2.2 摘要日志(必须)"></a>2.2.2 摘要日志(必须)</h4><p>业务摘要日志，记录业务执行轨迹。</p>
+<p>摘要日志请使用<code>com.yjf.common.log.DL</code>工具类输出日志。</p>
+<h4 id="2-2-3-性能日志-非必须"><a href="#2-2-3-性能日志-非必须" class="headerlink" title="2.2.3 性能日志(非必须)"></a>2.2.3 性能日志(非必须)</h4><p>业务性能日志,日志名前缀为 <code>{appName}-perf</code></p>
+<p>性能日志主要标识了从两个时间点的执行时间来测量某业务的性能情况</p>
+<p>业务性能日志建议使用<a href="https://github.com/perf4j/perf4j">perf4j</a></p>
+<h3 id="2-3-日志保存策略"><a href="#2-3-日志保存策略" class="headerlink" title="2.3  日志保存策略"></a>2.3  日志保存策略</h3><p>日志保持策略定义在文件名种，由两部分组成 天数+保存形式，信息中心按照文件名来处理日志</p>
+<ul>
+<li>最长天数为60天</li>
+<li><p>保存形式: </p>
+<ul>
+<li>定期清理日志关键字[dt],如:14dt.log</li>
+<li>定期备份日志关键字[de],如:14de.log</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-4-日志保存策略"><a href="#2-4-日志保存策略" class="headerlink" title="2.4  日志保存策略"></a>2.4  日志保存策略</h3><p>日志滚动规则</p>
+<ul>
+<li><p>按天滚动</p>
+<p>隔天日志格式在当天日志的最后加上日期.如:elife-xxx.log.2013-08-14</p>
+</li>
+<li><p>按大小滚动</p>
+<p>日志文件大小超过1G后，滚动为新的日志.如:elife-xxx.log.2013-08-14.0、elife-xxx.log.2013-08-14.1</p>
+</li>
+</ul>
+<h3 id="2-5-日志内容格式"><a href="#2-5-日志内容格式" class="headerlink" title="2.5 日志内容格式"></a>2.5 日志内容格式</h3><p>logback配置如下：</p>
+<pre><code>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L- %msg%n
+</code></pre><h2 id="3-最佳实践"><a href="#3-最佳实践" class="headerlink" title="3. 最佳实践"></a>3. 最佳实践</h2><h3 id="3-1-善用MDC"><a href="#3-1-善用MDC" class="headerlink" title="3.1 善用MDC"></a>3.1 善用<code>MDC</code></h3><p><code>MDC</code>用于记录请求执行轨迹，我们可以把某请求参数(比如<code>gid</code>)记录到日志中。当我们在分析日志时，搜索此请求参数，就能看到此请求完整的执行轨迹。</p>
+<p>参考: </p>
+<p>以<code>openapi-arch</code>中的代码为例，我们在<code>logback.xml</code>中<a href="http://gitlab.yiji/qzhanbo/openapi-arch/blob/master/openapi-arch-test/src/test/resources/logback.xml#L7">配置MDC</a>,当用户请求到达时，会生成唯一的<code>gid</code>.<a href="http://gitlab.yiji/qzhanbo/openapi-arch/blob/master/openapi-arch-core/src/main/java/com/yiji/openapi/arch/executer/HttpApiServiceExecuter.java#L107">此时把gid存入MDC中</a>，后续一系列的处理日志输出中都会有此<code>gid</code>,当请求处理完毕后，<a href="http://gitlab.yiji/qzhanbo/openapi-arch/blob/master/openapi-arch-core/src/main/java/com/yiji/openapi/arch/executer/HttpApiServiceExecuter.java#L167">清理MDC</a>。</p>
+<h3 id="3-2-日志调优"><a href="#3-2-日志调优" class="headerlink" title="3.2 日志调优"></a>3.2 日志调优</h3><p>参考 <a href="http://bohr.me/log-tuning/">日志优化</a></p>
+<h2 id="4-配置样例"><a href="#4-配置样例" class="headerlink" title="4.配置样例"></a>4.配置样例</h2><p>下面以<code>cs</code>系统为例，日志配置如下：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!-- 日志组件启动时，打印调试信息，并监控此文件变化，周期60秒 --&gt;
+&lt;configuration debug=&quot;true&quot; scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot;&gt;
+
+&lt;!--针对jul的性能优化  --&gt;
+&lt;contextListener class=&quot;ch.qos.logback.classic.jul.LevelChangePropagator&quot;&gt;
+    &lt;resetJUL&gt;true&lt;/resetJUL&gt;
+&lt;/contextListener&gt;
+
+&lt;!-- 定义变量 --&gt;
+&lt;property name=&quot;appName&quot; value=&quot;cs&quot;/&gt;
+&lt;property name=&quot;logPath&quot; value=&quot;/var/log/webapps/${appName}&quot;/&gt;
+&lt;property name=&quot;pattern&quot; value=&quot;%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L- %msg%n&quot;/&gt;
+
+&lt;!-- contextName主要是为了区分在一个web容器下部署多个应用启用jmx时，不会出现混乱 --&gt;
+&lt;contextName&gt;${appName}&lt;/contextName&gt;
+
+&lt;!-- ***************************************************************** --&gt;
+&lt;!-- 配置输出到控制台，仅在开发测试时启用输出到控制台 ，下面的语句在window环境下生效，使用mac或者ubuntu的同学，请自己构造下--&gt;
+&lt;!-- ***************************************************************** --&gt;
+
+&lt;if condition=&apos;property(&quot;os.name&quot;).toUpperCase().contains(&quot;WINDOWS&quot;)||property(&quot;os.name&quot;).toUpperCase().contains(&quot;MAC&quot;)&apos;&gt;
+    &lt;then&gt;
+        &lt;appender class=&quot;ch.qos.logback.core.ConsoleAppender&quot; name=&quot;STDOUT&quot;&gt;
+            &lt;encoder&gt;
+                &lt;pattern&gt;${pattern}&lt;/pattern&gt;
+            &lt;/encoder&gt;
+        &lt;/appender&gt;
+        &lt;root&gt;
+            &lt;appender-ref ref=&quot;STDOUT&quot;/&gt;
+        &lt;/root&gt;
+    &lt;/then&gt;
+&lt;/if&gt;
+
+&lt;!-- ***************************************************************** --&gt;
+&lt;!-- info级别的日志appender,这里把所有日志都输出到一个文件，没有区分不同的业务类型 --&gt;
+&lt;!-- ***************************************************************** --&gt;
+&lt;appender class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot; name=&quot;cs-info&quot;&gt;
+    &lt;file&gt;${logPath}/cs-info-30dt.log&lt;/file&gt;
+    &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+        &lt;fileNamePattern&gt;${logPath}/cs-info-30dt.log.%d{yyyy-MM-dd}.%i
+        &lt;/fileNamePattern&gt;
+        &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+            &lt;maxFileSize&gt;1024MB&lt;/maxFileSize&gt;
+        &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+    &lt;/rollingPolicy&gt;
+    &lt;encoder&gt;
+        &lt;pattern&gt;${pattern}&lt;/pattern&gt;
+    &lt;/encoder&gt;
+&lt;/appender&gt;
+
+&lt;!-- ***************************************************************** --&gt;
+&lt;!-- error级别日志appender --&gt;
+&lt;!-- ***************************************************************** --&gt;
+&lt;appender class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot; name=&quot;cs-err&quot;&gt;
+    &lt;file&gt;${logPath}/cs-error-30dt.log&lt;/file&gt;
+    &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+        &lt;fileNamePattern&gt;${logPath}/cs-error-30dt.%d{yyyy-MM-dd}.%i
+        &lt;/fileNamePattern&gt;
+        &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+            &lt;maxFileSize&gt;1024MB&lt;/maxFileSize&gt;
+        &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+    &lt;/rollingPolicy&gt;
+    &lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&gt;
+        &lt;level&gt;ERROR&lt;/level&gt;
+    &lt;/filter&gt;
+    &lt;encoder&gt;
+        &lt;pattern&gt;${pattern}&lt;/pattern&gt;
+    &lt;/encoder&gt;
+&lt;/appender&gt;
+
+&lt;!-- ***************************************************************** --&gt;
+&lt;!-- 性能日志appender --&gt;
+&lt;!-- ***************************************************************** --&gt;
+&lt;appender class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot; name=&quot;cs-perf&quot;&gt;
+    &lt;file&gt;${logPath}/cs-perf-30dt.log&lt;/file&gt;
+    &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+        &lt;fileNamePattern&gt;${logPath}/cs-perf-30dt.log.%d{yyyy-MM-dd}.%i
+        &lt;/fileNamePattern&gt;
+        &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+            &lt;maxFileSize&gt;1024MB&lt;/maxFileSize&gt;
+        &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+    &lt;/rollingPolicy&gt;
+    &lt;encoder&gt;
+        &lt;pattern&gt;${pattern}&lt;/pattern&gt;
+    &lt;/encoder&gt;
+&lt;/appender&gt;
+&lt;!-- 异步日志包裹 --&gt;
+&lt;appender class=&quot;com.yjf.common.log.LogbackAsyncAppender&quot; name=&quot;async-cs-info&quot;&gt;
+    &lt;appender-ref ref=&quot;cs-info&quot;/&gt;
+&lt;/appender&gt;
+&lt;appender class=&quot;com.yjf.common.log.LogbackAsyncAppender&quot; name=&quot;async-cs-err&quot;&gt;
+    &lt;appender-ref ref=&quot;cs-err&quot;/&gt;
+&lt;/appender&gt;
+&lt;appender class=&quot;com.yjf.common.log.LogbackAsyncAppender&quot; name=&quot;async-cs-perf&quot;&gt;
+    &lt;appender-ref ref=&quot;cs-perf&quot;/&gt;
+    &lt;!--不收集栈信息--&gt;
+    &lt;includeCallerData&gt;false&lt;/includeCallerData&gt;
+&lt;/appender&gt;
+
+&lt;!-- 性能日志logger additivity=false代表此日志不继承父logger中的appender，对于此样例，性能日志不会写到处cs-perf-30dt.log外的其他日志文件--&gt;
+&lt;logger name=&quot;LOGGER_PERFORMANCE&quot; additivity=&quot;false&quot;&gt;
+    &lt;appender-ref ref=&quot;async-cs-perf&quot;/&gt;
+&lt;/logger&gt;
+
+
+&lt;!-- 根日志logger --&gt;
+&lt;root level=&quot;INFO&quot;&gt;
+    &lt;appender-ref ref=&quot;async-cs-info&quot;/&gt;
+    &lt;appender-ref ref=&quot;async-cs-err&quot;/&gt;
+&lt;/root&gt;
+
+&lt;/configuration&gt;
+</code></pre>

@@ -2,6 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://bohr.me/spec_dev/</loc>
+    
+    <lastmod>2018-09-20T16:21:25.381Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/spec_log/</loc>
+    
+    <lastmod>2018-09-20T16:21:23.161Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/spec_maven/</loc>
+    
+    <lastmod>2018-09-20T16:21:19.047Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/spec_mysql/</loc>
+    
+    <lastmod>2018-09-20T16:21:15.450Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/spec_dev/spec_log/</loc>
+    
+    <lastmod>2018-09-20T15:41:22.711Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/monitor-tools/</loc>
+    
+    <lastmod>2018-08-13T07:48:37.371Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2018-06-reading-notes/</loc>
+    
+    <lastmod>2018-08-11T16:49:40.439Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://bohr.me/dubbo/</loc>
     
     <lastmod>2018-07-30T09:24:38.706Z</lastmod>
@@ -12,13 +61,6 @@
     <loc>http://bohr.me/dubbo-cache/</loc>
     
     <lastmod>2018-07-30T09:21:28.880Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/2018-06-reading-notes/</loc>
-    
-    <lastmod>2018-06-25T14:59:11.650Z</lastmod>
     
   </url>
   
@@ -51,13 +93,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/categories/index.html</loc>
-    
-    <lastmod>2018-04-01T16:53:17.089Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/about/index.html</loc>
     
     <lastmod>2018-04-01T16:53:17.089Z</lastmod>
@@ -65,9 +100,9 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/tags/index.html</loc>
+    <loc>http://bohr.me/categories/index.html</loc>
     
-    <lastmod>2018-04-01T16:53:17.088Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.089Z</lastmod>
     
   </url>
   
@@ -86,14 +121,21 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2016-06-reading-notes/</loc>
+    <loc>http://bohr.me/tags/index.html</loc>
+    
+    <lastmod>2018-04-01T16:53:17.088Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2016-08-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.087Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2016-08-reading-notes/</loc>
+    <loc>http://bohr.me/2016-06-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.087Z</lastmod>
     
@@ -107,14 +149,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/kryo-oom/</loc>
+    <loc>http://bohr.me/zero-copy/</loc>
     
     <lastmod>2018-04-01T16:53:17.084Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/zero-copy/</loc>
+    <loc>http://bohr.me/kryo-oom/</loc>
     
     <lastmod>2018-04-01T16:53:17.084Z</lastmod>
     
@@ -128,13 +170,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/google-java-style/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.082Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/2015-02-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.082Z</lastmod>
@@ -142,9 +177,9 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2015-11-reading-notes/</loc>
+    <loc>http://bohr.me/google-java-style/</loc>
     
-    <lastmod>2018-04-01T16:53:17.081Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.082Z</lastmod>
     
   </url>
   
@@ -156,7 +191,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2016-04-reading-notes/</loc>
+    <loc>http://bohr.me/2015-11-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.081Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/be-happy/</loc>
     
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     
@@ -170,6 +212,13 @@
   </url>
   
   <url>
+    <loc>http://bohr.me/2016-04-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://bohr.me/pojo-perperty/</loc>
     
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
@@ -177,9 +226,23 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/be-happy/</loc>
+    <loc>http://bohr.me/2014-12-reading-notes/</loc>
     
-    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-10-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     
   </url>
   
@@ -198,35 +261,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-11-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/2014-10-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/2014-12-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/database-version/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/cxf-tuning/</loc>
     
     <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     
@@ -240,14 +275,21 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/vagrant/</loc>
+    <loc>http://bohr.me/cxf-tuning/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
     
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <loc>http://bohr.me/vagrant/</loc>
     
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     
@@ -261,16 +303,9 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.077Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/cxf-unexpected-element/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
     
   </url>
   
@@ -282,7 +317,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-03-reading-notes/</loc>
+    <loc>http://bohr.me/cxf-unexpected-element/</loc>
     
     <lastmod>2018-04-01T16:53:17.076Z</lastmod>
     
@@ -296,7 +331,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/env-aware/</loc>
+    <loc>http://bohr.me/2014-03-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-04-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
@@ -310,14 +352,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-04-reading-notes/</loc>
+    <loc>http://bohr.me/dependency-management/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/dependency-management/</loc>
+    <loc>http://bohr.me/env-aware/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
@@ -338,13 +380,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/monitor-tools/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.074Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/thinking-clearly-about-performance/</loc>
     
     <lastmod>2018-04-01T16:53:17.073Z</lastmod>
@@ -352,14 +387,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/cxf-trans-filed-null/</loc>
+    <loc>http://bohr.me/jdk7-exception/</loc>
     
     <lastmod>2018-04-01T16:53:17.061Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/jdk7-exception/</loc>
+    <loc>http://bohr.me/cxf-trans-filed-null/</loc>
     
     <lastmod>2018-04-01T16:53:17.061Z</lastmod>
     
@@ -376,13 +411,6 @@
     <loc>http://bohr.me/web-layer-cluster/</loc>
     
     <lastmod>2018-04-01T16:53:17.056Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/2013-11-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
     
   </url>
   
@@ -408,14 +436,21 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/java-serialization/</loc>
+    <loc>http://bohr.me/2013-11-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2013-12-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.054Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/2013-12-reading-notes/</loc>
+    <loc>http://bohr.me/java-serialization/</loc>
     
     <lastmod>2018-04-01T16:53:17.054Z</lastmod>
     

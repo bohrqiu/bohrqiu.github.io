@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="qiubo&#39;s life">
 <meta property="og:description" content="spring InjectionPointInjectionPoint是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。 1. 获取被注入组件的类@Bean @Scope(&amp;quot;prototype&amp;quot;) Logger logger(InjectionPoint ip) {     return Logger.getL">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-25T14:59:11.650Z">
+<meta property="og:updated_time" content="2018-08-11T16:49:40.439Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018年06月Reading Notes">
 <meta name="twitter:description" content="spring InjectionPointInjectionPoint是spring 4.3引入的特性，顾名思义，注入点，通过此类能获取到注入点上下文。可以通过这个特性做一些有意思的事情。 1. 获取被注入组件的类@Bean @Scope(&amp;quot;prototype&amp;quot;) Logger logger(InjectionPoint ip) {     return Logger.getL">
@@ -437,6 +437,11 @@ public class GreeterService {
 <li>高可用:如果是一个N节点的分布式Minio,只要有N/2节点在线，你的数据就是安全的</li>
 <li>一致性:Minio在分布式和单机模式下，所有读写操作都严格遵守read-after-write一致性模型。</li>
 </ul>
+<p>以下几点需要注意：</p>
+<ul>
+<li>minio不支持动态扩容，如果要扩容只能停机迁移</li>
+<li>按照默认的<a href="https://github.com/minio/minio/tree/master/docs/erasure/storage-class" target="_blank" rel="noopener">storage class in erasure coding mode</a>策略，比如8个节点，4个数据块，4个校验块，最大允许4个节点挂掉，最大磁盘利用率50%</li>
+</ul>
 
       
     </div>
@@ -602,7 +607,7 @@ public class GreeterService {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -624,7 +629,7 @@ public class GreeterService {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

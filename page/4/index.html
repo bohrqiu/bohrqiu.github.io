@@ -310,6 +310,1113 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/zero-copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/zero-copy/" itemprop="url">使用零拷贝提高数据传输效率</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-16T21:52:17+08:00">
+                2014-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文讲了如何用<code>zero copy</code>技术来提高I/O性能.</p>
+<p>静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力.</p>
+<p>java提供了<code>transferTo</code>方法来使用<code>zero copy</code>技术.他可以让数据直接从一个<code>channel</code>到另外一个<code>channel</code>.避免上面说到的一些问题.</p>
+<h3 id="1-传统的解决办法"><a href="#1-传统的解决办法" class="headerlink" title="1.传统的解决办法"></a>1.传统的解决办法</h3><p>过程类似于下面的代码:</p>
+<pre><code>File.read(fileDesc, buf, len);
+Socket.send(socket, buf, len);
+</code></pre><h4 id="1-1数据拷贝"><a href="#1-1数据拷贝" class="headerlink" title="1.1数据拷贝"></a>1.1数据拷贝</h4><p><img src="/zero-copy/figure1.gif" alt=""></p>
+<p>这种方式会有四次内存拷贝</p>
+<h4 id="1-2-上下文切换"><a href="#1-2-上下文切换" class="headerlink" title="1.2 上下文切换"></a>1.2 上下文切换</h4><p><img src="/zero-copy/figure2.gif" alt=""></p>
+<p>这种方式会有四次上下文切换.</p>
+<h4 id="1-3-过程说明"><a href="#1-3-过程说明" class="headerlink" title="1.3 过程说明"></a>1.3 过程说明</h4><ol>
+<li><code>read</code>方法导致一次从<code>user mode</code>到<code>kernel mode</code>的上下文切换.系统调用<code>sys_read</code>从文件读取数据,通过DMA,把磁盘上的数据读到<code>kernel address space buffer</code>.</li>
+<li>数据从<code>kernel address space buffer</code>拷贝到<code>user buffer</code>.<code>read</code>返回,导致从<code>kernel mode</code>到<code>user mode</code>的上下文切换.现在数据被读到了<code>user address space buffer</code>.</li>
+<li><code>send</code>方法导致一次<code>user mode</code>到<code>kernel mode</code>的上下文切换.第三次拷贝把拷贝到<code>kernel address space buffer</code>.此buffer关联着<code>destination socket</code></li>
+<li>系统<code>send</code>调用返回时导致第四次上下文切换,DMA把<code>kernel address space buffer</code>中的数据发送到协议引擎导致第四次数据拷贝.</li>
+</ol>
+<h4 id="1-4-intermediate-kernel-buffer"><a href="#1-4-intermediate-kernel-buffer" class="headerlink" title="1.4 intermediate kernel buffer"></a>1.4 intermediate kernel buffer</h4><p>使用<code>intermediate kernel buffer</code>主要为了提高性能,读的时候扮演缓存的角色,写的时候可以让应用程序实现异步(应用程序写到kernel buffer就返回).不幸的是,当我们处理的数据大于内核缓冲大小时,这样的拷贝是完全没有任何意义的.</p>
+<h3 id="2-零拷贝的方式"><a href="#2-零拷贝的方式" class="headerlink" title="2.零拷贝的方式"></a>2.零拷贝的方式</h3><p>使用如下的代码来完成零拷贝</p>
+<p>java方法:</p>
+<pre><code>public void transferTo(long position, long count, WritableByteChannel target);
+</code></pre><p>系统调用:</p>
+<pre><code>#include &lt;sys/socket.h&gt;
+ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
+</code></pre><h4 id="2-1-数据拷贝"><a href="#2-1-数据拷贝" class="headerlink" title="2.1 数据拷贝"></a>2.1 数据拷贝</h4><p><img src="/zero-copy/figure3.gif" alt=""></p>
+<p>涉及到3次数据拷贝.</p>
+<h4 id="2-2-上下文切换"><a href="#2-2-上下文切换" class="headerlink" title="2.2 上下文切换"></a>2.2 上下文切换</h4><p><img src="/zero-copy/figure4.gif" alt=""></p>
+<p>涉及到2次上下文切换</p>
+<h4 id="2-3-过程说明"><a href="#2-3-过程说明" class="headerlink" title="2.3 过程说明"></a>2.3 过程说明</h4><ol>
+<li><code>transferTo</code>方法让DMA把磁盘文件读到<code>kernel read buffer</code>.然后内核把<code>kernel read buffer</code>中的数据拷贝到<code>socket buffer</code>.</li>
+<li><code>DMA</code>把<code>socket buffer</code>中的数据拷贝到协议引擎.</li>
+</ol>
+<h3 id="3-更好的方式"><a href="#3-更好的方式" class="headerlink" title="3 更好的方式"></a>3 更好的方式</h3><p>通过上面使用这种方式,上下文切换从4次变为了2次.数据拷贝减少了一次.如果网卡支持<code>gather operations</code>,linux 2.4内核就开始提供更好的解决方案.</p>
+<p><img src="/zero-copy/figure5.gif" alt=""></p>
+<ol>
+<li><code>transferTo</code>方法让<code>DMA engine</code>把磁盘文件内容拷贝到内核缓冲区.</li>
+<li>数据不需要拷贝到<code>socket buffer</code>.<code>socket buffer</code>里只需写入数据的地址和长度.<code>DMA engine</code>从内核缓冲区把数据读到协议引擎.</li>
+</ol>
+<p>通过内核带来的特性,数据拷贝变为了2次(这两次拷贝都是DMA在做).cpu copy变为了0.</p>
+<h3 id="4-写在最后"><a href="#4-写在最后" class="headerlink" title="4 写在最后"></a>4 写在最后</h3><p>文章地址<code>http://www.ibm.com/developerworks/library/j-zerocopy/</code>,里面有性能测试结果.后面附带有性能测试程序.不过这个测试程序不太恰当,应该都用nio的api来测试<code>tansferTo</code>和非<code>tansferTo</code>.</p>
+<p>静态文件服务器一般都有静态资源缓存(apache可以配置,其他的服务器不了解).如果使用内存缓存,减少了读的过程.内存拷贝变为cpu copy <code>application buffer</code> -&gt; <code>socket buffer</code>,DMA copy <code>socket buffer</code> -&gt;<code>NIC buffer</code>,磁盘io大大降低了.</p>
+<p><code>NIO</code>不是很熟悉,不知道通过<code>ByteBuffer.allocateDirect()</code>+<code>transferTo</code>+<code>gather operations</code>能不能让copy变为一次.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/database-version/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/database-version/" itemprop="url">如何跟踪数据库结构变动</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-15T21:52:17+08:00">
+                2014-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>昨天和澎湃聊了这个事情,当时的想法是数据库中有表记录版本,项目代码中存储变更脚本.无意中看到数据库版本控制工具<a href="http://www.liquibase.org/index.html" target="_blank" rel="noopener">liquibase</a>.最开始还是有点担心,怕这东西把数据库玩坏了.看了看官方文档,再粗略看了下主流程的源代码,发掘下我想要的功能,这个工具已经足够强大了,我们用好就行.</p>
+<p>下面以cs为例,讲讲整个过程.</p>
+<h3 id="1-在cs-dal中添加maven依赖"><a href="#1-在cs-dal中添加maven依赖" class="headerlink" title="1. 在cs-dal中添加maven依赖."></a>1. 在cs-dal中添加maven依赖.</h3><pre><code>    &lt;build&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.liquibase&lt;/groupId&gt;
+            &lt;artifactId&gt;liquibase-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.2.2&lt;/version&gt;
+            &lt;configuration&gt;
+                &lt;!--数据库变更主文件--&gt;
+                &lt;changeLogFile&gt;src/main/resources/db/changelog/db.master.xml&lt;/changeLogFile&gt;
+                &lt;!--数据库相关配置文件--&gt;
+                &lt;propertyFile&gt;src/main/resources/db/config/dal-${spring.profiles.active}.properties&lt;/propertyFile&gt;
+            &lt;/configuration&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;phase&gt;process-resources&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;update&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre><h3 id="2-编写数据库变更脚本"><a href="#2-编写数据库变更脚本" class="headerlink" title="2. 编写数据库变更脚本"></a>2. 编写数据库变更脚本</h3><h4 id="2-1-数据库变更主文件"><a href="#2-1-数据库变更主文件" class="headerlink" title="2.1 数据库变更主文件"></a>2.1 数据库变更主文件</h4><p><code>db.master.xml</code>:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;databaseChangeLog
+    xmlns=&quot;http://www.liquibase.org/xml/ns/dbchangelog&quot;
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd&quot;&gt;
+    &lt;!--数据库变更文件.注意:保证顺序,脚本执行顺序和include的先后有关系.includeAll可以加载所有脚本,加载顺序和文件命名有关系,容易犯错误,建议不使用.--&gt;
+    &lt;include relativeToChangelogFile=&quot;true&quot; file=&quot;db.1.0.sql&quot;/&gt;
+       &lt;include relativeToChangelogFile=&quot;true&quot; file=&quot;db.2.0.sql&quot;/&gt;
+&lt;/databaseChangeLog&gt;
+</code></pre><h4 id="2-2-变更脚本"><a href="#2-2-变更脚本" class="headerlink" title="2.2 变更脚本"></a>2.2 变更脚本</h4><p><code>db.1.0.sql</code>:</p>
+<pre><code>--liquibase formatted sql
+
+--changeset qiubo:1
+create table test1 (
+    id int primary key,
+    name varchar(255)
+);
+--rollback drop table test1;
+</code></pre><p><code>db.2.0.sql</code>:</p>
+<pre><code>--liquibase formatted sql
+
+--changeset qiubo:2
+insert into test1 (id, name) values (1, &apos;name 1&apos;);
+insert into test1 (id, name) values (2, &apos;name 2&apos;);
+</code></pre><p>语法参考:<a href="http://www.liquibase.org/documentation/sql_format.html" target="_blank" rel="noopener">http://www.liquibase.org/documentation/sql_format.html</a></p>
+<h4 id="2-3-数据库配置文件"><a href="#2-3-数据库配置文件" class="headerlink" title="2.3 数据库配置文件"></a>2.3 数据库配置文件</h4><p>dal-local.properties</p>
+<pre><code>driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://127.0.0.1:3306/yjf_cs?useUnicode=true&amp;characterEncoding=UTF8&amp;zeroDateTimeBehavior=convertToNull
+username=root
+password=root
+#数据库schema名
+changelogSchemaName=yjf_cs
+</code></pre><p>建议大家把原来的数据库配置文件中的key改为和这个一致,没必要搞多份配置.</p>
+<h3 id="3-路径结构"><a href="#3-路径结构" class="headerlink" title="3.路径结构"></a>3.路径结构</h3><p>确保xxx-dal如下的路径结构,请大家统一:</p>
+<pre><code>|---pom.xml
+|---src
+|    |---main
+|    |    |---java
+|    |    |---resources
+|    |    |        |---db
+|    |    |        |    |---changelog
+|    |    |        |    |        |---db.1.0.sql
+|    |    |        |    |        |---db.2.0.sql
+|    |    |        |    |        |---db.master.xml
+|    |    |        |    |---config
+|    |    |        |    |     |---dal-dev.properties
+|    |    |        |    |     |---dal-local.properties
+|    |    |        |    |     |---dal-net.properties
+|    |    |        |    |     |---dal-online.properties
+|    |    |        |    |     |---dal-pnet.properties
+|    |    |        |    |     |---dal-sdev.properties
+|    |    |        |    |     |---dal-snet.properties
+|    |    |        |    |     |---dal-stest.properties
+|    |    |        |    |     |---dal-test.properties
+</code></pre><h3 id="4-执行"><a href="#4-执行" class="headerlink" title="4.执行"></a>4.执行</h3><p>在cs-dal目录执行:</p>
+<pre><code>mvn liquibase:update -Dspring.profiles.active=local
+</code></pre><p>上面的脚本会以local环境执行,读取<code>dal-local.properties</code>中的数据库配置,执行数据库变更脚本.执行成功后,会在数据库中新建两个表.<code>DATABASECHANGELOG</code>会记录数据库变更信息,<code>DATABASECHANGELOGLOCK</code>用于防止多台服务器同时部署时的并发问题.</p>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5.注意事项"></a>5.注意事项</h3><ol>
+<li>先不要搞线上.</li>
+<li>变更脚本命名:我现在做得简单<code>db.1.0.sql</code>,最好版本号为项目版本号,便于跟踪.</li>
+<li>新项目建议采用此方案,跟踪数据库所有的开发变动.</li>
+<li>老项目可以采用全量的方式使用.全量,先根据数据库的基础数据生成变更脚本<a href="http://www.liquibase.org/documentation/generating_changelogs.html" target="_blank" rel="noopener">generating_changelogs</a>,然后同步版本(changeLogSync)到数据库中.这样做的好处是,以后可以从无到有的创建当前版本的数据库了.参考<a href="http://www.liquibase.org/documentation/existing_project.html" target="_blank" rel="noopener">Adding Liquibase on an Existing project</a></li>
+<li>老项目也可以采用增量的方式使用,增量的方式不会管以前的数据版本.如果采用这种方式,在新环境搭建数据库,你需要先用数据库工具还原到没有版本之前的状态,然后再执行变更脚本.参考<a href="http://www.liquibase.org/documentation/existing_project.html" target="_blank" rel="noopener">Adding Liquibase on an Existing project</a></li>
+<li>请不要修改(脚本内容/脚本路径)之前的数据库变更脚本,liquibase会对每个Changesets生成摘要,执行时会去对比,如果你修改了以前的Changesets,会报错(所有的变更在事务中执行,出错了会回滚,不用担心会影响到数据库).</li>
+<li>官方文档很全,想深入的同学请阅读<a href="http://www.liquibase.org/faq.html" target="_blank" rel="noopener">FAQ</a>/<a href="http://www.liquibase.org/bestpractices.html" target="_blank" rel="noopener">BEST PRACTICES</a>/<a href="http://www.liquibase.org/documentation/maven/index.html" target="_blank" rel="noopener">Maven Liquibase Plugin</a>.遇到问题之前先检查配置是否正确,有bug可以找我^_^.</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-tuning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/cxf-tuning/" itemprop="url">webservice优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-14T21:52:17+08:00">
+                2014-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>很早之前写的一篇文字,一直没有搬上blog,以后会慢慢把有些东西放到blog上来.</p>
+<p>webservice的性能实在是敢恭维。曾经因为webservice吞吐量上不去，对webservice进行了一些性能方面的优化:</p>
+<h2 id="1-分析"><a href="#1-分析" class="headerlink" title="1.分析"></a>1.分析</h2><h3 id="1-1-FastInfoset"><a href="#1-1-FastInfoset" class="headerlink" title="1.1 FastInfoset"></a>1.1 FastInfoset</h3><p>采用了<a href="http://en.wikipedia.org/wiki/Fast_Infoset" target="_blank" rel="noopener">FastInfoset</a>(简称FI)，效果很明显，极端条件下的大数据量传输，性能提高60%，他可以减少传输成本，序列化成本和xml解析成本。cxf基于http协商机制(检查请求header中<code>Accept: application/fastinfoset</code>)来启用FI。</p>
+<h3 id="1-2-Gzip"><a href="#1-2-Gzip" class="headerlink" title="1.2 Gzip"></a>1.2 Gzip</h3><p>客户端和服务器端是否使用Gzip压缩，也是基于http协议协商的(检查请求header 中是否有<code>Accept-encoding:gzip</code>)。但是这里需要仔细权衡下。对于小数据量，启用gzip压缩支持是吃力不讨好的行为，数据量很小的时候，gzip压缩结果不明显，还浪费cpu。</p>
+<h3 id="1-3-unexpected-element异常"><a href="#1-3-unexpected-element异常" class="headerlink" title="1.3 unexpected element异常"></a>1.3 unexpected element异常</h3><p>见:<a href="http://bohr.me/cxf-unexpected-element/">http://bohr.me/cxf-unexpected-element/</a></p>
+<h3 id="1-4-处理过程分析"><a href="#1-4-处理过程分析" class="headerlink" title="1.4 处理过程分析"></a>1.4 处理过程分析</h3><p>cxf 中通过一些列interceptor来完成数据解析处理操作，每个interceptor绑定到特定的阶段，下面是GZIP 和FI interceptor所处的阶段</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>Direction</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gzip</td>
+<td>IN</td>
+<td>Phase.RECEIVE</td>
+</tr>
+<tr>
+<td></td>
+<td>Out</td>
+<td>Phase.PREPARE_SEND</td>
+</tr>
+<tr>
+<td> FI</td>
+<td>IN</td>
+<td>Phase.POST_STREAM</td>
+</tr>
+<tr>
+<td></td>
+<td>Out</td>
+<td>Phase.PRE_STREAM</td>
+</tr>
+</tbody>
+</table>
+<p>数据进来时，先<code>RECEIVE</code>阶段适配InputStream对象为GZIPInputStream，然后在<code>POST_STREAM</code>阶段解析数据。完成gzip解压缩，FI解析数据过程。</p>
+<p>数据出去时，在<code>PREPARE_SEND</code>阶段适配OutputStream对象为GZipThresholdOutputStream，在<code>PRE_STREAM</code>阶段再序列化为二进制数据传输出去。完成FI序列化数据，GZIP压缩数据过程。</p>
+<p>测试发送20250byte数据，仅仅启用FI时，发送数据量为20181byte，再启用Gzip压缩后，发送数据量为258byte。</p>
+<h2 id="2-操作步骤"><a href="#2-操作步骤" class="headerlink" title="2.操作步骤"></a>2.操作步骤</h2><h3 id="2-1添加依赖"><a href="#2-1添加依赖" class="headerlink" title="2.1添加依赖"></a>2.1添加依赖</h3><p>cxf版本修改为2.7.0并加入FastInfoset</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.sun.xml.fastinfoset&lt;/groupId&gt;
+    &lt;artifactId&gt;FastInfoset&lt;/artifactId&gt;
+    &lt;version&gt;1.2.9&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="2-2-修改cxf配置"><a href="#2-2-修改cxf配置" class="headerlink" title="2.2    修改cxf配置"></a>2.2    修改cxf配置</h3><h4 id="2-2-1-删除引入的cxf配置"><a href="#2-2-1-删除引入的cxf配置" class="headerlink" title="2.2.1 删除引入的cxf配置"></a>2.2.1 删除引入的cxf配置</h4><pre><code>&lt;import resource=&quot;classpath:META-INF/cxf/cxf.xml&quot; /&gt;
+&lt;import resource=&quot;classpath:META-INF/cxf/cxf-extension-soap.xml&quot; /&gt;
+&lt;import resource=&quot;classpath:META-INF/cxf/cxf-servlet.xml&quot; /&gt;
+</code></pre><p>我们项目中很多spring配置文件都加入了上面的东东，这个不是必须的，不删除这东东会导致配置不生效。</p>
+<h4 id="2-2-2-配置gzip和FI"><a href="#2-2-2-配置gzip和FI" class="headerlink" title="2.2.2 配置gzip和FI"></a>2.2.2 配置gzip和FI</h4><p>Spring配置文件中引入cxf namespace<br><code>xmlns:cxf=http://cxf.apache.org/core和xsi:schemaLocation
+http://cxf.apache.org/core  http://cxf.apache.org/schemas/core.xsd</code></p>
+<p>然后加入配置</p>
+<pre><code>&lt;cxf:bus&gt;
+    &lt;cxf:features&gt;
+        &lt;cxf:fastinfoset force=&quot;false&quot; /&gt;
+        &lt;bean class=&quot;org.apache.cxf.transport.common.gzip.GZIPFeature&quot;&gt;
+            &lt;property name=&quot;threshold&quot;&gt;
+                &lt;value&gt;2048&lt;/value&gt;
+            &lt;/property&gt;
+        &lt;/bean&gt;
+    &lt;/cxf:features&gt;
+&lt;/cxf:bus&gt;
+</code></pre><p>注意这些特性client和server端都要配置。</p>
+<h2 id="3-写在最后"><a href="#3-写在最后" class="headerlink" title="3.写在最后"></a>3.写在最后</h2><p>启用<code>gzip</code>和<code>FastInfoset</code>,性能基本上也到达webservice的极致了.通过<code>IgnoreUnexpectedElementValidationEventHandler</code>再解决易用性问题,基本完美.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/monitor-tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/monitor-tools/" itemprop="url">java开发工程师可以了解的常用命令</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-06T21:52:17+08:00">
+                2014-08-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>先总结下常用的一些监控工具:</p>
+<h2 id="linux命令"><a href="#linux命令" class="headerlink" title="linux命令"></a>linux命令</h2><ul>
+<li><p><code>w</code></p>
+<p>  系统负载</p>
+</li>
+<li><p><code>lsof -p pid</code></p>
+<p>  进程打开的文件</p>
+</li>
+<li><p><code>lsof -i:port</code></p>
+<p>  端口的运行情况</p>
+</li>
+<li><p><code>free -m</code></p>
+<p>  内存情况</p>
+</li>
+<li><p><code>vmstat</code></p>
+<p>  进程、内存、内存分页、堵塞IO、traps及CPU活动的信息</p>
+</li>
+<li><p><code>iostat</code></p>
+<p>  磁盘io情况</p>
+</li>
+<li><p><code>top -n 1</code></p>
+<p>  cpu/负载/内存等使用情况.</p>
+</li>
+<li><p><code>iotop</code></p>
+<p>  磁盘io</p>
+</li>
+<li><p><code>ps aux | sort -k6nr | head -n 10</code></p>
+<p>  查看linux 实际内存占用最多的10个</p>
+</li>
+<li><p><code>ps aux | sort -k5nr | head -n 10</code></p>
+<p>  查看linux 虚拟内存占用最多的10个</p>
+</li>
+<li><p><code>dstat -lamps</code></p>
+<p>  查看系统整体状况</p>
+</li>
+<li><p><code>pstree -al pid|head -n 1</code></p>
+<p>  查看进程启动命令</p>
+</li>
+<li><p><code>strace -T -p pid</code></p>
+<p>  查看进程系统调用.开销很大,使用时要小心.</p>
+</li>
+<li><p><code>netstat</code></p>
+<p>  <code>netstat -an |grep port</code> 查看端口连接情况</p>
+<p>  <code>netstat -alnp |grep pid</code> 通过pid查看进程所有端口情况</p>
+</li>
+<li><p><code>ss -lntp |grep port</code></p>
+<p>  通过端口查看进程</p>
+</li>
+<li><p><code>nmon</code></p>
+<p>  强大的监控工具.也可以方便的出报表.我一般用来在压力测试时监控系统性能.</p>
+</li>
+<li><p><code>latencytop</code></p>
+<p>  用于查看系统内部慢.以前做mysql性能优化,多亏有这东东.</p>
+</li>
+<li><p><code>cat /proc/pid/status  |grep Threads</code></p>
+<p>  查看进程内线程个数</p>
+</li>
+</ul>
+<h2 id="java工具"><a href="#java工具" class="headerlink" title="java工具"></a>java工具</h2><ul>
+<li><p><code>jvisualvm</code></p>
+<p>  jvm的运行情况/各种dump的分析都可以干,没有JRMC牛.oracle承诺会把JRockit的特性迁移到HotSpot上面来.现在jdk下已经有jmc了.</p>
+</li>
+<li><p><code>jps -lv</code></p>
+<p>  查看所有java进程.</p>
+</li>
+<li><p><code>jinfo -sysprops pid</code></p>
+<p>  查看java进程系统参数</p>
+</li>
+<li><p><code>jinfo  -flag jvmflag pid</code></p>
+<p>  查看jvm flag.比如查看xss,<code>jinfo  -flag ThreadStackSize pid</code></p>
+</li>
+<li><p><code>jstack pid</code></p>
+<p>  查看线程栈信息</p>
+</li>
+<li><p><code>jmap -dump:live,format=b,file=xxx.hprof pid</code></p>
+<p>  生成heap dump</p>
+</li>
+<li><p><code>jmap -histo pid</code></p>
+<p>  查看java堆中对象统计信息</p>
+</li>
+<li><p><code>java -XX:+UnlockDiagnosticVMOptions -XX:+PrintFlagsFinal</code> </p>
+<p>  查看jvm flag</p>
+<pre><code>The first column appears to reflect the data type of the option (intx, uintx, uint64_t, bool, double, ccstr, ccstrlist). 
+The second column is the name of the flag and the third column is the value, if any, that the flag is set to.
+The fourth column appears to indicate the type of flag and has values such as {product},{pd product}, {C1 product} for client or {C2 product} for server, {C1 pd product} for client or {C2 pd product} for server, {product rw}, {diagnostic} 
+(only if -XX:+UnlockDiagnosticVMOptions was specified), {experimental}, and {manageable}. See Eugene Kuleshov&apos;s The most complete list of -XX options for Java 6 JVM for a brief description of most of these categories as well as a listing of most of these options themselves.
+</code></pre></li>
+<li><p><a href="http://visualvm.java.net/plugins.html​" target="_blank" rel="noopener">tda</a></p>
+<p>  线程栈分析器,这个是jvisualvm的插件.</p>
+</li>
+<li><p><a href="http://www.eclipse.org/mat/" target="_blank" rel="noopener">mat</a></p>
+<p>  基于eclipse的heap dump分析工具,这个工具是比jvisualvm在heap分析这块专业.不过jvisualvm能cover住大多数场景,基本上我都只用jvisualvm了.</p>
+</li>
+<li><p><code>jmap -heap pid</code></p>
+<p>  检查heap情况</p>
+</li>
+<li><p><a href="https://github.com/chewiebug/GCViewer" target="_blank" rel="noopener">GCViewer</a></p>
+<p>  GC日志分析</p>
+</li>
+<li><p><code>jstat  -gcutil pid</code></p>
+<p>  查看gc总体情况</p>
+<pre><code>S0  — Heap上的 Survivor space 0 区已使用空间的百分比
+S1  — Heap上的 Survivor space 1 区已使用空间的百分比
+E   — Heap上的 Eden space 区已使用空间的百分比
+O   — Heap上的 Old space 区已使用空间的百分比
+P   — Perm space 区已使用空间的百分比
+YGC — 从应用程序启动到采样时发生 Young GC 的次数
+YGCT– 从应用程序启动到采样时 Young GC 所用的时间(单位秒)
+FGC — 从应用程序启动到采样时发生 Full GC 的次数
+FGCT– 从应用程序启动到采样时 Full GC 所用的时间(单位秒)
+GCT — 从应用程序启动到采样时用于垃圾回收的总时间(单位秒)
+</code></pre></li>
+<li><p><code>btrace</code></p>
+<p>  神器,线上出问题了,想知道某个方法的调用情况,入参之类的,就靠btrace了.<br>此工具大致原理如下:</p>
+<ol>
+<li><code>btrace-client</code> attach 目标进程(<code>com.sun.tools.attach.VirtualMachine#attach</code>)</li>
+<li>加载agent <code>btrace-agent</code> (<code>com.sun.tools.attach.VirtualMachine#loadAgent</code>)</li>
+<li>agent启动服务端,开启监听端口</li>
+<li><code>brace-client</code> 把编译好的用户btrace代码发送到服务端,并等待服务端响应</li>
+<li><code>btrace-agent</code> 通过asm修改运行时代码,织入用户btrace代码逻辑.监控到信息后,发给<code>btrace-client</code></li>
+</ol>
+</li>
+<li><p>jmc</p>
+<p>  生成记录</p>
+<pre><code>#检查特性是否开启
+jcmd 23385 VM.check_commercial_features
+#开启商业特性
+jcmd 23385 VM.unlock_commercial_features
+#检查JFR状态
+jcmd 23385 JFR.check
+#执行180sJFR收集
+jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
+</code></pre></li>
+<li><p>vjtools</p>
+<p>  <a href="https://github.com/vipshop/vjtools" target="_blank" rel="noopener">https://github.com/vipshop/vjtools</a> 主要工具vjtop非常有用，打印JVM概况及繁忙线程</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-08-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014-08-reading-notes/" itemprop="url">2014年08月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-03T21:52:17+08:00">
+                2014-08-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="My-WordPress-Development-Toolbox"><a href="#My-WordPress-Development-Toolbox" class="headerlink" title="My WordPress Development Toolbox"></a>My WordPress Development Toolbox</h2><p><a href="http://tommcfarlin.com/wordpress-developer-toolbox/" target="_blank" rel="noopener">http://tommcfarlin.com/wordpress-developer-toolbox/</a></p>
+<p>本来是准备找git的客户端,看到这篇文章.不喜欢tower,大爱<a href="http://www.sourcetreeapp.com/" target="_blank" rel="noopener">SoureTree</a>.</p>
+<p><a href="http://www.browserstack.com/" target="_blank" rel="noopener">browserstack</a>也挺好的,适合做浏览器兼容性测试.</p>
+<h2 id="JVM-plus-Docker-Better-together"><a href="#JVM-plus-Docker-Better-together" class="headerlink" title="JVM plus Docker: Better together"></a>JVM plus Docker: Better together</h2><p><a href="http://www.javaworld.com/article/2456960/java-app-dev/jvm-plus-docker-better-together.html" target="_blank" rel="noopener">http://www.javaworld.com/article/2456960/java-app-dev/jvm-plus-docker-better-together.html</a></p>
+<p>docker刚好弥补jvm对资源管理(CPU/IO)的不足.</p>
+<h2 id="SharedHashMap-vs-Redis"><a href="#SharedHashMap-vs-Redis" class="headerlink" title="SharedHashMap vs Redis"></a>SharedHashMap vs Redis</h2><p><a href="http://vanillajava.blogspot.jp/2014/05/sharedhashmap-vs-redis.html" target="_blank" rel="noopener">http://vanillajava.blogspot.jp/2014/05/sharedhashmap-vs-redis.html</a></p>
+<p>这位哥异常牛掰,java低延迟方面的专家.把性能做到极致啊!!!<code>It was designed to be used in Java in a pause less, garbage free manner.</code>狂赞!!!先留着,有时间了看看源代码.</p>
+<h2 id="高性能服务器架构"><a href="#高性能服务器架构" class="headerlink" title="高性能服务器架构"></a>高性能服务器架构</h2><p><a href="http://blog.csdn.net/zhoudaxia/article/details/14223755" target="_blank" rel="noopener">http://blog.csdn.net/zhoudaxia/article/details/14223755</a></p>
+<p>这些经验可以参考下:</p>
+<ul>
+<li><p>数据拷贝</p>
+<p>  特别是java,很多数据拷贝的代码埋得深,比如<code>StringBuilder</code>扩容,集合扩容等等.java中的数据拷贝除了带来cpu的压力,也会给gc带来压力.</p>
+<p>  参考:<a href="/zero-copy/">使用零拷贝提高数据传输效率</a></p>
+</li>
+<li><p>上下文切换</p>
+<p>  线程越多,上下文切换就会越多.需要合理评估处理模型和系统情况.按照SEDA的方式把一个请求划分为多个阶段,但是多个阶段的独立线程池真的会增加上下文的切换,但这样可能会让系统利用率最高.</p>
+</li>
+<li><p>内存分配</p>
+<p>  采用类似于Buddy memory allocation的策略来减少开销.</p>
+</li>
+<li><p>锁竞争</p>
+<p>  一定要控制好锁的粒度.某些场景用map来存放锁对象,而不要使用一把大锁.</p>
+</li>
+</ul>
+<h2 id="数据库版本控制工具liquibase"><a href="#数据库版本控制工具liquibase" class="headerlink" title="数据库版本控制工具liquibase"></a>数据库版本控制工具liquibase</h2><p><a href="http://www.liquibase.org/quickstart.html" target="_blank" rel="noopener">http://www.liquibase.org/quickstart.html</a></p>
+<p>今天和勇哥讨论了如何来控制数据库版本.我们想的方案是,数据库里面有张versions表,里面记录当前的版本是多少.然后数据库更新文件存在项目中,并以目录来区分.这样就可以在项目启动时,来对比是否有新版本,是否需要升级.这样可以做到全自动化,需要规范现在的开发同学的行为,更重要的一点是,没有人来做这个事情.</p>
+<p>liquibase正好在做这个事情,他也支持sql格式的版本,学习成本相当低.而且有内置的数据库版本和集群场景的检测,给力,先试试.</p>
+<p>参考:<a href="/database-version/">如何跟踪数据库结构变动</a></p>
+<h2 id="可伸缩性最佳实践：来自eBay的经验"><a href="#可伸缩性最佳实践：来自eBay的经验" class="headerlink" title="可伸缩性最佳实践：来自eBay的经验"></a>可伸缩性最佳实践：来自eBay的经验</h2><p>(<a href="http://www.infoq.com/cn/articles/ebay-scalability-best-practices)[http://www.infoq.com/cn/articles/ebay-scalability-best-practices]" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/ebay-scalability-best-practices)[http://www.infoq.com/cn/articles/ebay-scalability-best-practices]</a></p>
+<p>手里有本2011年的架构师特刊,翻开看到的第一篇文章.虽然有点老了,但是经验还是值得我们借鉴.</p>
+<ul>
+<li>按功能分割</li>
+</ul>
+<p>咱们现在的架构体系基本上遵循这条最佳实践.借助于dubbo/cxf实现功能服务化.应用层可以实现水平线性扩展.</p>
+<ul>
+<li>水平切分</li>
+</ul>
+<p>应用层面的无状态很重要,会话之类的东西可以放在缓存服务器上,尽量让LB来实现水平切分.</p>
+<p>数据库层面读写分离/分区/分库/分表.</p>
+<ul>
+<li>避免分布式事务</li>
+</ul>
+<p>分布式第一定律,不要使用分布式.特别是两阶段提交,对系统的吞吐影响很大.ebuy通过周密调整数据库操作的次序、异步恢复事件，以及数据核对（reconciliation）或者集中决算（settlement batches）来实现最终一致性.</p>
+<ul>
+<li>用异步策略解耦程序</li>
+</ul>
+<p>组件之间的异步带来的好处是解耦/缓冲压力.组件内的异步能提供跟灵活的资源管理策略(当然带来了上下文切换的开销).我们还需要异步任务管理/确保机制.</p>
+<ul>
+<li>将过程转变为异步的流</li>
+<li>虚拟化所有层次</li>
+</ul>
+<p>虚拟化所有层次我们还做的不够好.硬件资源层面的虚拟化可以通过docker来实现.目前docker最缺少的是资源的管理/发现/注册能力.通用资源服务层面的虚拟化也可以通过注册中心来实现.结合配置管理系统/框架组件化,可以做到对应用的透明.</p>
+<ul>
+<li>适当地使用缓存</li>
+</ul>
+<p>缓存组件很多,分布式/集中式/进程内,不要选花了眼.同类型的我们只需要一种缓存组件,他必须要能支持丰富的数据结构,如果能提供持久话的能力最好(前提是在down掉的情况下要保证数据的一直.).</p>
+<h2 id="Why-Choose-Jetty"><a href="#Why-Choose-Jetty" class="headerlink" title="Why Choose Jetty?"></a>Why Choose Jetty?</h2><p><a href="https://webtide.com/why-choose-jetty/" target="_blank" rel="noopener">https://webtide.com/why-choose-jetty/</a></p>
+<p>一直有想法把jetty嵌入到我们的程序中来运行,jetty自身的体系结构优势便于我们去裁剪或者新增功能.</p>
+<p>jetty的设计哲学很酷:</p>
+<blockquote>
+<p>Don’t put your application into Jetty, put Jetty into your application.</p>
+</blockquote>
+<h2 id="http-proxy"><a href="#http-proxy" class="headerlink" title="http proxy"></a>http proxy</h2><p><a href="http://rehorn.github.io/livepool/" target="_blank" rel="noopener">http://rehorn.github.io/livepool/</a></p>
+<p><a href="http://mitmproxy.org/" target="_blank" rel="noopener">http://mitmproxy.org/</a></p>
+<p>两个都是好东东.可以看下手机里面在干啥,吐槽下某些粗制滥造的app.也可以用来模拟http请求.</p>
+<h2 id="jvm-flag"><a href="#jvm-flag" class="headerlink" title="jvm flag"></a>jvm flag</h2><p><a href="http://stas-blogspot.blogspot.jp/2011/07/most-complete-list-of-xx-options-for.html" target="_blank" rel="noopener">http://stas-blogspot.blogspot.jp/2011/07/most-complete-list-of-xx-options-for.html</a></p>
+<p>最全的jvm flag.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/hibernate-no-session-in-dubbo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1364,865 +2471,11 @@ if(key!=null &amp;&amp; !key.startsWith(&quot;com.xxx&quot;)){//不检查groupId
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-unexpected-element/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/cxf-unexpected-element/" itemprop="url">烦人的cxf unexpected element 异常</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-05-15T21:52:17+08:00">
-                2014-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>当cxf传输的数据对象结构变化时,比如请求对象减少了字段,响应对象增加了字段,在jaxb unmarsh时会抛出异常,导致接口访问失败.</p>
-<pre><code>javax.xml.bind.UnmarshalException: unexpected element (uri:&quot;&quot;, local:&quot;name&quot;). Expected elements are &lt;{}name&gt;
-</code></pre><p>上面这是一个典型的<code>unexpected element</code>异常,如果cxf客户端请求中多了一个<code>name</code>属性,或者cxf服务端响应中多了一个<code>name</code>属性,都会导致此异常.</p>
-<h3 id="2-源代码分析"><a href="#2-源代码分析" class="headerlink" title="2.源代码分析"></a>2.源代码分析</h3><p>翻了下源代码:</p>
-<p><code>com.sun.xml.bind.v2.runtime.unmarshaller.StructureLoader#childElement</code>检查是否是新增属性</p>
-<pre><code> @Override
-public void childElement(UnmarshallingContext.State state, TagName arg) throws SAXException {
-    ChildLoader child = childUnmarshallers.get(arg.uri,arg.local);
-    if(child==null) {//检查是否新增属性
-        child = catchAll;
-        if(child==null) {
-            super.childElement(state,arg);
-            return;
-        }
-    }
-
-    state.loader = child.loader;
-    state.receiver = child.receiver;
-}
-</code></pre><p>在<code>com.sun.xml.bind.v2.runtime.unmarshaller.Loader</code>中检查是否处理此问题</p>
-<pre><code> public void childElement(UnmarshallingContext.State state, TagName ea) throws SAXException {
-    // notify the error, then recover by ignoring the whole element.
-    reportUnexpectedChildElement(ea, true);
-    state.loader = Discarder.INSTANCE;
-    state.receiver = null;
-}
-
-@SuppressWarnings({&quot;StringEquality&quot;})
-protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover) throws SAXException {
-    if(canRecover &amp;&amp; !UnmarshallingContext.getInstance().parent.hasEventHandler())
-    //这里默认会有个EventHandler,不会直接忽略此问题
-        // this error happens particurly often (when input documents contain a lot of unexpected elements to be ignored),
-        // so don&apos;t bother computing all the messages and etc if we know that
-        // there&apos;s no event handler to receive the error in the end. See #286 
-        return;
-     //下面的代码抛出异常
-    if(ea.uri!=ea.uri.intern() || ea.local!=ea.local.intern())
-        reportError(Messages.UNINTERNED_STRINGS.format(), canRecover );
-    else
-        reportError(Messages.UNEXPECTED_ELEMENT.format(ea.uri,ea.local,computeExpectedElements()), canRecover );
-}
-</code></pre><p>在<code>org.apache.cxf.jaxb.io.DataReaderImpl#createUnmarshaller</code>中设置了<code>EventHandler</code>,注意这里的<code>veventHandler</code>,默认是没有的.</p>
-<pre><code>if (setEventHandler) {
-            um.setEventHandler(new WSUIDValidationHandler(veventHandler));
-}
-</code></pre><p> <code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的代码很简单:</p>
-<pre><code>private static class WSUIDValidationHandler implements ValidationEventHandler {
-    ValidationEventHandler origHandler;
-    WSUIDValidationHandler(ValidationEventHandler o) {
-        origHandler = o;
-    }
-
-    public boolean handleEvent(ValidationEvent event) {
-        String msg = event.getMessage();
-        System.out.println(&quot;WSUIDValidationHandler&quot;+msg);
-        if (msg != null
-                &amp;&amp; msg.contains(&quot;:Id&quot;)
-                &amp;&amp; (msg.startsWith(&quot;cvc-type.3.1.1: &quot;)
-                || msg.startsWith(&quot;cvc-type.3.2.2: &quot;)
-                || msg.startsWith(&quot;cvc-complex-type.3.1.1: &quot;)
-                || msg.startsWith(&quot;cvc-complex-type.3.2.2: &quot;))) {
-            return true;
-        }
-        if (origHandler != null) {
-            return origHandler.handleEvent(event);
-        }
-        return false;
-    }
-}
-</code></pre><p>先自己处理,自己处理不了的交给<code>origHandler</code>,那我们只需要自己构建一个<code>javax.xml.bind.ValidationEventHandler</code>来专门处理<code>unexpected element</code>异常,问题就得到了解决.</p>
-<p><code>org.apache.cxf.jaxb.io.DataReaderImpl#setProperty</code>中有段代码:</p>
-<pre><code>veventHandler = (ValidationEventHandler)m.getContextualProperty(&quot;jaxb-validation-event-handler&quot;);
-       if (veventHandler == null) {
-           veventHandler = databinding.getValidationEventHandler();
-       }
-</code></pre><p> 如果配置了<code>jaxb-validation-event-handler</code>属性,就可以让我们自己的<code>javax.xml.bind.ValidationEventHandler</code>来处理此异常.也可以设置<code>setEventHandler</code>为<code>false</code>,不设置异常处理器,忽略所有unmarsh异常,不过这样我感觉太暴力了点,这样做也忽略了<code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的逻辑,点儿都不科学.</p>
-<h3 id="3-实现"><a href="#3-实现" class="headerlink" title="3.实现"></a>3.实现</h3><p> 上面分析清楚了,实现就很简单,实现<code>javax.xml.bind.ValidationEventHandler</code></p>
-<pre><code>public class IgnoreUnexpectedElementValidationEventHandler implements ValidationEventHandler {
-        private static final Logger logger = LoggerFactory.getLogger(IgnoreUnexpectedElementValidationEventHandler.class);
-
-        @Override
-        public boolean handleEvent(ValidationEvent event) {
-                String msg = event.getMessage();
-                if (msg != null &amp;&amp; msg.startsWith(&quot;unexpected element&quot;)) {
-                    logger.warn(&quot;{}&quot;, msg);
-                    return true;
-             }
-              return false;
-        }
-}
-</code></pre><p> 在<code>cxf:bus</code>中配置下就ok</p>
-<pre><code>  &lt;cxf:bus&gt;
-    &lt;cxf:properties&gt;
-        &lt;entry key=&quot;jaxb-validation-event-handler&quot;&gt;
-            &lt;bean class=&quot;IgnoreUnexpectedElementValidationEventHandler&quot;/&gt;
-        &lt;/entry&gt;
-    &lt;/cxf:properties&gt;
-&lt;/cxf:bus&gt;
-</code></pre><p> 建议只在线上环境启用此东东,线下还是不要开启,早点发现问题是好事.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/pojo-perperty/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/pojo-perperty/" itemprop="url">java对象属性复制</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-05-13T21:52:17+08:00">
-                2014-05-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>java对象属性复制的工具类很多,常用的有<code>org.springframework.beans.BeanUtils#copyProperties</code>,<code>org.apache.commons.beanutils.BeanUtils#copyProperties</code>,这两个都是通过反射实现的,性能嘛,你关心TA就在那里,你不关心TA还是在那里.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/pojo-perperty/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-04-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014-04-reading-notes/" itemprop="url">2014年04月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-01T21:52:17+08:00">
-                2014-04-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="oh-my-zsh"><a href="#oh-my-zsh" class="headerlink" title="oh-my-zsh"></a><a id="zsh">oh-my-zsh</a></h2><p><a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview</a></p>
-<p><a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Themes" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh/wiki/Themes</a></p>
-<p>zsh才是王道啊,各种插件,很爽.</p>
-<p>我用<code>colored-man colorize sublime mvn terminalapp</code>插件.theme用<code>avit</code>,再装上<a href="http://ethanschoonover.com/solarized" target="_blank" rel="noopener">Solarized Dark</a>,prefect!!!</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014-04-reading-notes/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-03-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014-03-reading-notes/" itemprop="url">2014年03月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-07T21:52:17+08:00">
-                2014-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="Volatile-Vs-Static-in-JAVA"><a href="#Volatile-Vs-Static-in-JAVA" class="headerlink" title="Volatile Vs Static in JAVA"></a>Volatile Vs Static in JAVA</h2><p><a href="http://malalanayake.wordpress.com/2013/09/12/volatile-vs-static-in-java/" target="_blank" rel="noopener">http://malalanayake.wordpress.com/2013/09/12/volatile-vs-static-in-java/</a></p>
-<p>volatile能保证原子性和可见性.对static field的内存模型认识不足导致有些概念模糊了.内存结构见图:</p>
-<p><img src="/2014-03-reading-notes/volatilevsstaticinjava.png" alt=""></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014-03-reading-notes/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-02-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014-02-reading-notes/" itemprop="url">2014年02月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-02-19T21:52:17+08:00">
-                2014-02-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="HTTP-1-1-Upgrade-header"><a href="#HTTP-1-1-Upgrade-header" class="headerlink" title="HTTP/1.1 Upgrade header"></a>HTTP/1.1 Upgrade header</h2><p><a href="http://en.wikipedia.org/wiki/HTTP/1.1_Upgrade_header" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/HTTP/1.1_Upgrade_header</a></p>
-<p>通过http upgrade header来实现协议转换,比如把http协议转换为websocket协议.<a href="http://wildfly.org/news/2014/02/11/WildFly8-Final-Released/" target="_blank" rel="noopener">wildfly</a>走得更远,8080端口支持HTTP (Servlet, JAX-RS, JAX-WS), Web Sockets, HTTP Upgraded Remoting (EJB Invocation, Remote JNDI).<a href="http://jaitechwriteups.blogspot.com/2013/07/wildfly-800alpha3-released-with-support.html" target="_blank" rel="noopener">这篇文章</a>讲述了一些细节.</p>
-<h2 id="When-should-I-not-kill-9-a-process"><a href="#When-should-I-not-kill-9-a-process" class="headerlink" title="When should I not kill -9 a process?"></a>When should I not kill -9 a process?</h2><p><a href="http://unix.stackexchange.com/questions/8916/when-should-i-not-kill-9-a-process" target="_blank" rel="noopener">http://unix.stackexchange.com/questions/8916/when-should-i-not-kill-9-a-process</a></p>
-<p>Generally, you should use kill -15 before kill -9 to give the target process a chance to clean up after itself. </p>
-<h2 id="Java里快如闪电的线程间通讯"><a href="#Java里快如闪电的线程间通讯" class="headerlink" title="Java里快如闪电的线程间通讯"></a>Java里快如闪电的线程间通讯</h2><p><a href="http://www.infoq.com/cn/articles/High-Performance-Java-Inter-Thread-Communications" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/High-Performance-Java-Inter-Thread-Communications</a></p>
-<p>多线程中,锁是一个很大的性能开销.如果采用无锁实现,会发现原来世界可以更美好.</p>
-<h2 id="elasticsearch中文学习文档"><a href="#elasticsearch中文学习文档" class="headerlink" title="elasticsearch中文学习文档"></a>elasticsearch中文学习文档</h2><p><a href="https://github.com/medcl/elasticsearch-rtf" target="_blank" rel="noopener">https://github.com/medcl/elasticsearch-rtf</a></p>
-<p><a href="http://tanjianna.diandian.com/post/2013-07-27/elasticsearch-study" target="_blank" rel="noopener">http://tanjianna.diandian.com/post/2013-07-27/elasticsearch-study</a></p>
-<p>elasticsearch中文发行版，针对中文集成了相关插件，并带有Demo，方便新手学习,或者在生产环境中直接使用</p>
-<h2 id="elasticsearch中文学习文档-1"><a href="#elasticsearch中文学习文档-1" class="headerlink" title="elasticsearch中文学习文档"></a>elasticsearch中文学习文档</h2><p><a href="http://webappchecklist.com/" target="_blank" rel="noopener">http://webappchecklist.com/</a><br>Web开发者必备：Web应用检查清单</p>
-<h2 id="Cache-coherence"><a href="#Cache-coherence" class="headerlink" title="Cache coherence"></a>Cache coherence</h2><p><a href="http://en.wikipedia.org/wiki/Cache_coherence" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/Cache_coherence</a></p>
-<p>In a shared memory multiprocessor system with a separate cache memory for each processor, it is possible to have many copies of any one instruction operand: one copy in the main memory and one in each cache memory. When one copy of an operand is changed, the other copies of the operand must be changed also.</p>
-<p><strong>Cache coherence</strong> is the discipline that ensures that changes in the values of shared operands are propagated throughout the system in a timely fashion.</p>
-<h2 id="高性能、高流量Java-Web站点打造的22条建议"><a href="#高性能、高流量Java-Web站点打造的22条建议" class="headerlink" title="高性能、高流量Java Web站点打造的22条建议"></a>高性能、高流量Java Web站点打造的22条建议</h2><p><a href="http://www.csdn.net/article/2013-12-20/2817861-22-recommendations-for-building-effective-high-traffic-web-application" target="_blank" rel="noopener">http://www.csdn.net/article/2013-12-20/2817861-22-recommendations-for-building-effective-high-traffic-web-application</a></p>
-<ul>
-<li><p>通过使用类似Lucene的索引器做表的索引，使用一个允许在结果集上做基于其他字段的查询.</p>
-<p>  对于复杂的查询,在数据库中直接做是很影响性能的,通过使用搜索引擎,能减轻数据库的压力.</p>
-</li>
-<li><p>考虑使用Oracle或者MySQL分片</p>
-<p>  数据量大时,做分片能获得不错的性能提升.</p>
-</li>
-<li><p>不要使用session stickiness</p>
-<p>  会话粘滞会带来一系列的问题.我们的分布式session方案中,默认要求LB启用会话粘滞,这样做的目的是能让本地缓存生效.当需要failover时,才去后端memcached中取数据.能同时兼顾性能和高可用.</p>
-</li>
-<li><p>终止反向代理商的SSL</p>
-<p>  在反向代理或者LB上卸载ssl,能够减轻web应用服务器的压力.</p>
-</li>
-<li><p>拥抱一切“reactor”</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2272,7 +2525,7 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2294,7 +2547,7 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
