@@ -310,173 +310,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2016-08-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016-08-reading-notes/" itemprop="url">2016年08月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-10T21:52:17+08:00">
-                2016-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>服务发现用于动态感知服务提供方地址，并提供服务路由分发策略能力。</p>
-<h3 id="1-客户端发现"><a href="#1-客户端发现" class="headerlink" title="1. 客户端发现"></a>1. 客户端发现</h3><p>客户端从注册中心获取服务列表，客户端监听服务列表的变化，客户端通过路由策略选择合适的服务端地址。</p>
-<p>服务端在停服务时，需要先通知客户端不要发送新请求过来，等服务端把当前请求处理完后，才断开连接。</p>
-<h3 id="2-代理端发现"><a href="#2-代理端发现" class="headerlink" title="2. 代理端发现"></a>2. 代理端发现</h3><p>代理端对外提供服务，主要用于对外请求路由。代理端(比如nginx/haproxy)转发请求到后端服务。后端服务暴露地址到注册中心，代理程序动态获取服务地址。</p>
-<p>nginx可以试试<a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="noopener">nginx-upsync-module</a></p>
-<p>在k8s内部，采用nginx+dns+k8s proxy实现。</p>
-<h2 id="关于高可用系统"><a href="#关于高可用系统" class="headerlink" title="关于高可用系统"></a>关于高可用系统</h2><p><a href="http://coolshell.cn/articles/17459.html" target="_blank" rel="noopener">http://coolshell.cn/articles/17459.html</a></p>
-<p>前段时间写了一段公司的公关文(CUI NIU BI)，强迫自己写了<code>5个9</code>。</p>
-<p>作者讲了几个大实话：</p>
-<blockquote>
-<blockquote>
-<p>如果你没有一套科学的牛逼的软件工程的管理，没有牛逼先进的自动化的运维工具，没有技术能力很牛逼的工程师团队，怎么可能出现高可用的系统啊。</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<p>深层次的东西则是——对工程这门科学的尊重：1.对待技术的态度 2.一个公司的工程文化 3.领导者对工程的尊重</p>
-</blockquote>
-</blockquote>
-<p>佛渡有缘人，点到即止，不强求。</p>
-<ol>
-<li>以前对高可用的关注点主要在应用层面，现在加入运维团队后，高可用的关注点延伸到机房、硬件。</li>
-<li>同城双活只要网络质量靠谱点，还是比较好做，主要是南北请求路由控制和东西流量故障切换。</li>
-<li>把服务不可用的因素分成<a href="https://docs.oracle.com/cd/A91202_01/901_doc/rac.901/a89867/pshavdtl.htm" target="_blank" rel="noopener">planned、unplanned</a>，分别设计预案</li>
-</ol>
-<p>也许把<code>SLA</code>写到合同里，我就不敢乱吹牛逼了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2016-06-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2248,6 +2081,260 @@ The twelve-factor developer resists the urge to use different backing services b
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-04-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015-04-reading-notes/" itemprop="url">2015年04月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-01T21:52:17+08:00">
+                2015-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Enterprise-Nashorn"><a href="#Enterprise-Nashorn" class="headerlink" title="Enterprise Nashorn"></a><a name="enterprise_nashorn">Enterprise Nashorn</a></h2><p><a href="https://community.oracle.com/docs/DOC-910779" target="_blank" rel="noopener">https://community.oracle.com/docs/DOC-910779</a></p>
+<p>本文讲述了<code>Nashorn</code>的一些使用场景：</p>
+<ol>
+<li>由外部提供计算逻辑，服务端执行计算逻辑返回结果</li>
+<li>用java来定义接口，js来写逻辑，方便动态更新计算逻辑。(比如短信中的路由策略，需要经常更新)</li>
+<li>写shell脚本(访问数据库，访问网络,监控…)</li>
+</ol>
+<p><code>Nashorn</code>的性能比前任强多了，但是和java比较还是有差距，主要的性能开销在js-&gt;java上。在关注性能的场景，可以在业务使用时，采用方法2，并缓存proxy对象。</p>
+<pre><code>private static String isPrime = &quot; function test(num) {\n&quot; + &quot;if (num % 2 == 0)&quot; + &quot;return false;&quot; + &quot;for (var i = 3; i * i &lt;= num; i += 2)&quot;
+                                    + &quot;if (num % i == 0)&quot; + &quot;return false;&quot; + &quot;return true;&quot; + &quot;}&quot;;
+private Supplier&lt;Predicate&lt;Long&gt;&gt; supplier = Suppliers.memoize(() -&gt; getFilter());
+
+private Predicate getFilter() {
+    Invocable invocable = (Invocable) this.engine;
+    try {
+        this.engine.eval(isPrime);
+        return invocable.getInterface(Predicate.class);
+    } catch (Exception ex) {
+        throw Throwables.propagate(ex);
+    }
+}
+@Test
+public void testJavaScriptWithMemoize() throws Exception {
+    supplier.get().test(172673l);
+}
+</code></pre><p>对比了下<code>nashorn</code>和<code>groovy</code>的性能：</p>
+<pre><code>NashornPerfTest.testJavaScript: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 96, GC.time: 0.25, time.total: 34.20, time.warmup: 3.44, time.bench: 30.76
+NashornPerfTest.testJava: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.28, time.warmup: 0.01, time.bench: 0.27
+NashornPerfTest.testJavaScriptWithMemoize: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 0, GC.time: 0.00, time.total: 0.35, time.warmup: 0.06, time.bench: 0.29
+GroovyTest.testGroovyWithMemoize: [measured 50000 out of 51000 rounds, threads: 4 (all cores)]
+ round: 0.00 [+- 0.00], round.block: 0.00 [+- 0.00], round.gc: 0.00 [+- 0.00], GC.calls: 5, GC.time: 0.07, time.total: 3.86, time.warmup: 1.75, time.bench: 2.11
+</code></pre><h2 id="spring-多线程中两个事务执行顺序控制"><a href="#spring-多线程中两个事务执行顺序控制" class="headerlink" title="spring 多线程中两个事务执行顺序控制"></a>spring 多线程中两个事务执行顺序控制</h2><p>有些场景需要控制两个事务的执行顺序，比如事务A执行完后，需要事务B中执行费时操作。因为是费时操作，一般会把事务B放到独立的线程中执行。然而事务A和事务B在不同的线程中，事务B还会依赖事务A提交的数据。如果在事务A中新启动线程执行事务B，有可能事务A还没有提交，就开始执行事务B了。这种场景需要保证事务A提交后，才能在新线程中执行事务B。</p>
+<p>可以使用<code>TransactionSynchronizationManager</code>来解决这个问题：</p>
+<pre><code>TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
+       void afterCommit(){
+            //submit transaction B to threadpool
+       }
+})；
+</code></pre><p>在事务A中加上此钩子，在<code>afterCommit</code>方法中向线程池提交事务A任务。具体处理代码<code>AbstractPlatformTransactionManager#triggerAfterCommit</code>，<code>ThreadLocal</code>清理<code>AbstractPlatformTransactionManager#cleanupAfterCompletion</code>.</p>
+<h2 id="Web应用的缓存设计模式"><a href="#Web应用的缓存设计模式" class="headerlink" title="Web应用的缓存设计模式"></a>Web应用的缓存设计模式</h2><p><a href="">http://robbinfan.com/blog/38/orm-cache-sumup</a></p>
+<p>robbin大哥讲解了对<code>ORM</code>缓存的理解.我司也有不少项目用了<code>ORM</code>,大多数人没有使用缓存的意识,有这样意识的同学提到过用<code>ehcache</code>,这在单节点的情况下，工作得很好，但是到了线上多机部署，数据不一致的问题就会出现，至少也要选用分布式缓存系统来实现哈。还有一点，因为有了缓存，数据订正这种事情就要谨慎了。</p>
+<h2 id="java反射的性能"><a href="#java反射的性能" class="headerlink" title="java反射的性能"></a><a name="java_reflect">java反射的性能</a></h2><p>先看看下面的数据：</p>
+<pre><code>Benchmark                                  Mode  Cnt     Score    Error  Units
+ testInvokeMethod_Direct                avgt   20     0.587 ±  0.036  ns/op
+ testInvokeMethod_Reflectasm            avgt   20    39.940 ±  1.957  ns/op
+ testInvokeMethod_Reflectasm_withCache  avgt   20     9.784 ±  0.745  ns/op
+ testInvokeMethod_reflect               avgt   20  1513.409 ± 85.396  ns/op
+ testInvokeMethod_reflect_withCache     avgt   20    29.444 ±  1.863  ns/op
+</code></pre><p>上面的数据测试了<code>直接调用java方法</code>、<code>通过反射调用java</code>、<code>通过ReflectASM调用java</code>，<code>withCache</code>意思是把中间对象缓存起来。<br>反射确实很慢，但是只要把反射对象缓存起来，性能提升很大，<code>Reflectasm_withCache</code>比<code>reflect_withCache</code>快了3倍多。</p>
+<p><code>Reflectasm</code>的原理是生成java源代码来实现反射的调用，下面就是生成的源代码。</p>
+<pre><code>package reflectasm;
+import java.util.Map;
+import com.esotericsoftware.reflectasm.MethodAccess;
+public class PojoMethodAccess extends MethodAccess {
+    public Object invoke(Object paramObject, int paramInt, Object[] paramArrayOfObject) {
+        Pojo localPojo = (Pojo) paramObject;
+        switch (paramInt) {
+            case 0:
+                return Boolean.valueOf(localPojo.equals((Object) paramArrayOfObject[0]));
+            case 1:
+                return localPojo.toString();
+            case 2:
+                return Integer.valueOf(localPojo.hashCode());
+            case 3:
+                return localPojo.getName();
+            case 4:
+                localPojo.setName((String) paramArrayOfObject[0]);
+                return null;
+        }
+        throw new IllegalArgumentException(&quot;Method not found: &quot; + paramInt);
+    }
+}
+</code></pre><p>补充:</p>
+<p>–</p>
+<pre><code>ROUND 1:
+Benchmark                           Mode  Cnt   Score   Error  Units
+ MHOpto.mh_invoke                    avgt   15  11.332 ± 0.577  ns/op
+ MHOpto.mh_invokeExact               avgt   15  10.605 ± 0.667  ns/op
+ MHOpto.mh_invokeExact_static_fianl  avgt   15   3.797 ± 0.201  ns/op
+ MHOpto.plain                        avgt   15   4.093 ± 0.156  ns/op
+ MHOpto.reflect                      avgt   15  11.599 ± 0.646  ns/op
+ MHOpto.unreflect_invoke             avgt   15  11.147 ± 0.743  ns/op
+ MHOpto.unreflect_invokeExact        avgt   15  11.392 ± 0.518  ns/op
+
+ ROUND 2:
+ Benchmark                           Mode  Cnt   Score   Error  Units
+MHOpto.mh_invoke                    avgt   15  11.799 ± 0.847  ns/op
+MHOpto.mh_invokeExact               avgt   15  11.830 ± 0.637  ns/op
+MHOpto.mh_invokeExact_static_fianl  avgt   15   4.415 ± 0.191  ns/op
+MHOpto.plain                        avgt   15   4.084 ± 0.300  ns/op
+MHOpto.reflect                      avgt   15  12.191 ± 0.637  ns/op
+MHOpto.unreflect_invoke             avgt   15  11.535 ± 0.816  ns/op
+MHOpto.unreflect_invokeExact        avgt   15  11.828 ± 0.666  ns/op
+</code></pre><p><code>MethodHandle</code>太牛叉了。</p>
+<h2 id="spring-mvc的异步servlet实现"><a href="#spring-mvc的异步servlet实现" class="headerlink" title="spring mvc的异步servlet实现"></a><a name="spring_async_servelt">spring mvc的异步servlet实现</a></h2><p>spring异步web处理流程，我们先以<code>Controller</code>方法返回<code>Callable</code>对象为例</p>
+<ol>
+<li>http线程处理请求到Controller方法，返回Callable结果</li>
+<li>spring选用<code>CallableMethodReturnValueHandler</code>来处理Callable结果，提交Callable到线程池，当前http线程返回,参考<code>WebAsyncManager.startCallableProcessing()</code></li>
+<li>线程池中线程执行<code>Callable</code>任务，并且<code>dispatch</code>请求到容器，参考<code>WebAsyncManager.setConcurrentResultAndDispatch()</code></li>
+<li>容器选取http线程继续处理请求</li>
+</ol>
+<p>通过分析源代码，下面几点需要关注下：</p>
+<ol>
+<li><p><strong>dispatch请求后，又会执行filterchain</strong>，我们需要保证filter只执行一次，filter最好继承<code>OncePerRequestFilter</code>。</p>
+</li>
+<li><p>spring内置了几种异步结果处理器，<code>CallableMethodReturnValueHandler</code>、<code>AsyncTaskMethodReturnValueHandler</code>、<code>DeferredResultMethodReturnValueHandler</code>分别支持方法返回<code>Callable</code>,<code>WebAsyncTask</code>,<code>DeferredResult</code>。</p>
+</li>
+<li><p><code>org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#taskExecutor</code>此默认线程池为<code>SimpleAsyncTaskExecutor</code>，此<code>taskExecutor</code>每次都会都会新建线程来处理任务，生产环境建议单独配置线程池。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2302,7 +2389,7 @@ The twelve-factor developer resists the urge to use different backing services b
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">61</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
