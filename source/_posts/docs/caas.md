@@ -1,3 +1,9 @@
+---
+title: 基于docker的云解决方案
+date: 22015-12-16 21:52:17
+show: hide
+---
+
 # 基于docker的云解决方案
 
 
