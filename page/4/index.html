@@ -297,6 +297,191 @@
             
   <section id="posts" class="posts-expand">
     
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/zero-copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/zero-copy/" itemprop="url">使用零拷贝提高数据传输效率</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-16T21:52:17+08:00">
+                2014-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文讲了如何用<code>zero copy</code>技术来提高I/O性能.</p>
+<p>静态文件服务器需要把磁盘上的数据发送给客户端.这里cpu消耗比较少,但是效率不高:内核从磁盘读数据,内核/用户空间交换数据,最后写到socket.数据在内核/用户空间转换时,需要拷贝数据,消耗cpu和内存带宽.对于java应用来说,还需要合理的使用缓冲区来减少gc的压力.</p>
+<p>java提供了<code>transferTo</code>方法来使用<code>zero copy</code>技术.他可以让数据直接从一个<code>channel</code>到另外一个<code>channel</code>.避免上面说到的一些问题.</p>
+<h3 id="1-传统的解决办法"><a href="#1-传统的解决办法" class="headerlink" title="1.传统的解决办法"></a>1.传统的解决办法</h3><p>过程类似于下面的代码:</p>
+<pre><code>File.read(fileDesc, buf, len);
+Socket.send(socket, buf, len);
+</code></pre><h4 id="1-1数据拷贝"><a href="#1-1数据拷贝" class="headerlink" title="1.1数据拷贝"></a>1.1数据拷贝</h4><p><img src="/zero-copy/figure1.gif" alt=""></p>
+<p>这种方式会有四次内存拷贝</p>
+<h4 id="1-2-上下文切换"><a href="#1-2-上下文切换" class="headerlink" title="1.2 上下文切换"></a>1.2 上下文切换</h4><p><img src="/zero-copy/figure2.gif" alt=""></p>
+<p>这种方式会有四次上下文切换.</p>
+<h4 id="1-3-过程说明"><a href="#1-3-过程说明" class="headerlink" title="1.3 过程说明"></a>1.3 过程说明</h4><ol>
+<li><code>read</code>方法导致一次从<code>user mode</code>到<code>kernel mode</code>的上下文切换.系统调用<code>sys_read</code>从文件读取数据,通过DMA,把磁盘上的数据读到<code>kernel address space buffer</code>.</li>
+<li>数据从<code>kernel address space buffer</code>拷贝到<code>user buffer</code>.<code>read</code>返回,导致从<code>kernel mode</code>到<code>user mode</code>的上下文切换.现在数据被读到了<code>user address space buffer</code>.</li>
+<li><code>send</code>方法导致一次<code>user mode</code>到<code>kernel mode</code>的上下文切换.第三次拷贝把拷贝到<code>kernel address space buffer</code>.此buffer关联着<code>destination socket</code></li>
+<li>系统<code>send</code>调用返回时导致第四次上下文切换,DMA把<code>kernel address space buffer</code>中的数据发送到协议引擎导致第四次数据拷贝.</li>
+</ol>
+<h4 id="1-4-intermediate-kernel-buffer"><a href="#1-4-intermediate-kernel-buffer" class="headerlink" title="1.4 intermediate kernel buffer"></a>1.4 intermediate kernel buffer</h4><p>使用<code>intermediate kernel buffer</code>主要为了提高性能,读的时候扮演缓存的角色,写的时候可以让应用程序实现异步(应用程序写到kernel buffer就返回).不幸的是,当我们处理的数据大于内核缓冲大小时,这样的拷贝是完全没有任何意义的.</p>
+<h3 id="2-零拷贝的方式"><a href="#2-零拷贝的方式" class="headerlink" title="2.零拷贝的方式"></a>2.零拷贝的方式</h3><p>使用如下的代码来完成零拷贝</p>
+<p>java方法:</p>
+<pre><code>public void transferTo(long position, long count, WritableByteChannel target);
+</code></pre><p>系统调用:</p>
+<pre><code>#include &lt;sys/socket.h&gt;
+ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
+</code></pre><h4 id="2-1-数据拷贝"><a href="#2-1-数据拷贝" class="headerlink" title="2.1 数据拷贝"></a>2.1 数据拷贝</h4><p><img src="/zero-copy/figure3.gif" alt=""></p>
+<p>涉及到3次数据拷贝.</p>
+<h4 id="2-2-上下文切换"><a href="#2-2-上下文切换" class="headerlink" title="2.2 上下文切换"></a>2.2 上下文切换</h4><p><img src="/zero-copy/figure4.gif" alt=""></p>
+<p>涉及到2次上下文切换</p>
+<h4 id="2-3-过程说明"><a href="#2-3-过程说明" class="headerlink" title="2.3 过程说明"></a>2.3 过程说明</h4><ol>
+<li><code>transferTo</code>方法让DMA把磁盘文件读到<code>kernel read buffer</code>.然后内核把<code>kernel read buffer</code>中的数据拷贝到<code>socket buffer</code>.</li>
+<li><code>DMA</code>把<code>socket buffer</code>中的数据拷贝到协议引擎.</li>
+</ol>
+<h3 id="3-更好的方式"><a href="#3-更好的方式" class="headerlink" title="3 更好的方式"></a>3 更好的方式</h3><p>通过上面使用这种方式,上下文切换从4次变为了2次.数据拷贝减少了一次.如果网卡支持<code>gather operations</code>,linux 2.4内核就开始提供更好的解决方案.</p>
+<p><img src="/zero-copy/figure5.gif" alt=""></p>
+<ol>
+<li><code>transferTo</code>方法让<code>DMA engine</code>把磁盘文件内容拷贝到内核缓冲区.</li>
+<li>数据不需要拷贝到<code>socket buffer</code>.<code>socket buffer</code>里只需写入数据的地址和长度.<code>DMA engine</code>从内核缓冲区把数据读到协议引擎.</li>
+</ol>
+<p>通过内核带来的特性,数据拷贝变为了2次(这两次拷贝都是DMA在做).cpu copy变为了0.</p>
+<h3 id="4-写在最后"><a href="#4-写在最后" class="headerlink" title="4 写在最后"></a>4 写在最后</h3><p>文章地址<code>http://www.ibm.com/developerworks/library/j-zerocopy/</code>,里面有性能测试结果.后面附带有性能测试程序.不过这个测试程序不太恰当,应该都用nio的api来测试<code>tansferTo</code>和非<code>tansferTo</code>.</p>
+<p>静态文件服务器一般都有静态资源缓存(apache可以配置,其他的服务器不了解).如果使用内存缓存,减少了读的过程.内存拷贝变为cpu copy <code>application buffer</code> -&gt; <code>socket buffer</code>,DMA copy <code>socket buffer</code> -&gt;<code>NIC buffer</code>,磁盘io大大降低了.</p>
+<p><code>NIO</code>不是很熟悉,不知道通过<code>ByteBuffer.allocateDirect()</code>+<code>transferTo</code>+<code>gather operations</code>能不能让copy变为一次.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
       
 
   
@@ -530,6 +715,8 @@ changelogSchemaName=yjf_cs
 
 
     
+    
+    
       
 
   
@@ -735,6 +922,8 @@ http://cxf.apache.org/core  http://cxf.apache.org/schemas/core.xsd</code></p>
   </article>
 
 
+    
+    
     
       
 
@@ -1014,6 +1203,8 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
 
 
     
+    
+    
       
 
   
@@ -1222,6 +1413,8 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
 
 
     
+    
+    
       
 
   
@@ -1382,6 +1575,8 @@ jcmd 23385 JFR.start name=recording filename=/root/recording.jfr duration=180s
   </article>
 
 
+    
+    
     
       
 
@@ -1736,6 +1931,8 @@ vagrant box list
 
 
     
+    
+    
       
 
   
@@ -1892,6 +2089,8 @@ configuration file //Users/bohr/software/tengine/conf/nginx.conf test failed
   </article>
 
 
+    
+    
     
       
 
@@ -2116,6 +2315,8 @@ May 22 09:47:41 vagrant-ubuntu-saucy-64 kernel: [ 5499.449012] Killed process 76
 
 
     
+    
+    
       
 
   
@@ -2289,245 +2490,6 @@ if(key!=null &amp;&amp; !key.startsWith(&quot;com.xxx&quot;)){//不检查groupId
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-unexpected-element/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/cxf-unexpected-element/" itemprop="url">烦人的cxf unexpected element 异常</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-05-15T21:52:17+08:00">
-                2014-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>当cxf传输的数据对象结构变化时,比如请求对象减少了字段,响应对象增加了字段,在jaxb unmarsh时会抛出异常,导致接口访问失败.</p>
-<pre><code>javax.xml.bind.UnmarshalException: unexpected element (uri:&quot;&quot;, local:&quot;name&quot;). Expected elements are &lt;{}name&gt;
-</code></pre><p>上面这是一个典型的<code>unexpected element</code>异常,如果cxf客户端请求中多了一个<code>name</code>属性,或者cxf服务端响应中多了一个<code>name</code>属性,都会导致此异常.</p>
-<h3 id="2-源代码分析"><a href="#2-源代码分析" class="headerlink" title="2.源代码分析"></a>2.源代码分析</h3><p>翻了下源代码:</p>
-<p><code>com.sun.xml.bind.v2.runtime.unmarshaller.StructureLoader#childElement</code>检查是否是新增属性</p>
-<pre><code> @Override
-public void childElement(UnmarshallingContext.State state, TagName arg) throws SAXException {
-    ChildLoader child = childUnmarshallers.get(arg.uri,arg.local);
-    if(child==null) {//检查是否新增属性
-        child = catchAll;
-        if(child==null) {
-            super.childElement(state,arg);
-            return;
-        }
-    }
-
-    state.loader = child.loader;
-    state.receiver = child.receiver;
-}
-</code></pre><p>在<code>com.sun.xml.bind.v2.runtime.unmarshaller.Loader</code>中检查是否处理此问题</p>
-<pre><code> public void childElement(UnmarshallingContext.State state, TagName ea) throws SAXException {
-    // notify the error, then recover by ignoring the whole element.
-    reportUnexpectedChildElement(ea, true);
-    state.loader = Discarder.INSTANCE;
-    state.receiver = null;
-}
-
-@SuppressWarnings({&quot;StringEquality&quot;})
-protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover) throws SAXException {
-    if(canRecover &amp;&amp; !UnmarshallingContext.getInstance().parent.hasEventHandler())
-    //这里默认会有个EventHandler,不会直接忽略此问题
-        // this error happens particurly often (when input documents contain a lot of unexpected elements to be ignored),
-        // so don&apos;t bother computing all the messages and etc if we know that
-        // there&apos;s no event handler to receive the error in the end. See #286 
-        return;
-     //下面的代码抛出异常
-    if(ea.uri!=ea.uri.intern() || ea.local!=ea.local.intern())
-        reportError(Messages.UNINTERNED_STRINGS.format(), canRecover );
-    else
-        reportError(Messages.UNEXPECTED_ELEMENT.format(ea.uri,ea.local,computeExpectedElements()), canRecover );
-}
-</code></pre><p>在<code>org.apache.cxf.jaxb.io.DataReaderImpl#createUnmarshaller</code>中设置了<code>EventHandler</code>,注意这里的<code>veventHandler</code>,默认是没有的.</p>
-<pre><code>if (setEventHandler) {
-            um.setEventHandler(new WSUIDValidationHandler(veventHandler));
-}
-</code></pre><p> <code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的代码很简单:</p>
-<pre><code>private static class WSUIDValidationHandler implements ValidationEventHandler {
-    ValidationEventHandler origHandler;
-    WSUIDValidationHandler(ValidationEventHandler o) {
-        origHandler = o;
-    }
-
-    public boolean handleEvent(ValidationEvent event) {
-        String msg = event.getMessage();
-        System.out.println(&quot;WSUIDValidationHandler&quot;+msg);
-        if (msg != null
-                &amp;&amp; msg.contains(&quot;:Id&quot;)
-                &amp;&amp; (msg.startsWith(&quot;cvc-type.3.1.1: &quot;)
-                || msg.startsWith(&quot;cvc-type.3.2.2: &quot;)
-                || msg.startsWith(&quot;cvc-complex-type.3.1.1: &quot;)
-                || msg.startsWith(&quot;cvc-complex-type.3.2.2: &quot;))) {
-            return true;
-        }
-        if (origHandler != null) {
-            return origHandler.handleEvent(event);
-        }
-        return false;
-    }
-}
-</code></pre><p>先自己处理,自己处理不了的交给<code>origHandler</code>,那我们只需要自己构建一个<code>javax.xml.bind.ValidationEventHandler</code>来专门处理<code>unexpected element</code>异常,问题就得到了解决.</p>
-<p><code>org.apache.cxf.jaxb.io.DataReaderImpl#setProperty</code>中有段代码:</p>
-<pre><code>veventHandler = (ValidationEventHandler)m.getContextualProperty(&quot;jaxb-validation-event-handler&quot;);
-       if (veventHandler == null) {
-           veventHandler = databinding.getValidationEventHandler();
-       }
-</code></pre><p> 如果配置了<code>jaxb-validation-event-handler</code>属性,就可以让我们自己的<code>javax.xml.bind.ValidationEventHandler</code>来处理此异常.也可以设置<code>setEventHandler</code>为<code>false</code>,不设置异常处理器,忽略所有unmarsh异常,不过这样我感觉太暴力了点,这样做也忽略了<code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的逻辑,点儿都不科学.</p>
-<h3 id="3-实现"><a href="#3-实现" class="headerlink" title="3.实现"></a>3.实现</h3><p> 上面分析清楚了,实现就很简单,实现<code>javax.xml.bind.ValidationEventHandler</code></p>
-<pre><code>public class IgnoreUnexpectedElementValidationEventHandler implements ValidationEventHandler {
-        private static final Logger logger = LoggerFactory.getLogger(IgnoreUnexpectedElementValidationEventHandler.class);
-
-        @Override
-        public boolean handleEvent(ValidationEvent event) {
-                String msg = event.getMessage();
-                if (msg != null &amp;&amp; msg.startsWith(&quot;unexpected element&quot;)) {
-                    logger.warn(&quot;{}&quot;, msg);
-                    return true;
-             }
-              return false;
-        }
-}
-</code></pre><p> 在<code>cxf:bus</code>中配置下就ok</p>
-<pre><code>  &lt;cxf:bus&gt;
-    &lt;cxf:properties&gt;
-        &lt;entry key=&quot;jaxb-validation-event-handler&quot;&gt;
-            &lt;bean class=&quot;IgnoreUnexpectedElementValidationEventHandler&quot;/&gt;
-        &lt;/entry&gt;
-    &lt;/cxf:properties&gt;
-&lt;/cxf:bus&gt;
-</code></pre><p> 建议只在线上环境启用此东东,线下还是不要开启,早点发现问题是好事.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
   </section>
 
@@ -2583,7 +2545,7 @@ protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

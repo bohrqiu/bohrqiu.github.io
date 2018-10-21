@@ -297,6 +297,249 @@
             
   <section id="posts" class="posts-expand">
     
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/cxf-unexpected-element/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/cxf-unexpected-element/" itemprop="url">烦人的cxf unexpected element 异常</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-05-15T21:52:17+08:00">
+                2014-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>当cxf传输的数据对象结构变化时,比如请求对象减少了字段,响应对象增加了字段,在jaxb unmarsh时会抛出异常,导致接口访问失败.</p>
+<pre><code>javax.xml.bind.UnmarshalException: unexpected element (uri:&quot;&quot;, local:&quot;name&quot;). Expected elements are &lt;{}name&gt;
+</code></pre><p>上面这是一个典型的<code>unexpected element</code>异常,如果cxf客户端请求中多了一个<code>name</code>属性,或者cxf服务端响应中多了一个<code>name</code>属性,都会导致此异常.</p>
+<h3 id="2-源代码分析"><a href="#2-源代码分析" class="headerlink" title="2.源代码分析"></a>2.源代码分析</h3><p>翻了下源代码:</p>
+<p><code>com.sun.xml.bind.v2.runtime.unmarshaller.StructureLoader#childElement</code>检查是否是新增属性</p>
+<pre><code> @Override
+public void childElement(UnmarshallingContext.State state, TagName arg) throws SAXException {
+    ChildLoader child = childUnmarshallers.get(arg.uri,arg.local);
+    if(child==null) {//检查是否新增属性
+        child = catchAll;
+        if(child==null) {
+            super.childElement(state,arg);
+            return;
+        }
+    }
+
+    state.loader = child.loader;
+    state.receiver = child.receiver;
+}
+</code></pre><p>在<code>com.sun.xml.bind.v2.runtime.unmarshaller.Loader</code>中检查是否处理此问题</p>
+<pre><code> public void childElement(UnmarshallingContext.State state, TagName ea) throws SAXException {
+    // notify the error, then recover by ignoring the whole element.
+    reportUnexpectedChildElement(ea, true);
+    state.loader = Discarder.INSTANCE;
+    state.receiver = null;
+}
+
+@SuppressWarnings({&quot;StringEquality&quot;})
+protected final void reportUnexpectedChildElement(TagName ea, boolean canRecover) throws SAXException {
+    if(canRecover &amp;&amp; !UnmarshallingContext.getInstance().parent.hasEventHandler())
+    //这里默认会有个EventHandler,不会直接忽略此问题
+        // this error happens particurly often (when input documents contain a lot of unexpected elements to be ignored),
+        // so don&apos;t bother computing all the messages and etc if we know that
+        // there&apos;s no event handler to receive the error in the end. See #286 
+        return;
+     //下面的代码抛出异常
+    if(ea.uri!=ea.uri.intern() || ea.local!=ea.local.intern())
+        reportError(Messages.UNINTERNED_STRINGS.format(), canRecover );
+    else
+        reportError(Messages.UNEXPECTED_ELEMENT.format(ea.uri,ea.local,computeExpectedElements()), canRecover );
+}
+</code></pre><p>在<code>org.apache.cxf.jaxb.io.DataReaderImpl#createUnmarshaller</code>中设置了<code>EventHandler</code>,注意这里的<code>veventHandler</code>,默认是没有的.</p>
+<pre><code>if (setEventHandler) {
+            um.setEventHandler(new WSUIDValidationHandler(veventHandler));
+}
+</code></pre><p> <code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的代码很简单:</p>
+<pre><code>private static class WSUIDValidationHandler implements ValidationEventHandler {
+    ValidationEventHandler origHandler;
+    WSUIDValidationHandler(ValidationEventHandler o) {
+        origHandler = o;
+    }
+
+    public boolean handleEvent(ValidationEvent event) {
+        String msg = event.getMessage();
+        System.out.println(&quot;WSUIDValidationHandler&quot;+msg);
+        if (msg != null
+                &amp;&amp; msg.contains(&quot;:Id&quot;)
+                &amp;&amp; (msg.startsWith(&quot;cvc-type.3.1.1: &quot;)
+                || msg.startsWith(&quot;cvc-type.3.2.2: &quot;)
+                || msg.startsWith(&quot;cvc-complex-type.3.1.1: &quot;)
+                || msg.startsWith(&quot;cvc-complex-type.3.2.2: &quot;))) {
+            return true;
+        }
+        if (origHandler != null) {
+            return origHandler.handleEvent(event);
+        }
+        return false;
+    }
+}
+</code></pre><p>先自己处理,自己处理不了的交给<code>origHandler</code>,那我们只需要自己构建一个<code>javax.xml.bind.ValidationEventHandler</code>来专门处理<code>unexpected element</code>异常,问题就得到了解决.</p>
+<p><code>org.apache.cxf.jaxb.io.DataReaderImpl#setProperty</code>中有段代码:</p>
+<pre><code>veventHandler = (ValidationEventHandler)m.getContextualProperty(&quot;jaxb-validation-event-handler&quot;);
+       if (veventHandler == null) {
+           veventHandler = databinding.getValidationEventHandler();
+       }
+</code></pre><p> 如果配置了<code>jaxb-validation-event-handler</code>属性,就可以让我们自己的<code>javax.xml.bind.ValidationEventHandler</code>来处理此异常.也可以设置<code>setEventHandler</code>为<code>false</code>,不设置异常处理器,忽略所有unmarsh异常,不过这样我感觉太暴力了点,这样做也忽略了<code>org.apache.cxf.jaxb.io.DataReaderImpl.WSUIDValidationHandler</code>的逻辑,点儿都不科学.</p>
+<h3 id="3-实现"><a href="#3-实现" class="headerlink" title="3.实现"></a>3.实现</h3><p> 上面分析清楚了,实现就很简单,实现<code>javax.xml.bind.ValidationEventHandler</code></p>
+<pre><code>public class IgnoreUnexpectedElementValidationEventHandler implements ValidationEventHandler {
+        private static final Logger logger = LoggerFactory.getLogger(IgnoreUnexpectedElementValidationEventHandler.class);
+
+        @Override
+        public boolean handleEvent(ValidationEvent event) {
+                String msg = event.getMessage();
+                if (msg != null &amp;&amp; msg.startsWith(&quot;unexpected element&quot;)) {
+                    logger.warn(&quot;{}&quot;, msg);
+                    return true;
+             }
+              return false;
+        }
+}
+</code></pre><p> 在<code>cxf:bus</code>中配置下就ok</p>
+<pre><code>  &lt;cxf:bus&gt;
+    &lt;cxf:properties&gt;
+        &lt;entry key=&quot;jaxb-validation-event-handler&quot;&gt;
+            &lt;bean class=&quot;IgnoreUnexpectedElementValidationEventHandler&quot;/&gt;
+        &lt;/entry&gt;
+    &lt;/cxf:properties&gt;
+&lt;/cxf:bus&gt;
+</code></pre><p> 建议只在线上环境启用此东东,线下还是不要开启,早点发现问题是好事.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
       
 
   
@@ -442,6 +685,8 @@
   </article>
 
 
+    
+    
     
       
 
@@ -592,6 +837,8 @@
 
 
     
+    
+    
       
 
   
@@ -739,6 +986,8 @@
   </article>
 
 
+    
+    
     
       
 
@@ -910,6 +1159,8 @@
   </article>
 
 
+    
+    
     
       
 
@@ -1095,6 +1346,8 @@
 
 
     
+    
+    
       
 
   
@@ -1274,6 +1527,8 @@ jekyll serve --watch
   </article>
 
 
+    
+    
     
       
 
@@ -1485,6 +1740,8 @@ jekyll serve --watch
   </article>
 
 
+    
+    
     
       
 
@@ -1773,6 +2030,8 @@ at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConver
 
 
     
+    
+    
       
 
   
@@ -1968,153 +2227,6 @@ at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConver
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/jsr303/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/jsr303/" itemprop="url">JSR303</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-12-02T21:52:17+08:00">
-                2013-12-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="how-to-obtain-a-validator"><a href="#how-to-obtain-a-validator" class="headerlink" title="how to obtain a validator"></a>how to obtain a validator</h2><p>To obtain a Validator, you must first create a ValidatorFactory. If there is only one Bean Validation implementation in your classpath, you can use:</p>
-<pre><code>ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-</code></pre><p>You should usually not instantiate more than one factory; factory creation is a costly process. Also, the factory also acts as a cache for the available validation constraints.<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/jsr303/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
   </section>
 
@@ -2170,7 +2282,7 @@ at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConver
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

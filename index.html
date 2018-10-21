@@ -297,6 +297,9 @@
             
   <section id="posts" class="posts-expand">
     
+    
+    
+    
       
 
   
@@ -484,6 +487,8 @@ cachePrefixContainVersion=true
 
 
     
+    
+    
       
 
   
@@ -667,6 +672,8 @@ public class GreeterService {
 
 
     
+    
+    
       
 
   
@@ -840,6 +847,8 @@ public class GreeterService {
   </article>
 
 
+    
+    
     
       
 
@@ -1178,593 +1187,7 @@ public class GreeterService {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/spec_dev/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spec_dev/" itemprop="url">开发规范</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T21:52:17+08:00">
-                2018-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<blockquote>
-<p>几年前写的东西，已经离职，留作纪念</p>
-</blockquote>
-</blockquote>
-<h1 id="易极付开发规范"><a href="#易极付开发规范" class="headerlink" title="易极付开发规范"></a>易极付开发规范</h1><blockquote>
-<table>
-<thead>
-<tr>
-<th>版本</th>
-<th>时间</th>
-<th>作者</th>
-<th>修订章节</th>
-<th>修订内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.5</td>
-<td>2012-05-23</td>
-<td>培根</td>
-<td>全部</td>
-<td>初始版本</td>
-</tr>
-<tr>
-<td>1.0</td>
-<td>2015-04-11</td>
-<td>秋波</td>
-<td>全部</td>
-<td>优化、补充</td>
-</tr>
-<tr>
-<td>1.1</td>
-<td>2015-04-14</td>
-<td>秋波</td>
-<td>全部</td>
-<td>增加目录</td>
-</tr>
-<tr>
-<td>1.2</td>
-<td>2015-09-24</td>
-<td>秋波</td>
-<td>全部</td>
-<td>增加用户信息安全</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li><a href="#OperationSpec">操作规范</a></li>
-<li><a href="#LogSpec">日志规范</a></li>
-<li><a href="#CommentSpec">注释规范</a></li>
-<li><a href="#SecuritySpec">安全规范</a></li>
-<li><a href="#CodeSpec">编码规范</a></li>
-<li><a href="#CommonSpec">通用规范</a></li>
-<li><a href="#MySQLSpec">数据库规范</a></li>
-<li><a href="#MavenSpec">maven规范</a></li>
-<li><a href="#AccessSpec">访问权限规范</a></li>
-</ol>
-<hr>
-<h2 id="一、操作规范"><a href="#一、操作规范" class="headerlink" title="一、操作规范"></a><a name="OperationSpecification">一、操作规范</a></h2><h3 id="1-模板及格式化"><a href="#1-模板及格式化" class="headerlink" title="1. 模板及格式化"></a>1. 模板及格式化</h3><p>易极付开发人员必须保证代码格式化的一致性，否则可能会导致代码冲突，轻微的耗费人力合并代码；严重时可能导致代码丢失，引起bug或者故障。</p>
-<ul>
-<li>开发人员必须配置易极付的codetemplates.xml代码模板文件;</li>
-<li>开发人员必须配置易极付的YJFFormatter.xml代码格式化文件;</li>
-<li>每次提交代码之前，必须对java代码format;</li>
-</ul>
-<p>IDE设置参考：<a href="http://wiki.yiji.dev/pages/viewpage.action?pageId=3310402" target="_blank" rel="noopener">IDE设置代码格式和代码模板配置</a></p>
-<h3 id="2-代码提交"><a href="#2-代码提交" class="headerlink" title="2. 代码提交"></a>2. 代码提交</h3><ul>
-<li>任何代码禁止出现“System.out.println”、”// TODO Auto-generated method stub”</li>
-<li>提交代码前使用checkstyle、findbugs、pmd扫描代码，禁止提交<strong>严重</strong>以上问题</li>
-<li>不准提交工程下IDE自动生成的代码,比如.classpath、target、.idea、*.iml</li>
-</ul>
-<h3 id="3-垃圾清理"><a href="#3-垃圾清理" class="headerlink" title="3. 垃圾清理"></a>3. 垃圾清理</h3><ul>
-<li>对于从来没有用到的或者被注释的方法,变量,类,配置文件,动态配置属性等要坚决从系统中清理出去,避免造成过多垃圾</li>
-</ul>
-<h3 id="4-版本控制工具"><a href="#4-版本控制工具" class="headerlink" title="4. 版本控制工具"></a>4. 版本控制工具</h3><ul>
-<li>git项目必须要有.gitignore文件，文件内容<a href="http://gitlab.yiji/qzhanbo/yiji-boot/raw/master/.gitignore" target="_blank" rel="noopener">参考</a></li>
-<li>git项目工作流必须遵循<a href="http://gitlab.yiji/yanglie/git-camp/blob/master/git-standard/yiji-git-workflow.md" target="_blank" rel="noopener">易极付git项目开发工作流规范</a></li>
-<li>为防止冲突,任何时候,代码(及配置文件)提交前,先从svn/git中更新代码和配置文件,以及早发现不兼容的代码变更和冲突</li>
-<li>提交代码(及配置文件)时,如果发生冲突时,先看历史说明,再找相关人员确认,坚决不允许强制覆盖</li>
-<li>svn目录结构应该包括3个代码目录：<code>trunk</code>、<code>tags</code>、<code>branches</code>。如果项目有文档，应该增加<code>doc</code>目录，禁止把文档放到代码目录</li>
-</ul>
-<h2 id="二、日志规范"><a href="#二、日志规范" class="headerlink" title="二、日志规范"></a><a name="LogSpec">二、日志规范</a></h2><p>参考：<a href="/spec_log/" title="日志规范">日志规范</a></p>
-<h2 id="三、注释规范"><a href="#三、注释规范" class="headerlink" title="三、注释规范"></a><a name="CommentSpec">三、注释规范</a></h2><ul>
-<li>类注释和版权注释，请使用<code>file template</code>自动生成。</li>
-<li><p>接口方法注释如下：</p>
-<pre><code>/**
- * 删除用户收藏的一个商品。
- * 逻辑删除：delete_flag置为1
- *
- * @param memberId  会员ID
- * @param itemSku   商品序列号
- *
- * @return 是否删除成功：1.成功，0.失败
- * @throws ServiceCustomException
- */
-</code></pre><p>  接口方法注释每个入参必须有中文解释，且全局统一名称，返回对象是<code>boolean</code>或<code>int</code>型时，解释返回结果含义，加入必要的抛出异常规则。</p>
-</li>
-<li><p>方法体内注释如下：</p>
-<pre><code>// 1. 尝试更新已有的收藏
-int updateForCreate = dao.doUpdate(memberId, itemSku);
-// 2. 更新成功，返回新增成功
-if (updateForCreate &gt; 0) {
-return updateForCreate;
-}
-// 3. 没有更新成功则需要添加用户收藏信息
-</code></pre><p>  禁止在每行的尾部注释。</p>
-</li>
-</ul>
-<h2 id="四、安全规范"><a href="#四、安全规范" class="headerlink" title="四、安全规范"></a><a name="SecuritySpec">四、安全规范</a></h2><p>请参考<a href="http://wiki.yiji.dev/pages/viewpage.action?pageId=3310408" target="_blank" rel="noopener">安全checklist</a></p>
-<h2 id="五、编码规范"><a href="#五、编码规范" class="headerlink" title="五、编码规范"></a><a name="CodeSpec">五、编码规范</a></h2><p>java代码必须严格遵循<a href="google-java-code-style.md">google编码规范</a></p>
-<h2 id="六、通用规范"><a href="#六、通用规范" class="headerlink" title="六、通用规范"></a><a name="CommonSpec">六、通用规范</a></h2><h3 id="1-异常处理"><a href="#1-异常处理" class="headerlink" title="1. 异常处理"></a>1. 异常处理</h3><ul>
-<li>捕捉到的异常，不允许不作任何处理就截断，至少要记入日志，或重新抛出</li>
-<li>最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容</li>
-</ul>
-<h3 id="2-资源的使用"><a href="#2-资源的使用" class="headerlink" title="2. 资源的使用"></a>2. 资源的使用</h3><ul>
-<li>对系统资源的访问,使用后必须释放系统资源。这类资源包括:文件流、线程、网络连接、数据库连接等。</li>
-<li>对于文件、流的IO操作,必须通过finally关闭。可以考虑使用jdk7以后新增的try-resource来关闭资源</li>
-<li>对于线程,线程资源必须通过线程池提供,不允许在应用中自行显式创建线程</li>
-<li>对于网络连接不数据库连接,必须由框架通过连接池提供,不允许应用 中自行建立网络不数据库连接</li>
-</ul>
-<h3 id="3-本地事务操作"><a href="#3-本地事务操作" class="headerlink" title="3. 本地事务操作"></a>3. 本地事务操作</h3><ul>
-<li>对于业务逻辑上不允许并发访问的数据(例如：具有全局唯一性的数据, 涉及到总和类的数据等) ,必须采用事务和加锁的方式进行处理</li>
-<li>对于业务逻辑上要求数据完整性的数据(例如：同时操作多个表,对同一 个表反复进行操作等) ,必须采用事务的方式进行处理</li>
-</ul>
-<h3 id="4-线程安全处理"><a href="#4-线程安全处理" class="headerlink" title="4. 线程安全处理"></a>4. 线程安全处理</h3><ul>
-<li>虽然容器会负责多线程的处理,但是程序中还是会遇到很多线程安全的问题, 开发人员必须注意并发处理,否则可能导致死锁或者资损</li>
-<li>线程上下文变量的设置清除必须配对</li>
-<li>静态Util或单例必须是线程安全。</li>
-<li>DateFormat是非线程安全的,类变量使用时会被破坏。每次使用都要重新构造,或者使用DateUtil工具类</li>
-<li>为记录加锁时,需要保持一致的加锁顺序,否则可能会造成死锁</li>
-</ul>
-<h3 id="5-用户信息安全"><a href="#5-用户信息安全" class="headerlink" title="5. 用户信息安全"></a>5. 用户信息安全</h3><ul>
-<li><p>禁止把用户敏感信息(用户密码、银行卡、信用卡等信息)输出到日志</p>
-<p>  学习并使用下面三个注解：</p>
-<pre><code>@ToString.Maskable 调用ToString#tostring时输出掩码
-@ToString.Invisible 调用ToString#tostring时不输出
-@JSONField(serialize = false) json序列化时不输出，要考虑是否有反序列的情况
-</code></pre></li>
-<li><p>禁止把用户敏感信息告知给其他人</p>
-</li>
-<li>出现用户敏感信息泄露时，不能扩散、传播、留存，请立即通知技术总监</li>
-</ul>
-<h2 id="七、数据库规范"><a href="#七、数据库规范" class="headerlink" title="七、数据库规范"></a><a name="MySQLSpec">七、数据库规范</a></h2><a href="/spec_mysql/" title="MySQL数据库开发规范">MySQL数据库开发规范</a>
-<h2 id="八、maven规范"><a href="#八、maven规范" class="headerlink" title="八、maven规范"></a><a name="MavenSpec">八、maven规范</a></h2><a href="/spec_maven/" title="maven规范">maven规范</a>
-<h2 id="九、访问权限规范"><a href="#九、访问权限规范" class="headerlink" title="九、访问权限规范"></a><a name="AccessSpec">九、访问权限规范</a></h2><ul>
-<li>禁止把测试页面暴露到公网</li>
-<li>禁止把http定时任务url暴露到公网</li>
-<li><strong>禁止测试环境直接访问线上</strong></li>
-<li><strong>禁止把生产数据导到本地</strong></li>
-<li>禁止把管理、统计功能直接暴露到公网(boss功能、druid管理页面等)</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/spec_maven/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/spec_maven/" itemprop="url">开发规范(二):maven</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T21:52:17+08:00">
-                2018-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<blockquote>
-<p>几年前写的东西，已经离职，留作纪念</p>
-</blockquote>
-</blockquote>
-<h1 id="maven使用规范"><a href="#maven使用规范" class="headerlink" title="maven使用规范"></a>maven使用规范</h1><blockquote>
-<table>
-<thead>
-<tr>
-<th>版本</th>
-<th>时间</th>
-<th>作者</th>
-<th>修订章节</th>
-<th>修订内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1.0</td>
-<td>2015-05-11</td>
-<td>秋波</td>
-<td>全部</td>
-<td>init</td>
-</tr>
-<tr>
-<td>1.1</td>
-<td>2015-07-16</td>
-<td>秋波</td>
-<td>全部</td>
-<td>增加依赖规范</td>
-</tr>
-<tr>
-<td>1.2</td>
-<td>2015-07-13</td>
-<td>秋波</td>
-<td>全部</td>
-<td>增加版本号命名规范，增加发布规范</td>
-</tr>
-<tr>
-<td>1.3</td>
-<td>2015-08-05</td>
-<td>秋波</td>
-<td>全部</td>
-<td>增加maven相关命令</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li><a href="#dm">依赖管理</a></li>
-<li><a href="#dr">模块依赖关系</a></li>
-<li><a href="#ds">发布规范</a></li>
-<li><a href="#vs">版本规范</a></li>
-<li><a href="#cmd">maven相关命令</a></li>
-</ol>
-<hr>
-<p>此规范用于规范maven依赖管理、maven模块依赖关系、模块版本升级原则、发布规则。</p>
-<h2 id="1-依赖管理"><a href="#1-依赖管理" class="headerlink" title="1. 依赖管理"></a><a name="dm">1. 依赖管理</a></h2><ul>
-<li>业务系统父pom必须继承于<code>yiji-parent</code></li>
-<li>业务系统不能在<code>pom</code>中定义依赖版本，所有版本由<code>yiji-parent</code>提供</li>
-<li>禁止使用<code>yiji-parent</code>中没有定义的第三方组件，如需要使用第三方组件，需由基础技术部评估</li>
-</ul>
-<h2 id="2-模块依赖关系"><a href="#2-模块依赖关系" class="headerlink" title="2. 模块依赖关系"></a><a name="dr">2. 模块依赖关系</a></h2><p>这里以cs项目为例，模块依赖规范如下</p>
-<h3 id="2-1-父pom"><a href="#2-1-父pom" class="headerlink" title="2.1 父pom:"></a>2.1 父pom:</h3><p>项目的版本由父pom定义</p>
-<pre><code>&lt;parent&gt;
-    &lt;groupId&gt;com.yiji&lt;/groupId&gt;
-    &lt;artifactId&gt;yiji-parent&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-&lt;/parent&gt;
-&lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
-&lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
-&lt;version&gt;2.0.20140306&lt;/version&gt;
-</code></pre><p>禁止在父pom的dependencyManagement中定义子module的版本.</p>
-<h3 id="2-2-facade模块："><a href="#2-2-facade模块：" class="headerlink" title="2.2 facade模块："></a>2.2 facade模块：</h3><p>子模块<code>groupId</code>和<code>version</code>继承自父pom</p>
-<pre><code>&lt;parent&gt;
-       &lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
-    &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
-    &lt;version&gt;2.0.20140306&lt;/version&gt;
-&lt;/parent&gt;
-&lt;artifactId&gt;cs-facade&lt;/artifactId&gt;
-</code></pre><p> 当前模块pom定义中不准定义groupId和version.</p>
-<h3 id="2-3-web模块"><a href="#2-3-web模块" class="headerlink" title="2.3 web模块:"></a>2.3 web模块:</h3><p>版本依赖通过<code>${project.parent.version}</code>定义</p>
-<pre><code>&lt;parent&gt;
-    &lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
-    &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
-    &lt;version&gt;2.0.20140306&lt;/version&gt;
-&lt;/parent&gt;
-&lt;artifactId&gt;cs-web&lt;/artifactId&gt;
- &lt;dependencies&gt;
-    &lt;dependency&gt;
-       &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
-       &lt;artifactId&gt;cs-biz&lt;/artifactId&gt;
-       &lt;version&gt;${project.parent.version}&lt;/version&gt;
-    &lt;/dependency&gt;
- &lt;/dependencies&gt;
-</code></pre><p>web模块需要依赖biz模块，通过<code>${project.parent.version}</code>来定义依赖版本.</p>
-<h2 id="3-发布规范"><a href="#3-发布规范" class="headerlink" title="3. 发布规范"></a><a name="ds">3. 发布规范</a></h2><h3 id="3-1-发布流程"><a href="#3-1-发布流程" class="headerlink" title="3.1 发布流程"></a>3.1 发布流程</h3><h4 id="3-1-1-nexus环境介绍"><a href="#3-1-1-nexus环境介绍" class="headerlink" title="3.1.1 nexus环境介绍"></a>3.1.1 nexus环境介绍</h4><p>我们有两个nexus，一个用于开发测试(在<code>yiji-parent</code>中<code>profile=dev</code>中定义)，一个用于联调和线上打包(在<code>yiji-parent</code>中<code>profile=online</code>中定义)</p>
-<h4 id="3-1-2-发布流程规范"><a href="#3-1-2-发布流程规范" class="headerlink" title="3.1.2 发布流程规范"></a>3.1.2 发布流程规范</h4><p>开发测试阶段，我们把项目输出物发布到测试nexus(<code>profile=dev</code>)，本地开发测试通过后，发布到线上nexus(<code>profile=online</code>)</p>
-<p>在上线时，必须保持线上nexus和测试nexus中的版本一致，禁止出现下面的情况：</p>
-<ul>
-<li>测试nexus中有，线上nexus没有</li>
-<li>测试nexus中没有，线上nexus有</li>
-<li>测试、线上nexus中都有，版本也一致，但是代码不一致</li>
-</ul>
-<h3 id="3-2-发布操作规范"><a href="#3-2-发布操作规范" class="headerlink" title="3.2 发布操作规范"></a>3.2 发布操作规范</h3><h4 id="3-2-1-在不需要部署的模块中覆盖配置"><a href="#3-2-1-在不需要部署的模块中覆盖配置" class="headerlink" title="3.2.1 在不需要部署的模块中覆盖配置"></a>3.2.1 在不需要部署的模块中覆盖配置</h4><p>比如<code>assemble</code>模块不需要发布，需要在assemble的pom中覆盖配置,<strong>禁止把非项目输出物发布到nexus</strong>，比如<code>biz</code>,<code>dal</code>,<code>web</code>,<code>assemble</code></p>
-<pre><code>&lt;properties&gt;
-    &lt;deploy.skip&gt;true&lt;/deploy.skip&gt;
-&lt;/properties&gt;
-</code></pre><h4 id="3-2-2-发布到nexus仓库"><a href="#3-2-2-发布到nexus仓库" class="headerlink" title="3.2.2 发布到nexus仓库"></a>3.2.2 发布到nexus仓库</h4><p>发布时，在父pom所在的目录，执行命令发布。执行此命令会把父pom和<code>deploy.skip=false</code>的项目提交到nexus仓库。按照我们的项目结构，大多数项目只能把<code>facade</code>module发到nexus仓库。</p>
-<h4 id="3-2-3-发布到测试nexus"><a href="#3-2-3-发布到测试nexus" class="headerlink" title="3.2.3 发布到测试nexus"></a>3.2.3 发布到测试nexus</h4><pre><code>mvn -T 1C clean deploy -P dev  -Dmaven.test.skip=true
-</code></pre><h4 id="3-2-4-发布到线上nexus"><a href="#3-2-4-发布到线上nexus" class="headerlink" title="3.2.4 发布到线上nexus"></a>3.2.4 发布到线上nexus</h4><pre><code>mvn -T 1C clean deploy -P online  -Dmaven.test.skip=true
-</code></pre><p>使用windows的同学，可以写几个bat，放到PATH中加载这几个bat.</p>
-<h2 id="4-版本规范"><a href="#4-版本规范" class="headerlink" title="4. 版本规范"></a><a name="vs">4. 版本规范</a></h2><h3 id="4-1-版本命名"><a href="#4-1-版本命名" class="headerlink" title="4.1 版本命名"></a>4.1 版本命名</h3><p>业务系统必须按照下面的方式命名版本号：</p>
-<pre><code>主版本.子版本.日期
-</code></pre><p>说明如下：</p>
-<ul>
-<li><p>主版本号：</p>
-<p>  当功能模块有较大的变动，比如增加模块或是整体架构发生变化。此版本号由项目负责人决定是否修改。</p>
-</li>
-<li><p>次版本号：</p>
-<p>  相对于主版本号而言，次版本号的升级对应的只是局部的变动，但该局部的变动造成程序和以前版本不能兼容，或者对该程序以前的协作关系产生了破坏，或者是功能上有大的改进或增强。此版本号由项目负责人决定是否修改。</p>
-</li>
-<li><p>日期版本号：</p>
-<p>  用于记录修改项目的当前日期，每此对项目的修改都需要更改日期版本号。此版本号由开发人员决定是否修改。</p>
-</li>
-</ul>
-<h3 id="4-2-版本修改原则"><a href="#4-2-版本修改原则" class="headerlink" title="4.2 版本修改原则"></a>4.2 版本修改原则</h3><p>版本修改的原则是：</p>
-<ol>
-<li>所有模块的版本必须保持一致</li>
-<li>服务输出项目:服务输出模块的功能改变时，升级模块版本</li>
-<li>组件项目:组件功能改变时，升级版本。</li>
-</ol>
-<p>我们大多数项目都是服务输出项目，我们对其他客户提供服务，当我们对外提供的服务功能变动时,需要升级服务输出模块的版本(我们的项目结构中，此模块基本上都命名为<code>facade</code>)。</p>
-<p>组件项目，当功能发生变化，影响到使用方时，需要升级版本。如果是bug修复，可以在nexus上把老版本删除，强制让使用方升级。</p>
-<p>无论的模块版本如何变动，都要保证所有的模块版本一致，可以使用下面的命令来统一修改版本。</p>
-<pre><code>mvn versions:set -DgenerateBackupPoms=false
-</code></pre><h3 id="5-maven相关命令"><a href="#5-maven相关命令" class="headerlink" title="5. maven相关命令"></a><a name="cmd">5. maven相关命令</a></h3><pre><code>#安装到本地
-alias mvni=&apos;mvn -T 1C clean install -Dmaven.test.skip=true&apos;
-#打包
-alias mvnp=&apos;mvn -T 1C clean package -Dmaven.test.skip=true&apos;
-#修改版本
-alias mvnv=&apos;mvn versions:set -DgenerateBackupPoms=false&apos;
-#发布到测试nexus
-alias mvndd=&apos;mvn -T 1C clean deploy -P dev  -Dmaven.test.skip=true&apos;
-#发布到生产nexus
-alias mvndo=&apos;mvn -T 1C clean deploy -P online -Dmaven.test.skip=true&apos;
-#清理工程
-alias mvnc=&apos;mvn -T 1C clean eclipse:clean idea:clean&apos;
-#检查依赖升级情况
-alias mvncv=&apos;mvn -T 4C  versions:display-dependency-updates&apos;
-#生成文档站点
-alias mvns=&apos;mvn clean site -Dmaven.test.skip=true&apos;
-#生成eclipse工程结构
-alias mvne=&apos;mvn eclipse:eclipse install&apos;
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
       
 
@@ -2115,6 +1538,600 @@ end;
 
 
     
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/spec_maven/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spec_maven/" itemprop="url">开发规范(二):maven</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T21:52:17+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<blockquote>
+<p>几年前写的东西，已经离职，留作纪念</p>
+</blockquote>
+</blockquote>
+<h1 id="maven使用规范"><a href="#maven使用规范" class="headerlink" title="maven使用规范"></a>maven使用规范</h1><blockquote>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>时间</th>
+<th>作者</th>
+<th>修订章节</th>
+<th>修订内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>2015-05-11</td>
+<td>秋波</td>
+<td>全部</td>
+<td>init</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>2015-07-16</td>
+<td>秋波</td>
+<td>全部</td>
+<td>增加依赖规范</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>2015-07-13</td>
+<td>秋波</td>
+<td>全部</td>
+<td>增加版本号命名规范，增加发布规范</td>
+</tr>
+<tr>
+<td>1.3</td>
+<td>2015-08-05</td>
+<td>秋波</td>
+<td>全部</td>
+<td>增加maven相关命令</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#dm">依赖管理</a></li>
+<li><a href="#dr">模块依赖关系</a></li>
+<li><a href="#ds">发布规范</a></li>
+<li><a href="#vs">版本规范</a></li>
+<li><a href="#cmd">maven相关命令</a></li>
+</ol>
+<hr>
+<p>此规范用于规范maven依赖管理、maven模块依赖关系、模块版本升级原则、发布规则。</p>
+<h2 id="1-依赖管理"><a href="#1-依赖管理" class="headerlink" title="1. 依赖管理"></a><a name="dm">1. 依赖管理</a></h2><ul>
+<li>业务系统父pom必须继承于<code>yiji-parent</code></li>
+<li>业务系统不能在<code>pom</code>中定义依赖版本，所有版本由<code>yiji-parent</code>提供</li>
+<li>禁止使用<code>yiji-parent</code>中没有定义的第三方组件，如需要使用第三方组件，需由基础技术部评估</li>
+</ul>
+<h2 id="2-模块依赖关系"><a href="#2-模块依赖关系" class="headerlink" title="2. 模块依赖关系"></a><a name="dr">2. 模块依赖关系</a></h2><p>这里以cs项目为例，模块依赖规范如下</p>
+<h3 id="2-1-父pom"><a href="#2-1-父pom" class="headerlink" title="2.1 父pom:"></a>2.1 父pom:</h3><p>项目的版本由父pom定义</p>
+<pre><code>&lt;parent&gt;
+    &lt;groupId&gt;com.yiji&lt;/groupId&gt;
+    &lt;artifactId&gt;yiji-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/parent&gt;
+&lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
+&lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
+&lt;version&gt;2.0.20140306&lt;/version&gt;
+</code></pre><p>禁止在父pom的dependencyManagement中定义子module的版本.</p>
+<h3 id="2-2-facade模块："><a href="#2-2-facade模块：" class="headerlink" title="2.2 facade模块："></a>2.2 facade模块：</h3><p>子模块<code>groupId</code>和<code>version</code>继承自父pom</p>
+<pre><code>&lt;parent&gt;
+       &lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
+    &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
+    &lt;version&gt;2.0.20140306&lt;/version&gt;
+&lt;/parent&gt;
+&lt;artifactId&gt;cs-facade&lt;/artifactId&gt;
+</code></pre><p> 当前模块pom定义中不准定义groupId和version.</p>
+<h3 id="2-3-web模块"><a href="#2-3-web模块" class="headerlink" title="2.3 web模块:"></a>2.3 web模块:</h3><p>版本依赖通过<code>${project.parent.version}</code>定义</p>
+<pre><code>&lt;parent&gt;
+    &lt;artifactId&gt;cs-parent&lt;/artifactId&gt;
+    &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
+    &lt;version&gt;2.0.20140306&lt;/version&gt;
+&lt;/parent&gt;
+&lt;artifactId&gt;cs-web&lt;/artifactId&gt;
+ &lt;dependencies&gt;
+    &lt;dependency&gt;
+       &lt;groupId&gt;com.yjf.cs&lt;/groupId&gt;
+       &lt;artifactId&gt;cs-biz&lt;/artifactId&gt;
+       &lt;version&gt;${project.parent.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+ &lt;/dependencies&gt;
+</code></pre><p>web模块需要依赖biz模块，通过<code>${project.parent.version}</code>来定义依赖版本.</p>
+<h2 id="3-发布规范"><a href="#3-发布规范" class="headerlink" title="3. 发布规范"></a><a name="ds">3. 发布规范</a></h2><h3 id="3-1-发布流程"><a href="#3-1-发布流程" class="headerlink" title="3.1 发布流程"></a>3.1 发布流程</h3><h4 id="3-1-1-nexus环境介绍"><a href="#3-1-1-nexus环境介绍" class="headerlink" title="3.1.1 nexus环境介绍"></a>3.1.1 nexus环境介绍</h4><p>我们有两个nexus，一个用于开发测试(在<code>yiji-parent</code>中<code>profile=dev</code>中定义)，一个用于联调和线上打包(在<code>yiji-parent</code>中<code>profile=online</code>中定义)</p>
+<h4 id="3-1-2-发布流程规范"><a href="#3-1-2-发布流程规范" class="headerlink" title="3.1.2 发布流程规范"></a>3.1.2 发布流程规范</h4><p>开发测试阶段，我们把项目输出物发布到测试nexus(<code>profile=dev</code>)，本地开发测试通过后，发布到线上nexus(<code>profile=online</code>)</p>
+<p>在上线时，必须保持线上nexus和测试nexus中的版本一致，禁止出现下面的情况：</p>
+<ul>
+<li>测试nexus中有，线上nexus没有</li>
+<li>测试nexus中没有，线上nexus有</li>
+<li>测试、线上nexus中都有，版本也一致，但是代码不一致</li>
+</ul>
+<h3 id="3-2-发布操作规范"><a href="#3-2-发布操作规范" class="headerlink" title="3.2 发布操作规范"></a>3.2 发布操作规范</h3><h4 id="3-2-1-在不需要部署的模块中覆盖配置"><a href="#3-2-1-在不需要部署的模块中覆盖配置" class="headerlink" title="3.2.1 在不需要部署的模块中覆盖配置"></a>3.2.1 在不需要部署的模块中覆盖配置</h4><p>比如<code>assemble</code>模块不需要发布，需要在assemble的pom中覆盖配置,<strong>禁止把非项目输出物发布到nexus</strong>，比如<code>biz</code>,<code>dal</code>,<code>web</code>,<code>assemble</code></p>
+<pre><code>&lt;properties&gt;
+    &lt;deploy.skip&gt;true&lt;/deploy.skip&gt;
+&lt;/properties&gt;
+</code></pre><h4 id="3-2-2-发布到nexus仓库"><a href="#3-2-2-发布到nexus仓库" class="headerlink" title="3.2.2 发布到nexus仓库"></a>3.2.2 发布到nexus仓库</h4><p>发布时，在父pom所在的目录，执行命令发布。执行此命令会把父pom和<code>deploy.skip=false</code>的项目提交到nexus仓库。按照我们的项目结构，大多数项目只能把<code>facade</code>module发到nexus仓库。</p>
+<h4 id="3-2-3-发布到测试nexus"><a href="#3-2-3-发布到测试nexus" class="headerlink" title="3.2.3 发布到测试nexus"></a>3.2.3 发布到测试nexus</h4><pre><code>mvn -T 1C clean deploy -P dev  -Dmaven.test.skip=true
+</code></pre><h4 id="3-2-4-发布到线上nexus"><a href="#3-2-4-发布到线上nexus" class="headerlink" title="3.2.4 发布到线上nexus"></a>3.2.4 发布到线上nexus</h4><pre><code>mvn -T 1C clean deploy -P online  -Dmaven.test.skip=true
+</code></pre><p>使用windows的同学，可以写几个bat，放到PATH中加载这几个bat.</p>
+<h2 id="4-版本规范"><a href="#4-版本规范" class="headerlink" title="4. 版本规范"></a><a name="vs">4. 版本规范</a></h2><h3 id="4-1-版本命名"><a href="#4-1-版本命名" class="headerlink" title="4.1 版本命名"></a>4.1 版本命名</h3><p>业务系统必须按照下面的方式命名版本号：</p>
+<pre><code>主版本.子版本.日期
+</code></pre><p>说明如下：</p>
+<ul>
+<li><p>主版本号：</p>
+<p>  当功能模块有较大的变动，比如增加模块或是整体架构发生变化。此版本号由项目负责人决定是否修改。</p>
+</li>
+<li><p>次版本号：</p>
+<p>  相对于主版本号而言，次版本号的升级对应的只是局部的变动，但该局部的变动造成程序和以前版本不能兼容，或者对该程序以前的协作关系产生了破坏，或者是功能上有大的改进或增强。此版本号由项目负责人决定是否修改。</p>
+</li>
+<li><p>日期版本号：</p>
+<p>  用于记录修改项目的当前日期，每此对项目的修改都需要更改日期版本号。此版本号由开发人员决定是否修改。</p>
+</li>
+</ul>
+<h3 id="4-2-版本修改原则"><a href="#4-2-版本修改原则" class="headerlink" title="4.2 版本修改原则"></a>4.2 版本修改原则</h3><p>版本修改的原则是：</p>
+<ol>
+<li>所有模块的版本必须保持一致</li>
+<li>服务输出项目:服务输出模块的功能改变时，升级模块版本</li>
+<li>组件项目:组件功能改变时，升级版本。</li>
+</ol>
+<p>我们大多数项目都是服务输出项目，我们对其他客户提供服务，当我们对外提供的服务功能变动时,需要升级服务输出模块的版本(我们的项目结构中，此模块基本上都命名为<code>facade</code>)。</p>
+<p>组件项目，当功能发生变化，影响到使用方时，需要升级版本。如果是bug修复，可以在nexus上把老版本删除，强制让使用方升级。</p>
+<p>无论的模块版本如何变动，都要保证所有的模块版本一致，可以使用下面的命令来统一修改版本。</p>
+<pre><code>mvn versions:set -DgenerateBackupPoms=false
+</code></pre><h3 id="5-maven相关命令"><a href="#5-maven相关命令" class="headerlink" title="5. maven相关命令"></a><a name="cmd">5. maven相关命令</a></h3><pre><code>#安装到本地
+alias mvni=&apos;mvn -T 1C clean install -Dmaven.test.skip=true&apos;
+#打包
+alias mvnp=&apos;mvn -T 1C clean package -Dmaven.test.skip=true&apos;
+#修改版本
+alias mvnv=&apos;mvn versions:set -DgenerateBackupPoms=false&apos;
+#发布到测试nexus
+alias mvndd=&apos;mvn -T 1C clean deploy -P dev  -Dmaven.test.skip=true&apos;
+#发布到生产nexus
+alias mvndo=&apos;mvn -T 1C clean deploy -P online -Dmaven.test.skip=true&apos;
+#清理工程
+alias mvnc=&apos;mvn -T 1C clean eclipse:clean idea:clean&apos;
+#检查依赖升级情况
+alias mvncv=&apos;mvn -T 4C  versions:display-dependency-updates&apos;
+#生成文档站点
+alias mvns=&apos;mvn clean site -Dmaven.test.skip=true&apos;
+#生成eclipse工程结构
+alias mvne=&apos;mvn eclipse:eclipse install&apos;
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/spec_dev/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spec_dev/" itemprop="url">开发规范</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T21:52:17+08:00">
+                2018-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<blockquote>
+<p>几年前写的东西，已经离职，留作纪念</p>
+</blockquote>
+</blockquote>
+<h1 id="易极付开发规范"><a href="#易极付开发规范" class="headerlink" title="易极付开发规范"></a>易极付开发规范</h1><blockquote>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>时间</th>
+<th>作者</th>
+<th>修订章节</th>
+<th>修订内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>2012-05-23</td>
+<td>培根</td>
+<td>全部</td>
+<td>初始版本</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>2015-04-11</td>
+<td>秋波</td>
+<td>全部</td>
+<td>优化、补充</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>2015-04-14</td>
+<td>秋波</td>
+<td>全部</td>
+<td>增加目录</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>2015-09-24</td>
+<td>秋波</td>
+<td>全部</td>
+<td>增加用户信息安全</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#OperationSpec">操作规范</a></li>
+<li><a href="#LogSpec">日志规范</a></li>
+<li><a href="#CommentSpec">注释规范</a></li>
+<li><a href="#SecuritySpec">安全规范</a></li>
+<li><a href="#CodeSpec">编码规范</a></li>
+<li><a href="#CommonSpec">通用规范</a></li>
+<li><a href="#MySQLSpec">数据库规范</a></li>
+<li><a href="#MavenSpec">maven规范</a></li>
+<li><a href="#AccessSpec">访问权限规范</a></li>
+</ol>
+<hr>
+<h2 id="一、操作规范"><a href="#一、操作规范" class="headerlink" title="一、操作规范"></a><a name="OperationSpecification">一、操作规范</a></h2><h3 id="1-模板及格式化"><a href="#1-模板及格式化" class="headerlink" title="1. 模板及格式化"></a>1. 模板及格式化</h3><p>易极付开发人员必须保证代码格式化的一致性，否则可能会导致代码冲突，轻微的耗费人力合并代码；严重时可能导致代码丢失，引起bug或者故障。</p>
+<ul>
+<li>开发人员必须配置易极付的codetemplates.xml代码模板文件;</li>
+<li>开发人员必须配置易极付的YJFFormatter.xml代码格式化文件;</li>
+<li>每次提交代码之前，必须对java代码format;</li>
+</ul>
+<p>IDE设置参考：<a href="http://wiki.yiji.dev/pages/viewpage.action?pageId=3310402" target="_blank" rel="noopener">IDE设置代码格式和代码模板配置</a></p>
+<h3 id="2-代码提交"><a href="#2-代码提交" class="headerlink" title="2. 代码提交"></a>2. 代码提交</h3><ul>
+<li>任何代码禁止出现“System.out.println”、”// TODO Auto-generated method stub”</li>
+<li>提交代码前使用checkstyle、findbugs、pmd扫描代码，禁止提交<strong>严重</strong>以上问题</li>
+<li>不准提交工程下IDE自动生成的代码,比如.classpath、target、.idea、*.iml</li>
+</ul>
+<h3 id="3-垃圾清理"><a href="#3-垃圾清理" class="headerlink" title="3. 垃圾清理"></a>3. 垃圾清理</h3><ul>
+<li>对于从来没有用到的或者被注释的方法,变量,类,配置文件,动态配置属性等要坚决从系统中清理出去,避免造成过多垃圾</li>
+</ul>
+<h3 id="4-版本控制工具"><a href="#4-版本控制工具" class="headerlink" title="4. 版本控制工具"></a>4. 版本控制工具</h3><ul>
+<li>git项目必须要有.gitignore文件，文件内容<a href="http://gitlab.yiji/qzhanbo/yiji-boot/raw/master/.gitignore" target="_blank" rel="noopener">参考</a></li>
+<li>git项目工作流必须遵循<a href="http://gitlab.yiji/yanglie/git-camp/blob/master/git-standard/yiji-git-workflow.md" target="_blank" rel="noopener">易极付git项目开发工作流规范</a></li>
+<li>为防止冲突,任何时候,代码(及配置文件)提交前,先从svn/git中更新代码和配置文件,以及早发现不兼容的代码变更和冲突</li>
+<li>提交代码(及配置文件)时,如果发生冲突时,先看历史说明,再找相关人员确认,坚决不允许强制覆盖</li>
+<li>svn目录结构应该包括3个代码目录：<code>trunk</code>、<code>tags</code>、<code>branches</code>。如果项目有文档，应该增加<code>doc</code>目录，禁止把文档放到代码目录</li>
+</ul>
+<h2 id="二、日志规范"><a href="#二、日志规范" class="headerlink" title="二、日志规范"></a><a name="LogSpec">二、日志规范</a></h2><p>参考：<a href="/spec_log/" title="日志规范">日志规范</a></p>
+<h2 id="三、注释规范"><a href="#三、注释规范" class="headerlink" title="三、注释规范"></a><a name="CommentSpec">三、注释规范</a></h2><ul>
+<li>类注释和版权注释，请使用<code>file template</code>自动生成。</li>
+<li><p>接口方法注释如下：</p>
+<pre><code>/**
+ * 删除用户收藏的一个商品。
+ * 逻辑删除：delete_flag置为1
+ *
+ * @param memberId  会员ID
+ * @param itemSku   商品序列号
+ *
+ * @return 是否删除成功：1.成功，0.失败
+ * @throws ServiceCustomException
+ */
+</code></pre><p>  接口方法注释每个入参必须有中文解释，且全局统一名称，返回对象是<code>boolean</code>或<code>int</code>型时，解释返回结果含义，加入必要的抛出异常规则。</p>
+</li>
+<li><p>方法体内注释如下：</p>
+<pre><code>// 1. 尝试更新已有的收藏
+int updateForCreate = dao.doUpdate(memberId, itemSku);
+// 2. 更新成功，返回新增成功
+if (updateForCreate &gt; 0) {
+return updateForCreate;
+}
+// 3. 没有更新成功则需要添加用户收藏信息
+</code></pre><p>  禁止在每行的尾部注释。</p>
+</li>
+</ul>
+<h2 id="四、安全规范"><a href="#四、安全规范" class="headerlink" title="四、安全规范"></a><a name="SecuritySpec">四、安全规范</a></h2><p>请参考<a href="http://wiki.yiji.dev/pages/viewpage.action?pageId=3310408" target="_blank" rel="noopener">安全checklist</a></p>
+<h2 id="五、编码规范"><a href="#五、编码规范" class="headerlink" title="五、编码规范"></a><a name="CodeSpec">五、编码规范</a></h2><p>java代码必须严格遵循<a href="google-java-code-style.md">google编码规范</a></p>
+<h2 id="六、通用规范"><a href="#六、通用规范" class="headerlink" title="六、通用规范"></a><a name="CommonSpec">六、通用规范</a></h2><h3 id="1-异常处理"><a href="#1-异常处理" class="headerlink" title="1. 异常处理"></a>1. 异常处理</h3><ul>
+<li>捕捉到的异常，不允许不作任何处理就截断，至少要记入日志，或重新抛出</li>
+<li>最外层的业务使用者，必须处理异常，将其转化为用户可以理解的内容</li>
+</ul>
+<h3 id="2-资源的使用"><a href="#2-资源的使用" class="headerlink" title="2. 资源的使用"></a>2. 资源的使用</h3><ul>
+<li>对系统资源的访问,使用后必须释放系统资源。这类资源包括:文件流、线程、网络连接、数据库连接等。</li>
+<li>对于文件、流的IO操作,必须通过finally关闭。可以考虑使用jdk7以后新增的try-resource来关闭资源</li>
+<li>对于线程,线程资源必须通过线程池提供,不允许在应用中自行显式创建线程</li>
+<li>对于网络连接不数据库连接,必须由框架通过连接池提供,不允许应用 中自行建立网络不数据库连接</li>
+</ul>
+<h3 id="3-本地事务操作"><a href="#3-本地事务操作" class="headerlink" title="3. 本地事务操作"></a>3. 本地事务操作</h3><ul>
+<li>对于业务逻辑上不允许并发访问的数据(例如：具有全局唯一性的数据, 涉及到总和类的数据等) ,必须采用事务和加锁的方式进行处理</li>
+<li>对于业务逻辑上要求数据完整性的数据(例如：同时操作多个表,对同一 个表反复进行操作等) ,必须采用事务的方式进行处理</li>
+</ul>
+<h3 id="4-线程安全处理"><a href="#4-线程安全处理" class="headerlink" title="4. 线程安全处理"></a>4. 线程安全处理</h3><ul>
+<li>虽然容器会负责多线程的处理,但是程序中还是会遇到很多线程安全的问题, 开发人员必须注意并发处理,否则可能导致死锁或者资损</li>
+<li>线程上下文变量的设置清除必须配对</li>
+<li>静态Util或单例必须是线程安全。</li>
+<li>DateFormat是非线程安全的,类变量使用时会被破坏。每次使用都要重新构造,或者使用DateUtil工具类</li>
+<li>为记录加锁时,需要保持一致的加锁顺序,否则可能会造成死锁</li>
+</ul>
+<h3 id="5-用户信息安全"><a href="#5-用户信息安全" class="headerlink" title="5. 用户信息安全"></a>5. 用户信息安全</h3><ul>
+<li><p>禁止把用户敏感信息(用户密码、银行卡、信用卡等信息)输出到日志</p>
+<p>  学习并使用下面三个注解：</p>
+<pre><code>@ToString.Maskable 调用ToString#tostring时输出掩码
+@ToString.Invisible 调用ToString#tostring时不输出
+@JSONField(serialize = false) json序列化时不输出，要考虑是否有反序列的情况
+</code></pre></li>
+<li><p>禁止把用户敏感信息告知给其他人</p>
+</li>
+<li>出现用户敏感信息泄露时，不能扩散、传播、留存，请立即通知技术总监</li>
+</ul>
+<h2 id="七、数据库规范"><a href="#七、数据库规范" class="headerlink" title="七、数据库规范"></a><a name="MySQLSpec">七、数据库规范</a></h2><a href="/spec_mysql/" title="MySQL数据库开发规范">MySQL数据库开发规范</a>
+<h2 id="八、maven规范"><a href="#八、maven规范" class="headerlink" title="八、maven规范"></a><a name="MavenSpec">八、maven规范</a></h2><a href="/spec_maven/" title="maven规范">maven规范</a>
+<h2 id="九、访问权限规范"><a href="#九、访问权限规范" class="headerlink" title="九、访问权限规范"></a><a name="AccessSpec">九、访问权限规范</a></h2><ul>
+<li>禁止把测试页面暴露到公网</li>
+<li>禁止把http定时任务url暴露到公网</li>
+<li><strong>禁止测试环境直接访问线上</strong></li>
+<li><strong>禁止把生产数据导到本地</strong></li>
+<li>禁止把管理、统计功能直接暴露到公网(boss功能、druid管理页面等)</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
       
 
   
@@ -2355,6 +2372,8 @@ npm run build
 
 
     
+    
+    
       
 
   
@@ -2502,172 +2521,6 @@ npm run build
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/2016-08-reading-notes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016-08-reading-notes/" itemprop="url">2016年08月Reading Notes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-10T21:52:17+08:00">
-                2016-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>服务发现用于动态感知服务提供方地址，并提供服务路由分发策略能力。</p>
-<h3 id="1-客户端发现"><a href="#1-客户端发现" class="headerlink" title="1. 客户端发现"></a>1. 客户端发现</h3><p>客户端从注册中心获取服务列表，客户端监听服务列表的变化，客户端通过路由策略选择合适的服务端地址。</p>
-<p>服务端在停服务时，需要先通知客户端不要发送新请求过来，等服务端把当前请求处理完后，才断开连接。</p>
-<h3 id="2-代理端发现"><a href="#2-代理端发现" class="headerlink" title="2. 代理端发现"></a>2. 代理端发现</h3><p>代理端对外提供服务，主要用于对外请求路由。代理端(比如nginx/haproxy)转发请求到后端服务。后端服务暴露地址到注册中心，代理程序动态获取服务地址。</p>
-<p>nginx可以试试<a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="noopener">nginx-upsync-module</a></p>
-<p>在k8s内部，采用nginx+dns+k8s proxy实现。</p>
-<h2 id="关于高可用系统"><a href="#关于高可用系统" class="headerlink" title="关于高可用系统"></a>关于高可用系统</h2><p><a href="http://coolshell.cn/articles/17459.html" target="_blank" rel="noopener">http://coolshell.cn/articles/17459.html</a></p>
-<p>前段时间写了一段公司的公关文(CUI NIU BI)，强迫自己写了<code>5个9</code>。</p>
-<p>作者讲了几个大实话：</p>
-<blockquote>
-<blockquote>
-<p>如果你没有一套科学的牛逼的软件工程的管理，没有牛逼先进的自动化的运维工具，没有技术能力很牛逼的工程师团队，怎么可能出现高可用的系统啊。</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<blockquote>
-<p>深层次的东西则是——对工程这门科学的尊重：1.对待技术的态度 2.一个公司的工程文化 3.领导者对工程的尊重</p>
-</blockquote>
-</blockquote>
-<p>佛渡有缘人，点到即止，不强求。</p>
-<ol>
-<li>以前对高可用的关注点主要在应用层面，现在加入运维团队后，高可用的关注点延伸到机房、硬件。</li>
-<li>同城双活只要网络质量靠谱点，还是比较好做，主要是南北请求路由控制和东西流量故障切换。</li>
-<li>把服务不可用的因素分成<a href="https://docs.oracle.com/cd/A91202_01/901_doc/rac.901/a89867/pshavdtl.htm" target="_blank" rel="noopener">planned、unplanned</a>，分别设计预案</li>
-</ol>
-<p>也许把<code>SLA</code>写到合同里，我就不敢乱吹牛逼了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
   </section>
 
@@ -2723,7 +2576,7 @@ npm run build
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
