@@ -10,9 +10,9 @@ tags:
 ## AOP Benchmark
 
 一直觉得spring proxy aop性能比较差，看了[AOP Benchmark](https://web.archive.org/web/20150520175004/https://docs.codehaus.org/display/AW/AOP+Benchmark)没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：
-
-1. 在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)
-2. spring 使用aspectj ltw
+ 
+1. 在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)，spring 使用aspectj ltw(开发时运行)
+2. 使用maven注解实现编译时植入(线上运行)
 
 参考 [spring-boot-aspectj](https://github.com/dsyer/spring-boot-aspectj)
 
