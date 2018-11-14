@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent) spring 使用aspectj ltw  参考 spring-boot-aspectj">
+<meta name="description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)，spring 使用aspectj ltw(开发时运行) 使用maven注解实现编译时植入">
 <meta name="keywords" content="READING NOTES,aop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018年11月Reading Notes">
 <meta property="og:url" content="http://bohr.me/2018-11-reading-notes/index.html">
 <meta property="og:site_name" content="qiubo&#39;s life">
-<meta property="og:description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent) spring 使用aspectj ltw  参考 spring-boot-aspectj">
+<meta property="og:description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)，spring 使用aspectj ltw(开发时运行) 使用maven注解实现编译时植入">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-14T03:31:11.759Z">
+<meta property="og:updated_time" content="2018-11-14T03:54:51.920Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2018年11月Reading Notes">
-<meta name="twitter:description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent) spring 使用aspectj ltw  参考 spring-boot-aspectj">
+<meta name="twitter:description" content="AOP Benchmark一直觉得spring proxy aop性能比较差，看了AOP Benchmark没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：  在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)，spring 使用aspectj ltw(开发时运行) 使用maven注解实现编译时植入">
 
 
 
@@ -402,8 +402,8 @@
       
         <h2 id="AOP-Benchmark"><a href="#AOP-Benchmark" class="headerlink" title="AOP Benchmark"></a>AOP Benchmark</h2><p>一直觉得spring proxy aop性能比较差，看了<a href="https://web.archive.org/web/20150520175004/https://docs.codehaus.org/display/AW/AOP+Benchmark" target="_blank" rel="noopener">AOP Benchmark</a>没想当差别这么大。曾今在一个项目中改用aspectj，成本有点高，也不便于团队协作。先埋个思路在这里：</p>
 <ol>
-<li>在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)</li>
-<li>spring 使用aspectj ltw</li>
+<li>在应用启动时，编程式加载java agent(VirtualMachine#loadAgent)，spring 使用aspectj ltw(开发时运行)</li>
+<li>使用maven注解实现编译时植入(线上运行)</li>
 </ol>
 <p>参考 <a href="https://github.com/dsyer/spring-boot-aspectj" target="_blank" rel="noopener">spring-boot-aspectj</a></p>
 <p>在spring.io上看到了不一样的声音: <a href="https://spring.io/blog/2007/07/19/debunking-myths-proxies-impact-performance/" target="_blank" rel="noopener">Debunking myths: proxies impact performance</a></p>
