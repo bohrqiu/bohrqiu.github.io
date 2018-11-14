@@ -311,6 +311,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-05-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015-05-reading-notes/" itemprop="url">2015年05月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-05-01T21:52:17+08:00">
+                2015-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="使用spring-loaded提高开发效率"><a href="#使用spring-loaded提高开发效率" class="headerlink" title="使用spring loaded提高开发效率"></a><a name="springloaded">使用spring loaded提高开发效率</a></h2><p><a href="https://github.com/spring-projects/spring-loaded" target="_blank" rel="noopener">spring-loaded</a>和<a href="http://zeroturnaround.com/software/jrebel/" target="_blank" rel="noopener">jrebel</a>类似，它能发现您修改的类并重新加载。在开发测试时，您只需要使用它启动后，就可以一直写代码了。jrebel是收费的软件，spring-loaded免费，而且他很了解您代码中用到的spring特性，能很智能的帮忙重新加载类，并把bean注册到spring容器中。</p>
+<p>使用很简单，参考下面的步骤：</p>
+<ol>
+<li>下载<a href="http://repo.spring.io/simple/libs-release-local/org/springframework/springloaded/1.2.3.RELEASE/springloaded-1.2.3.RELEASE.jar" target="_blank" rel="noopener">springloaded</a></li>
+<li><p>配置IDEA</p>
+<ul>
+<li>打开<code>Run/Debug Configuations</code>,在<code>Defaults</code>中选择<code>Application</code></li>
+<li><p>在右边的<code>Configuration</code> tab中配置<code>VM options</code></p>
+<pre><code>-javaagent:/Users/bohr/software/springloaded/springloaded-1.2.3.RELEASE.jar -noverify
+</code></pre><p>有了此默认配置，一劳永逸。上面的路径地址修改为您保存springloaded的路径</p>
+</li>
+</ul>
+</li>
+<li>执行任何java类</li>
+<li>修改后，编译此java类就能看到修改后的效果了。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2015-04-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2303,247 +2462,6 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
 
     
     
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/dubbo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/dubbo/" itemprop="url">dubbo</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-23T21:52:17+08:00">
-                2014-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="dubbo的一些分析和优化"><a href="#dubbo的一些分析和优化" class="headerlink" title="dubbo的一些分析和优化"></a>dubbo的一些分析和优化</h1><h2 id="dubbo应用线程分析"><a href="#dubbo应用线程分析" class="headerlink" title="dubbo应用线程分析"></a>dubbo应用线程分析</h2><h3 id="dubbo-remoting-client-heartbeat-thread"><a href="#dubbo-remoting-client-heartbeat-thread" class="headerlink" title="dubbo-remoting-client-heartbeat-thread"></a>dubbo-remoting-client-heartbeat-thread</h3><p>dubbo客户端心跳线程</p>
-<p>线程启动类：<code>HeaderExchangeClient</code></p>
-<p>任务执行类：<code>HeartBeatTask</code></p>
-<p>此任务会定时向服务端发送心跳消息，每个连接一个任务，执行周期默认为60s，执行时会判断此<code>Channel</code>是否在心跳周期类有读写，如果没有，给服务端发送心跳信号.</p>
-<p>改进措施：可以给执行线程合理命名。</p>
-<h3 id="xxxx-EventThread"><a href="#xxxx-EventThread" class="headerlink" title="xxxx-EventThread"></a>xxxx-EventThread</h3><p>zookeeper事件处理线程</p>
-<p>线程启动类：<code>org.apache.zookeeper.ClientCnxn</code></p>
-<p>任务执行类：<code>org.apache.zookeeper.ClientCnxn.EventThread</code></p>
-<p>此线程的命名格式为<code>启动线程名+EventThread</code>，其中的<code>localhost-startStop-1</code>tomcat启动线程名。</p>
-<p>在<code>CuratorFrameworkImpl</code>启动时，会向zookeeper服务器建立连接，此时会创建此线程。</p>
-<p>我们必须保证一个应用只有一个<code>CuratorFrameworkImpl</code>实例。</p>
-<h3 id="localhost-startStop-1-SendThread"><a href="#localhost-startStop-1-SendThread" class="headerlink" title="localhost-startStop-1-SendThread"></a>localhost-startStop-1-SendThread</h3><p>zookeeper 心跳、发送请求线程</p>
-<p>线程启动类：<code>org.apache.zookeeper.ClientCnxn</code></p>
-<p>任务执行类：<code>org.apache.zookeeper.ClientCnxn.SendThread</code></p>
-<h3 id="DubboClientReconnectTimer-thread"><a href="#DubboClientReconnectTimer-thread" class="headerlink" title="DubboClientReconnectTimer-thread"></a>DubboClientReconnectTimer-thread</h3><p>消费者连接服务提供者的定时重连任务，默认执行周期2s，检查是否连接，没有连接重新连接。</p>
-<p>线程启动类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient</code></p>
-<p>任务执行类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient$1</code></p>
-<h3 id="DubboServerHandler"><a href="#DubboServerHandler" class="headerlink" title="DubboServerHandler-"></a>DubboServerHandler-</h3><p>dubbo服务端，任务处理线程,处理客户端请求</p>
-<p>线程池启动类:<code>AllChannelHandler</code>的构造器中初始化线程池</p>
-<p>线程池实际创建类：<code>FixedThreadPool</code></p>
-<p>任务处理类：<code>com.alibaba.dubbo.remoting.transport.DecodeHandler</code></p>
-<h3 id="DubboClientHandler"><a href="#DubboClientHandler" class="headerlink" title="DubboClientHandler-"></a>DubboClientHandler-</h3><p>此线程主要用于dubbo客户端处理服务端的响应/连接相关事件，netty在接受到消息后，交给此线程池来处理。</p>
-<p>线程启动类：<code>com.alibaba.dubbo.remoting.transport.AbstractClient#wrapChannelHandler</code></p>
-<p>线程池实际创建类：<code>CachedThreadPool</code></p>
-<p>任务处理类：<code>com.alibaba.dubbo.remoting.transport.DecodeHandler</code></p>
-<h3 id="DubboRegistryFailedRetryTimer"><a href="#DubboRegistryFailedRetryTimer" class="headerlink" title="DubboRegistryFailedRetryTimer"></a>DubboRegistryFailedRetryTimer</h3><p>当dubbo和注册中心的相关请求(注册、取消注册、订阅、取消订阅)处理失败时，会暂时放在缓存中，此定时任务会周期性的来处理这些失败的请求</p>
-<p>线程启动类：<code>com.alibaba.dubbo.registry.support.FailbackRegistry</code></p>
-<p>处理任务：<code>com.alibaba.dubbo.registry.support.FailbackRegistry#retry</code></p>
-<h3 id="DubboSaveRegistryCache"><a href="#DubboSaveRegistryCache" class="headerlink" title="DubboSaveRegistryCache"></a>DubboSaveRegistryCache</h3><p>异步保存服务提供者地址</p>
-<p>线程启动类：<code>com.alibaba.dubbo.registry.support.AbstractRegistry</code></p>
-<p>任务执行类：<code>com.alibaba.dubbo.registry.support.AbstractRegistry.SaveProperties</code></p>
-<h3 id="DubboResponseTimeoutScanTimer"><a href="#DubboResponseTimeoutScanTimer" class="headerlink" title="DubboResponseTimeoutScanTimer"></a>DubboResponseTimeoutScanTimer</h3><p>扫描等待返回的<code>DefaultFuture</code>对象，如果<code>DefaultFuture</code>超时，则抛出超时异常。</p>
-<p>任务类:<code>DefaultFuture.RemotingInvocationTimeoutScan</code></p>
-<p>优化意见：目前的方式是间隔30ms就去扫描一次，建议重写<code>ConcurrentHashMap</code>缓存，加入队列等待机制。</p>
-<h2 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h2><p><code>com.alibaba.dubbo.remoting.transport.dispatcher.ChannelEventRunnable</code>处理netty的事件，他会把telnet请求(decode后为文本)代理给<code>com.alibaba.dubbo.remoting.telnet.support.TelnetHandlerAdapter</code>来处理。</p>
-<h2 id="dubbo线程池任务不均衡问题分析"><a href="#dubbo线程池任务不均衡问题分析" class="headerlink" title="dubbo线程池任务不均衡问题分析"></a>dubbo线程池任务不均衡问题分析</h2><p>dubbo应用使用的线程池为<code>com.alibaba.dubbo.common.threadpool.support.fixed.FixedThreadPool</code>,如果当queue设置为0时,会使用<code>SynchronousQueue</code>,这个东东导致了任务线程执行”不均衡”(满足了大家的心理预期,其实这种不均衡方式减少了上下文切换,但是<code>SynchronousQueue</code>没有大小,不能起到任务缓冲的作用).</p>
-<p>请在dubbo:protocol上加上queues大小(参考tomcat默认配置).</p>
-<pre><code>&lt;dubbo:protocol name=&quot;dubbo&quot; port=&quot;${dubbo.provider.port}&quot; threads=&quot;200&quot; queues=&quot;100&quot;/&gt;
-</code></pre><p>测试:</p>
-<p>修改前:</p>
-<pre><code>grep DubboServerHandler dubbo-demo.log |awk  -F &apos;-&apos;  &apos;{print $6}&apos; |awk  -F &apos;]&apos;  &apos;{print $1}&apos; |sort -n |uniq -c
-
-  1 150
-  1 168
-  1 169
-  1 170
-  ...
-  117 171
-  5386 172
-  714 173
-      2646 174
-</code></pre><p>修改后:</p>
-<pre><code>grep DubboServerHandler dubbo-demo.log |awk  -F &apos;-&apos;  &apos;{print $6}&apos; |awk  -F &apos;]&apos;  &apos;{print $1}&apos; |sort -n |uniq -c
-507 1
-498 2
- ...
-493 199
-489 200
-</code></pre><h2 id="线程池优化"><a href="#线程池优化" class="headerlink" title="线程池优化"></a>线程池优化</h2><p>jdk默认线程池实现策略如下：</p>
-<ol>
-<li>当线程数少于corePoolSize，总是新建线程</li>
-<li>当线程数=corePoolSize时，所有线程都忙，就会把线程放入队列；当队列满时，才会继续创建线程</li>
-<li>当线程数量=maxPoolSize并且队列也满时，<code>RejectedExecutionHandler</code>生效。</li>
-</ol>
-<p>易极付内部对线程池做了些优化：</p>
-<ol>
-<li>我们希望能充分利用资源，仅当线程数量=maxPoolSize时，才放入队列。当线程空闲时，线程池收缩到corePoolSize。</li>
-<li>当队列设置得比较小的时候，即便线程数量&lt;maxPoolSize,在高并发下也会触发<code>RejectedExecutionHandler</code></li>
-<li>线程池没有传递<code>MDC</code>或者应用请求<code>gid</code>。</li>
-</ol>
-<p>对于1，2，可以参考tomcat内部的线程池实现<code>org.apache.tomcat.util.threads.ThreadPoolExecutor</code>和<code>org.apache.tomcat.util.threads.TaskQueue</code>来改造。</p>
-<p>对于3，wrap原任务即可，大致代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MDCGidCallable</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Callable&lt;T&gt; task;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String gid;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MDCGidCallable</span><span class="params">(Callable&lt;T&gt; task, String gid)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.task = task;</span><br><span class="line">		<span class="keyword">this</span>.gid = gid;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			MDC.put(GID_KEY, gid);</span><br><span class="line">			<span class="keyword">return</span> task.call();</span><br><span class="line">		&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">			MDC.remove(GID_KEY);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="缓存扩展"><a href="#缓存扩展" class="headerlink" title="缓存扩展"></a>缓存扩展</h2><p>下面是我们自己实现的cache机制，个人感觉比dubbo原生的清爽，通过dubbo filter实现。</p>
-<p>源代码见<a href="https://github.com/bohrqiu/dubbo-cache" target="_blank" rel="noopener">dubbo-cache</a></p>
-<p>blog 参考<a href="http://bohr.me/dubbo-cache/">@DubboCache</a></p>
-<h2 id="dubbo-mock"><a href="#dubbo-mock" class="headerlink" title="dubbo mock"></a>dubbo mock</h2><p>mock最好是有mock server。由于懒，把mock server的client实现了(拦截请求，转换为http+json调用到mock server)，后面就没时间做mock server了。前段时间有个项目紧急需要，做了个简单的mock。</p>
-<p>原理如下：</p>
-<h3 id="对于使用者："><a href="#对于使用者：" class="headerlink" title="对于使用者："></a>对于使用者：</h3><ol>
-<li><p>用户配置需要mock的dubbo服务。</p>
-<p> 比如： <code>dubbo.consumer.mockInterfaces[0]=com.acooly.core.test.dubbo.mock.XXFacade</code></p>
-</li>
-<li><p>增加mock实现。</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XXFacadeMock</span> <span class="keyword">implements</span> <span class="title">XXFacade</span> </span>&#123;</span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> SingleResult&lt;String&gt; <span class="title">echo</span><span class="params">(SingleOrder&lt;String&gt; msg)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> SingleResult.from(<span class="string">"mocked"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="组件提供的能力"><a href="#组件提供的能力" class="headerlink" title="组件提供的能力"></a>组件提供的能力</h3><ol>
-<li>自定义实现<code>BeanPostProcessor</code>,扫描所有标注<code>@Reference</code>注解的属性，如果被配置了要mock掉，设置属性为mock实现。</li>
-</ol>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>最后附带一个在易极付写的dubbo分享。</p>
-
-
-	<div class="row">
-    <embed src="dubbo.pdf" width="100%" height="550" type="application/pdf">
-	</div>
-
-
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-    
   </section>
 
   
@@ -2598,7 +2516,7 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2620,7 +2538,7 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2666,6 +2584,10 @@ List&lt;SchedulerRule&gt; findByClient(@Param(&quot;clusterSize&quot;) int clust
                 
                   <li class="links-of-blogroll-item">
                     <a href="http://thanhong.me/" title="daidai" target="_blank">daidai</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://dbalife.info" title="bingwei" target="_blank">bingwei</a>
                   </li>
                 
               </ul>

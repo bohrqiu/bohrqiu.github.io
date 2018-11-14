@@ -311,6 +311,203 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2013-12-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2013-12-reading-notes/" itemprop="url">2013年12月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-12-08T21:52:17+08:00">
+                2013-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="如何处理web静态文件"><a href="#如何处理web静态文件" class="headerlink" title="如何处理web静态文件"></a>如何处理web静态文件</h2><h4 id="spring-mvc-处理静态资源文件"><a href="#spring-mvc-处理静态资源文件" class="headerlink" title="spring mvc 处理静态资源文件"></a>spring mvc 处理静态资源文件</h4><p>在spring mvc中，通过三种方式来处理静态资源</p>
+<ol>
+<li><p>激活Tomcat的defaultServlet来处理静态文件</p>
+<p> 参考tomcat config目录下的web.xml,这种方式IDE不友好，IDE会报找不到default servlet</p>
+</li>
+<li><p>在spring3.0.4以后版本提供了mvc:resources</p>
+<p> 可以读取WEB-INFO和jar包里面的资源文件，也可以控制浏览器缓存</p>
+</li>
+<li><p>使用<code>&lt;mvc:default-servlet-handler/&gt;</code></p>
+<p> 通过使用DefaultServletHttpRequestHandler来把静态资源文件丢给容器处理，和方式一做的事情一样，这种方式兼容多种web容器，ide友好。使用这个一般是在<code>DispatcherServlet</code>映射为<code>/</code>时，让静态资源继续交给容器处理。其实这种方式的性能不好，因为<code>DispatcherServlet</code>里执行了一大坨代码。</p>
+</li>
+</ol>
+<h4 id="前端页面优化"><a href="#前端页面优化" class="headerlink" title="前端页面优化"></a>前端页面优化</h4><p>前端页面优化，可以用yslow(yahoo强大的web团队推出的精品)、chorme audit、<a href="https://developers.google.com/speed/pagespeed/module" target="_blank" rel="noopener">PageSpeed</a>来评估</p>
+<p>只用apache的童鞋可以考虑使用<a href="https://code.google.com/p/modpagespeed/" target="_blank" rel="noopener">modpagespeed</a>，结合apache的内存缓存，减少服务器IO开销。</p>
+<p>比较理想的方式还是在web服务器加上一个反向代理服务器(varnish、nginx)，它来缓存静态资源文件</p>
+<p>开源的公共js、css库，可以考虑各种开源cdn服务，鉴于国内的网络情况，推荐两个国内的cdn：</p>
+<ul>
+<li><a href="http://developer.baidu.com/wiki/index.php?title=docs/cplat/libs" target="_blank" rel="noopener">百度cdn</a></li>
+<li><a href="http://www.staticfile.org/" target="_blank" rel="noopener">开发静态文件CDN</a></li>
+</ul>
+<h2 id="避免Java应用中NullPointerException的技巧和最佳实践"><a href="#避免Java应用中NullPointerException的技巧和最佳实践" class="headerlink" title="避免Java应用中NullPointerException的技巧和最佳实践"></a>避免Java应用中NullPointerException的技巧和最佳实践</h2><p><a href="http://www.importnew.com/7268.html" target="_blank" rel="noopener">http://www.importnew.com/7268.html</a></p>
+<ol>
+<li>从已知的String对象中调用equals()和equalsIgnoreCase()方法，而非未知对象。</li>
+<li>当valueOf()和toString()返回相同的结果时，宁愿使用前者。</li>
+<li>使用null安全的方法和库(spring和guava都提供了相关工具)</li>
+<li>避免从方法中返回空指针，而是返回空collection或者空数组。</li>
+<li>使用annotation@NotNull 和 @Nullable(目前是想起了才用，得强迫自己加上了)</li>
+<li>避免你的代码中不必要的自动包装和自动解包。</li>
+<li>遵从Contract并定义合理的默认值。</li>
+<li>定义数据库中的字段是否可为空。</li>
+<li>使用空对象模式（Null Object Pattern）</li>
+</ol>
+<h2 id="如何优雅地使用-Windows-系统？"><a href="#如何优雅地使用-Windows-系统？" class="headerlink" title="如何优雅地使用 Windows 系统？"></a>如何优雅地使用 Windows 系统？</h2><p><a href="http://daily.zhihu.com/story/395" target="_blank" rel="noopener">http://daily.zhihu.com/story/395</a></p>
+<p>不离不弃windows很多年了，令人恶心的超级本天天让我纠结，下次一定换MAC。不过还是先将就下。</p>
+<h2 id="tomcat进程关闭时收集dump信息"><a href="#tomcat进程关闭时收集dump信息" class="headerlink" title="tomcat进程关闭时收集dump信息"></a>tomcat进程关闭时收集dump信息</h2><p><a href="https://gist.github.com/bohrqiu/6518715" target="_blank" rel="noopener">https://gist.github.com/bohrqiu/6518715</a></p>
+<p>给gist加个超链接</p>
+<h2 id="PhantomJS"><a href="#PhantomJS" class="headerlink" title="PhantomJS"></a>PhantomJS</h2><p><a href="http://phantomjs.org/" target="_blank" rel="noopener">http://phantomjs.org/</a></p>
+<p>PhantomJS 是一个基于webkit的无界面浏览器，它提供了js api来实现dom操作、css选择器、json、canvas、svg</p>
+<p>PhantomJS适用于下列场景：</p>
+<ul>
+<li><a href="http://phantomjs.org/headless-testing.html" target="_blank" rel="noopener">无界面网站测试</a></li>
+</ul>
+<ul>
+<li><a href="http://phantomjs.org/screen-capture.html" target="_blank" rel="noopener">网站屏幕截图</a></li>
+<li><p><a href="http://phantomjs.org/page-automation.html" target="_blank" rel="noopener">页面操纵</a></p>
+<p>  通过标准dom api或者开源库访问和操作dom</p>
+</li>
+<li><p><a href="http://phantomjs.org/network-monitoring.html" target="_blank" rel="noopener">网络监控</a></p>
+<p>  包括网页加载测试、结合yslow和jenkins实现自动化页面性能测试</p>
+</li>
+</ul>
+<p>貌似速度比Selenium快，用它来抓取页面数据应该很happy。官方有很多<a href="https://github.com/ariya/phantomjs/tree/master/examples" target="_blank" rel="noopener">栗子</a>，可以深入挖掘下。</p>
+<h2 id="Advanced-REST-client"><a href="#Advanced-REST-client" class="headerlink" title="Advanced REST client"></a>Advanced REST client</h2><p><a href="https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo</a></p>
+<p>构造一个rest请求，有时候有点麻烦，借助Advanced REST client，可以很方便的chrome中构造一个REST请求，方便测试</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/jsr303/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -617,155 +814,6 @@ emailSenderOrder.setClientName(null);
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/hessian-java-serialization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/hessian-java-serialization/" itemprop="url">hessian反序列化field值丢失bug</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-29T21:52:17+08:00">
-                2013-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="bug说明"><a href="#bug说明" class="headerlink" title="bug说明"></a>bug说明</h3><hr>
-<p>子类和父类中有同名的字段时，hessian反序列化会丢失字段值。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/hessian-java-serialization/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-    
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/zookeeper-dev-ops/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -863,6 +911,155 @@ emailSenderOrder.setClientName(null);
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/zookeeper-dev-ops/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/hessian-java-serialization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/hessian-java-serialization/" itemprop="url">hessian反序列化field值丢失bug</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-29T21:52:17+08:00">
+                2013-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="bug说明"><a href="#bug说明" class="headerlink" title="bug说明"></a>bug说明</h3><hr>
+<p>子类和父类中有同名的字段时，hessian反序列化会丢失字段值。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/hessian-java-serialization/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1745,158 +1942,6 @@ LoggerPerfTest.testAsyncLoggerWithoutStackInfo: [measured 100000 out of 101000 r
 
     
     
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/jdk7-exception/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/jdk7-exception/" itemprop="url">使用jdk7新增异常构造器提高异常性能</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-05-09T21:52:17+08:00">
-                2013-05-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>JDK7在Throwable对象中增加了一个新的构造器</p>
-<pre><code>protected Throwable(String message, Throwable cause,
-                    boolean enableSuppression,
-                    boolean writableStackTrace)
-</code></pre><p>第三个参数表示是否启用suppressedExceptions(try代码快中抛出异常，在finally中又抛出异常，导致try中的异常丢失)<br>。第四个参数表示是否填充异常栈，如果为false，异常在初始化的时候不会调用本地方法fillInStackTrace。<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/jdk7-exception/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-    
   </section>
 
   
@@ -1951,7 +1996,7 @@ LoggerPerfTest.testAsyncLoggerWithoutStackInfo: [measured 100000 out of 101000 r
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1973,7 +2018,7 @@ LoggerPerfTest.testAsyncLoggerWithoutStackInfo: [measured 100000 out of 101000 r
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2019,6 +2064,10 @@ LoggerPerfTest.testAsyncLoggerWithoutStackInfo: [measured 100000 out of 101000 r
                 
                   <li class="links-of-blogroll-item">
                     <a href="http://thanhong.me/" title="daidai" target="_blank">daidai</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://dbalife.info" title="bingwei" target="_blank">bingwei</a>
                   </li>
                 
               </ul>

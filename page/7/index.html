@@ -311,6 +311,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/jdk7-exception/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/jdk7-exception/" itemprop="url">使用jdk7新增异常构造器提高异常性能</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-05-09T21:52:17+08:00">
+                2013-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>JDK7在Throwable对象中增加了一个新的构造器</p>
+<pre><code>protected Throwable(String message, Throwable cause,
+                    boolean enableSuppression,
+                    boolean writableStackTrace)
+</code></pre><p>第三个参数表示是否启用suppressedExceptions(try代码快中抛出异常，在finally中又抛出异常，导致try中的异常丢失)<br>。第四个参数表示是否填充异常栈，如果为false，异常在初始化的时候不会调用本地方法fillInStackTrace。<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/jdk7-exception/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/thinking-clearly-about-performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -678,7 +830,7 @@ in many cases. We’ll be happy when response time is one second or less in at l
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -700,7 +852,7 @@ in many cases. We’ll be happy when response time is one second or less in at l
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -746,6 +898,10 @@ in many cases. We’ll be happy when response time is one second or less in at l
                 
                   <li class="links-of-blogroll-item">
                     <a href="http://thanhong.me/" title="daidai" target="_blank">daidai</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://dbalife.info" title="bingwei" target="_blank">bingwei</a>
                   </li>
                 
               </ul>
