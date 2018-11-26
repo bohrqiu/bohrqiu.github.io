@@ -32,5 +32,4 @@ tags:
 3. `SystemSlot`实现系统负载保护功能。有趣的是参考[BBR](https://github.com/alibaba/Sentinel/wiki/%E7%B3%BB%E7%BB%9F%E8%B4%9F%E8%BD%BD%E4%BF%9D%E6%8A%A4)算法,当负载过高时，判断当前请求容量来减少对请求的拒绝。
 4. `AuthoritySlot`黑白名单控制
 5. `FlowSlot`流控
-6. `DegradeSlot`降级
-
+6. `DegradeSlot`降级    
