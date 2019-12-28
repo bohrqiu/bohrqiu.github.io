@@ -311,6 +311,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-06-reading-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="qiubo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qiubo's life">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014-06-reading-notes/" itemprop="url">2014年06月Reading Notes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-06-28T21:52:17+08:00">
+                2014-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Awesome-Sysadmin"><a href="#Awesome-Sysadmin" class="headerlink" title="Awesome Sysadmin"></a>Awesome Sysadmin</h2><p><a href="https://github.com/kahun/awesome-sysadmin" target="_blank" rel="noopener">https://github.com/kahun/awesome-sysadmin</a></p>
+<p>系统管理员的开源资源,资源暴多,技术选型时参考.</p>
+<h2 id="Tengine"><a href="#Tengine" class="headerlink" title="Tengine"></a>Tengine</h2><p><a href="http://dmsimard.com/2014/06/21/a-use-case-of-tengine-a-drop-in-replacement-and-fork-of-nginx/" target="_blank" rel="noopener">http://dmsimard.com/2014/06/21/a-use-case-of-tengine-a-drop-in-replacement-and-fork-of-nginx/</a></p>
+<p>使用tengine来做LB,通过Tengine的<code>unbuffered requests</code>特性实现了上传性能提升.</p>
+<p>不过我自己装tengine启动就遇到了问题.</p>
+<pre><code>the configuration file //Users/bohr/software/tengine/conf/nginx.conf syntax is ok
+nginx: [emerg] mkdir() &quot;//Users/bohr/software/tengine/logs/access.log&quot; failed (21: Is a directory)
+configuration file //Users/bohr/software/tengine/conf/nginx.conf test failed
+</code></pre><h2 id="服务器操作系统应该选择-Debian-Ubuntu-还是-CentOS？"><a href="#服务器操作系统应该选择-Debian-Ubuntu-还是-CentOS？" class="headerlink" title="服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？"></a>服务器操作系统应该选择 Debian/Ubuntu 还是 CentOS？</h2><p><a href="http://www.zhihu.com/question/19599986" target="_blank" rel="noopener">http://www.zhihu.com/question/19599986</a></p>
+<p>生产环境选择操作系统还是要慎重.现在我厂在线上用ubuntu,遇到过几次诡异事件(服务器无缘无故挂了,没有任何日志,时间跳变),看了这篇文章,SA应该会把线上的linux服务器统一了吧.</p>
+<h2 id="web-starter-kit"><a href="#web-starter-kit" class="headerlink" title="web-starter-kit"></a>web-starter-kit</h2><p><a href="https://github.com/google/web-starter-kit" target="_blank" rel="noopener">https://github.com/google/web-starter-kit</a></p>
+<p>Web Starter Kit is a starting point for multi-screen web development. It encompasses opinionated recommendations on boilerplate and tooling for building an experience that works great across multiple devices.</p>
+<h2 id="微服务：分解应用以实现可部署性和可扩展性"><a href="#微服务：分解应用以实现可部署性和可扩展性" class="headerlink" title="微服务：分解应用以实现可部署性和可扩展性"></a>微服务：分解应用以实现可部署性和可扩展性</h2><p><a href="http://www.infoq.com/cn/articles/microservices-intro" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/microservices-intro</a><br><a href="http://microservices.io/index.html" target="_blank" rel="noopener">http://microservices.io/index.html</a></p>
+<p>文章讨论了整体架构和微服务构架的优缺点.对于大型应用而言,微服务架构当然是首选.</p>
+<p>API网关模式用于解耦应用客户端和微服务.我们可能没有考虑对不同的客户端提供不同粒度的服务(不同客户端的网络环境不一样).</p>
+<p>对于非强一致性数据要求的场景,<code>事件驱动的异步更新</code>(服务发布事件声明有些数据发生了变化，其他的服务订阅这些事件并更新它们的数据)解耦了事件的生产者和消费者,简化了开发也提升了可用性.某应用,很多配置数据都存在memcache中,一笔业务需要查询缓存&gt;5次,每次都要去查,感觉很不爽.还是使用本地缓存+事件驱动的异步更新来做比较好.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+    
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://bohr.me/2014-05-reading-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1929,219 +2088,6 @@ jekyll serve --watch
 
     
     
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://bohr.me/env-aware/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="qiubo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qiubo's life">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/env-aware/" itemprop="url">打造环境感知的应用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-15T21:52:17+08:00">
-                2014-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="打造环境感知的应用"><a href="#打造环境感知的应用" class="headerlink" title="打造环境感知的应用"></a>打造环境感知的应用</h2><p>这里说的<code>环境感知的应用</code>是指,应用放在不同的环境,就可以使用不同环境的配置,不需要重新打包.</p>
-<h3 id="1-我眼中理想的环境和应用"><a href="#1-我眼中理想的环境和应用" class="headerlink" title="1.我眼中理想的环境和应用"></a>1.我眼中理想的环境和应用</h3><ul>
-<li>应用不用管环境配置</li>
-<li>参数配置在配置管理系统中的</li>
-<li>框架从配置管理中加载配置</li>
-<li>只有操作系统或者应用服务器知道环境的概念</li>
-</ul>
-<p>理想很丰满,现实很惨…,揉醒了,继续面对现实.要实现这个目标,还有很多需要做的.现在我们尽可能要做的是,开发童鞋自己把环境搞定,不给其他童鞋添堵.</p>
-<h3 id="2-适合我们的环境感知的应用"><a href="#2-适合我们的环境感知的应用" class="headerlink" title="2.适合我们的环境感知的应用"></a>2.适合我们的<code>环境感知</code>的应用</h3><p>我们的系统大多数用的是tomcat作为应用服务器,最好是让应用服务器来提供环境标识,在应用中结合spring profile机制来实现环境感知</p>
-<h3 id="3-如何操作"><a href="#3-如何操作" class="headerlink" title="3.如何操作"></a>3.如何操作</h3><h4 id="3-1在操作系统中添加环境变量"><a href="#3-1在操作系统中添加环境变量" class="headerlink" title="3.1在操作系统中添加环境变量"></a>3.1在操作系统中添加环境变量</h4><p>比如在10测试环境,在<code>/etc/profile</code>中增加如下东东:</p>
-<pre><code>export CATALINA_OPTS=&apos; -Dspring.profiles.active=dev &apos;
-</code></pre><p>然后执行<code>. /etc/profile</code>解析</p>
-<h4 id="3-2配置日志"><a href="#3-2配置日志" class="headerlink" title="3.2配置日志"></a>3.2配置日志</h4><p>并不是所有系统都会针对不同环境启用不同的日志配置文件,即便有logback可以很方便的来解决这些问题.</p>
-<h5 id="3-2-1-在logback配置内区分环境"><a href="#3-2-1-在logback配置内区分环境" class="headerlink" title="3.2.1 在logback配置内区分环境"></a>3.2.1 在logback配置内区分环境</h5><p>比如我们在本地测试的时候,把日志输出到console,便于我们查问题.<br>可以在logback.xml中加入:</p>
-<pre><code>&lt;if condition=&apos;property(&quot;os.name&quot;).toUpperCase().contains(&quot;WINDOWS&quot;)||property(&quot;os.name&quot;).toUpperCase().contains(&quot;MAC&quot;)&apos;&gt;
-    &lt;then&gt;
-        &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
-            &lt;encoder&gt;
-                &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{0}:%L-%X{ID}- %msg%n&lt;/pattern&gt;
-            &lt;/encoder&gt;
-        &lt;/appender&gt;
-        &lt;root&gt;
-            &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
-        &lt;/root&gt;
-    &lt;/then&gt;
-&lt;/if&gt;
-</code></pre><p>上面的配置会在windows和mac中启用console日志输出</p>
-<p>在logback中引入外部配置文件,也可以区分不同的环境</p>
-<pre><code>&lt;property resource=&quot;spring/log/log-${spring.profiles.active}.properties&quot; /&gt;
-</code></pre><p>上面会根据<code>spring.profiles.active</code>的配置读取不同的配置文件</p>
-<h5 id="3-2-2-不同环境区分不同的日志配置文件"><a href="#3-2-2-不同环境区分不同的日志配置文件" class="headerlink" title="3.2.2 不同环境区分不同的日志配置文件"></a>3.2.2 不同环境区分不同的日志配置文件</h5><p>如果您有针对不同环境不同的日志文件,<code>com.yjf.common.log.LogbackConfigListener</code>提供了支持.</p>
-<pre><code>&lt;context-param&gt;
-      &lt;param-name&gt;logbackConfigLocation&lt;/param-name&gt;
-      &lt;param-value&gt;WEB-INF/logback-${spring.profiles.active}.xml&lt;/param-value&gt;
-  &lt;/context-param&gt;
-</code></pre><h4 id="3-3-配置应用"><a href="#3-3-配置应用" class="headerlink" title="3.3 配置应用"></a>3.3 配置应用</h4><p>数据库和外部资源配置,一般会放入到单独的配置文件中,我们可以使用spring提供的能力来实现环境感知</p>
-<h5 id="3-3-1-使用properties文件"><a href="#3-3-1-使用properties文件" class="headerlink" title="3.3.1 使用properties文件"></a>3.3.1 使用properties文件</h5><pre><code>&lt;bean id=&quot;propertyConfigurerForJDBC&quot;
-    class=&quot;com.yjf.common.dal.EncryptablePropertyPlaceholderConfigurer&quot;&gt;
-    &lt;property name=&quot;order&quot; value=&quot;1&quot; /&gt;
-    &lt;property name=&quot;ignoreUnresolvablePlaceholders&quot; value=&quot;true&quot; /&gt;
-    &lt;property name=&quot;location&quot;
-        value=&quot;classpath:jdbc-${spring.profiles.active}.properties&quot; /&gt;
-&lt;/bean&gt;
-</code></pre><p>上面会根据<code>spring.profiles.active</code>的配置读取不同jdbc配置文件</p>
-<h5 id="3-3-2-使用spring-profile"><a href="#3-3-2-使用spring-profile" class="headerlink" title="3.3.2 使用spring profile"></a>3.3.2 使用spring profile</h5><pre><code>&lt;beans profile=&quot;production&quot;&gt;
-     &lt;bean id=&quot;xxx&quot; class=&quot;xxxxBEAN&quot; /&gt;  
-&lt;/beans&gt;
-&lt;beans profile=&quot;test&quot;&gt;
-     &lt;bean id=&quot;xxx&quot; class=&quot;xxxxBEAN&quot; /&gt;  
-&lt;/beans&gt;
-</code></pre><p>spring profile通过读取系统或者环境变量<code>spring.profiles.active</code>来启用不同的bean.</p>
-<h5 id="3-3-2-硬编码实现"><a href="#3-3-2-硬编码实现" class="headerlink" title="3.3.2 硬编码实现"></a>3.3.2 硬编码实现</h5><p><code>com.yjf.common.env.Env</code>提供了在编写java code时,区分不同的环境</p>
-<pre><code>private void doIt() {
-    if (Env.isOnline()) {
-        //do anything you like.
-    }
-}
-</code></pre><p>上面的代码只在生成环境运行,<code>com.yjf.common.env.Env</code>通过读取<code>spring.profiles.active</code>来判断环境</p>
-<h4 id="3-4-配置测试"><a href="#3-4-配置测试" class="headerlink" title="3.4 配置测试"></a>3.4 配置测试</h4><p>通过上面的一些列配置,环境都由<code>spring.profiles.active</code>控制.在本地测试时,也需要启用此环境变量.</p>
-<h5 id="3-4-1-tomcat-jetty-启动类"><a href="#3-4-1-tomcat-jetty-启动类" class="headerlink" title="3.4.1 tomcat/jetty 启动类"></a>3.4.1 tomcat/jetty 启动类</h5><p><code>TomcatBootstrapHelper</code>启动时,默认会在系统变量里增加<code>spring.profiles.active=dev</code></p>
-<pre><code>new TomcatBootstrapHelper(11111).start();
-</code></pre><p>上面的代码会使用<code>dev</code>环境配置.如果您按照3.3.1配置,此时会读取<code>jdbc-dev.properties</code></p>
-<p>我没有写jetty的启动帮助类,主要原因是为了和线上保持一致,减少一些不可预知的问题.如果要使用jetty,请增加如下代码:</p>
-<pre><code>static{
-    System.setProperty(&quot;spring.profiles.active&quot;, &quot;dev&quot;);
-}
-</code></pre><h5 id="3-4-1-单元测试"><a href="#3-4-1-单元测试" class="headerlink" title="3.4.1 单元测试"></a>3.4.1 单元测试</h5><p>在测试类或者测试父类中增加:</p>
-<pre><code>static{
-    System.setProperty(&quot;spring.profiles.active&quot;, &quot;dev&quot;);
-}
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-    
   </section>
 
   
@@ -2196,7 +2142,7 @@ jekyll serve --watch
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2207,7 +2153,7 @@ jekyll serve --watch
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
