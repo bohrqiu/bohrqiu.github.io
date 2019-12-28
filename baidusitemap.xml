@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://bohr.me/zero-copy/</loc>
+    <lastmod>2019-12-27T14:44:56.153Z</lastmod>
+    <data>
+        <display>
+        <title>使用零拷贝提高数据传输效率</title>
+        <pubTime>2014-08-16T13:52:17.000Z</pubTime>
+        
+        <tag>zero copy</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://bohr.me/synchronization/</loc>
     <lastmod>2018-11-26T04:43:05.473Z</lastmod>
     <data>
@@ -372,6 +392,7 @@
     </url>
 
     
+    
   <url>
     <loc>http://bohr.me/2016-02-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
@@ -381,29 +402,6 @@
         <pubTime>2016-02-01T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
-    <loc>http://bohr.me/2016-08-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.087Z</lastmod>
-    <data>
-        <display>
-        <title>2016年08月Reading Notes</title>
-        <pubTime>2016-08-10T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-        <tag>服务发现</tag>
          
          
            
@@ -438,16 +436,16 @@
 
     
   <url>
-    <loc>http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/</loc>
-    <lastmod>2018-04-01T16:53:17.085Z</lastmod>
+    <loc>http://bohr.me/2016-08-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.087Z</lastmod>
     <data>
         <display>
-        <title>使用ssh tunneling和JMX远程监控java程序</title>
-        <pubTime>2013-05-18T13:52:17.000Z</pubTime>
+        <title>2016年08月Reading Notes</title>
+        <pubTime>2016-08-10T13:52:17.000Z</pubTime>
         
-        <tag>SSH TUNNELING</tag>
+        <tag>READING NOTES</tag>
          
-        <tag>JMX</tag>
+        <tag>服务发现</tag>
          
          
            
@@ -460,14 +458,16 @@
 
     
   <url>
-    <loc>http://bohr.me/zero-copy/</loc>
-    <lastmod>2018-04-01T16:53:17.084Z</lastmod>
+    <loc>http://bohr.me/ssh-tunneling-and-JMX-for-remote-monitor/</loc>
+    <lastmod>2018-04-01T16:53:17.085Z</lastmod>
     <data>
         <display>
-        <title>使用零拷贝提高数据传输效率</title>
-        <pubTime>2014-08-16T13:52:17.000Z</pubTime>
+        <title>使用ssh tunneling和JMX远程监控java程序</title>
+        <pubTime>2013-05-18T13:52:17.000Z</pubTime>
         
-        <tag>zero copy</tag>
+        <tag>SSH TUNNELING</tag>
+         
+        <tag>JMX</tag>
          
          
            
@@ -560,16 +560,16 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-05-reading-notes/</loc>
+    <loc>http://bohr.me/2015-11-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     <data>
         <display>
-        <title>2015年05月Reading Notes</title>
-        <pubTime>2015-05-01T13:52:17.000Z</pubTime>
+        <title>2015年11月Reading Notes</title>
+        <pubTime>2015-11-01T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
-        <tag>springloaded</tag>
+        <tag>spring-session</tag>
          
          
            
@@ -582,16 +582,16 @@
 
     
   <url>
-    <loc>http://bohr.me/2015-11-reading-notes/</loc>
+    <loc>http://bohr.me/2015-05-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.081Z</lastmod>
     <data>
         <display>
-        <title>2015年11月Reading Notes</title>
-        <pubTime>2015-11-01T13:52:17.000Z</pubTime>
+        <title>2015年05月Reading Notes</title>
+        <pubTime>2015-05-01T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
-        <tag>spring-session</tag>
+        <tag>springloaded</tag>
          
          
            
@@ -624,14 +624,14 @@
 
     
   <url>
-    <loc>http://bohr.me/pojo-perperty/</loc>
+    <loc>http://bohr.me/2016-04-reading-notes/</loc>
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     <data>
         <display>
-        <title>java对象属性复制</title>
-        <pubTime>2014-05-13T13:52:17.000Z</pubTime>
+        <title>2016年04月Reading Notes</title>
+        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
         
-        <tag>java properties copy</tag>
+        <tag>READING NOTES</tag>
          
          
            
@@ -644,14 +644,14 @@
 
     
   <url>
-    <loc>http://bohr.me/2016-04-reading-notes/</loc>
+    <loc>http://bohr.me/pojo-perperty/</loc>
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     <data>
         <display>
-        <title>2016年04月Reading Notes</title>
-        <pubTime>2016-04-05T13:52:17.000Z</pubTime>
+        <title>java对象属性复制</title>
+        <pubTime>2014-05-13T13:52:17.000Z</pubTime>
         
-        <tag>READING NOTES</tag>
+        <tag>java properties copy</tag>
          
          
            
@@ -674,6 +674,26 @@
         <tag>READING NOTES</tag>
          
         <tag>react</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <data>
+        <display>
+        <title>2014年11月Reading Notes</title>
+        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
+        
+        <tag>READING NOTES</tag>
          
          
            
@@ -768,12 +788,12 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-11-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <loc>http://bohr.me/2014-09-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     <data>
         <display>
-        <title>2014年11月Reading Notes</title>
-        <pubTime>2014-11-04T13:52:17.000Z</pubTime>
+        <title>2014年09月Reading Notes</title>
+        <pubTime>2014-09-28T13:52:17.000Z</pubTime>
         
         <tag>READING NOTES</tag>
          
@@ -808,26 +828,6 @@
 
     
   <url>
-    <loc>http://bohr.me/2014-09-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
-    <data>
-        <display>
-        <title>2014年09月Reading Notes</title>
-        <pubTime>2014-09-28T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://bohr.me/cxf-tuning/</loc>
     <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     <data>
@@ -836,26 +836,6 @@
         <pubTime>2014-08-14T13:52:17.000Z</pubTime>
         
         <tag>webservice</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
-    <data>
-        <display>
-        <title>hibernate应用报could not initialize proxy - no Session分析</title>
-        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
-        
-        <tag>hibernate</tag>
          
          
            
@@ -882,6 +862,46 @@
         <tag>web-starter-kit</tag>
          
         <tag>microservice</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/vagrant/</loc>
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <data>
+        <display>
+        <title>使用vagrant</title>
+        <pubTime>2014-07-07T13:52:17.000Z</pubTime>
+        
+        <tag>vagrant</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://bohr.me/hibernate-no-session-in-dubbo/</loc>
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <data>
+        <display>
+        <title>hibernate应用报could not initialize proxy - no Session分析</title>
+        <pubTime>2014-07-17T13:52:17.000Z</pubTime>
+        
+        <tag>hibernate</tag>
          
          
            
@@ -926,14 +946,22 @@
 
     
   <url>
-    <loc>http://bohr.me/vagrant/</loc>
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <loc>http://bohr.me/2014-02-reading-notes/</loc>
+    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
     <data>
         <display>
-        <title>使用vagrant</title>
-        <pubTime>2014-07-07T13:52:17.000Z</pubTime>
+        <title>2014年02月Reading Notes</title>
+        <pubTime>2014-02-19T13:52:17.000Z</pubTime>
         
-        <tag>vagrant</tag>
+        <tag>READING NOTES</tag>
+         
+        <tag>Upgrade header</tag>
+         
+        <tag>linux kill</tag>
+         
+        <tag>elasticsearch</tag>
+         
+        <tag>Cache coherence</tag>
          
          
            
@@ -964,34 +992,6 @@
         <tag>CopyOnWrite</tag>
          
         <tag>log</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://bohr.me/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://bohr.me/2014-02-reading-notes/</loc>
-    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
-    <data>
-        <display>
-        <title>2014年02月Reading Notes</title>
-        <pubTime>2014-02-19T13:52:17.000Z</pubTime>
-        
-        <tag>READING NOTES</tag>
-         
-        <tag>Upgrade header</tag>
-         
-        <tag>linux kill</tag>
-         
-        <tag>elasticsearch</tag>
-         
-        <tag>Cache coherence</tag>
          
          
            
