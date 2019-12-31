@@ -4,7 +4,7 @@
   <url>
     <loc>http://bohr.me/review-2019/</loc>
     
-    <lastmod>2019-12-29T09:00:34.281Z</lastmod>
+    <lastmod>2019-12-31T06:13:04.559Z</lastmod>
     
   </url>
   
@@ -135,13 +135,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/about/index.html</loc>
-    
-    <lastmod>2018-04-01T16:53:17.089Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/categories/index.html</loc>
     
     <lastmod>2018-04-01T16:53:17.089Z</lastmod>
@@ -149,7 +142,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/tags/index.html</loc>
+    <loc>http://bohr.me/about/index.html</loc>
+    
+    <lastmod>2018-04-01T16:53:17.089Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2016-02-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     
@@ -163,7 +163,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2016-02-reading-notes/</loc>
+    <loc>http://bohr.me/tags/index.html</loc>
     
     <lastmod>2018-04-01T16:53:17.088Z</lastmod>
     
@@ -233,13 +233,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/be-happy/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/why-react/</loc>
     
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
@@ -247,7 +240,7 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/pojo-perperty/</loc>
+    <loc>http://bohr.me/be-happy/</loc>
     
     <lastmod>2018-04-01T16:53:17.080Z</lastmod>
     
@@ -261,7 +254,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-12-reading-notes/</loc>
+    <loc>http://bohr.me/pojo-perperty/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.080Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-11-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     
@@ -275,7 +275,14 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-11-reading-notes/</loc>
+    <loc>http://bohr.me/2016-05-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-12-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.079Z</lastmod>
     
@@ -289,9 +296,9 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2016-05-reading-notes/</loc>
+    <loc>http://bohr.me/2014-09-reading-notes/</loc>
     
-    <lastmod>2018-04-01T16:53:17.079Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     
   </url>
   
@@ -303,16 +310,23 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-09-reading-notes/</loc>
+    <loc>http://bohr.me/database-version/</loc>
     
     <lastmod>2018-04-01T16:53:17.078Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/database-version/</loc>
+    <loc>http://bohr.me/vagrant/</loc>
     
-    <lastmod>2018-04-01T16:53:17.078Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
     
   </url>
   
@@ -331,16 +345,16 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2014-06-reading-notes/</loc>
+    <loc>http://bohr.me/maven-transitive-dependency-exception/</loc>
     
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/vagrant/</loc>
+    <loc>http://bohr.me/2014-02-reading-notes/</loc>
     
-    <lastmod>2018-04-01T16:53:17.077Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
     
   </url>
   
@@ -359,16 +373,9 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/maven-transitive-dependency-exception/</loc>
+    <loc>http://bohr.me/dependency-management/</loc>
     
-    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/2014-02-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.076Z</lastmod>
+    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
   </url>
   
@@ -388,13 +395,6 @@
   
   <url>
     <loc>http://bohr.me/2014-04-reading-notes/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.075Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://bohr.me/dependency-management/</loc>
     
     <lastmod>2018-04-01T16:53:17.075Z</lastmod>
     
@@ -443,13 +443,6 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/zookeeper-dev-ops/</loc>
-    
-    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://bohr.me/hessian-java-serialization/</loc>
     
     <lastmod>2018-04-01T16:53:17.055Z</lastmod>
@@ -471,14 +464,21 @@
   </url>
   
   <url>
-    <loc>http://bohr.me/2013-12-reading-notes/</loc>
+    <loc>http://bohr.me/zookeeper-dev-ops/</loc>
+    
+    <lastmod>2018-04-01T16:53:17.055Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://bohr.me/java-serialization/</loc>
     
     <lastmod>2018-04-01T16:53:17.054Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://bohr.me/java-serialization/</loc>
+    <loc>http://bohr.me/2013-12-reading-notes/</loc>
     
     <lastmod>2018-04-01T16:53:17.054Z</lastmod>
     
